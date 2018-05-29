@@ -1,4 +1,4 @@
-# d-restaurant-backend
+# [projects](http://idugalic.github.io/projects)/digital-restaurant [![Build Status](https://travis-ci.org/idugalic/digital-restaurant.svg?branch=master)](https://travis-ci.org/idugalic/digital-restaurant)
 
 Customers use the website application to place food orders at local restaurants. Application coordinates a network of couriers who deliver the orders.
 
