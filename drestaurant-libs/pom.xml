@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>drestaurant-libs</artifactId>
+	<packaging>pom</packaging>
+
+	<name>drestaurant-libs (parent)</name>
+	<description>d-restaurant libraries</description>
+
+	<parent>
+		<groupId>com.drestaurant</groupId>
+		<artifactId>drestaurant-backend</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<modules>
+		<module>drestaurant-restaurant</module>
+		<module>drestaurant-courier</module>
+		<module>drestaurant-customer</module>
+		<module>drestaurant-order</module>
+		<module>drestaurant-accounting</module>
+		<module>drestaurant-common</module>
+	</modules>
+
+</project>
