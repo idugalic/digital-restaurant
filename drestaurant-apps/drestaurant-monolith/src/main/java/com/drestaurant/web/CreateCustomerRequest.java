@@ -1,8 +1,8 @@
 package com.drestaurant.web;
 
-import java.math.BigDecimal;
-
 import com.drestaurant.common.domain.model.PersonName;
+
+import java.math.BigDecimal;
 
 /**
  *

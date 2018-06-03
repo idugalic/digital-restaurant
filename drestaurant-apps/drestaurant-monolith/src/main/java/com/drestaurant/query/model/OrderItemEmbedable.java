@@ -1,17 +1,14 @@
 package com.drestaurant.query.model;
 
-import java.math.BigDecimal;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
+import java.math.BigDecimal;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
-@Embeddable
-@Access(AccessType.FIELD)
-public class OrderItemEmbedable {
+@Embeddable @Access(AccessType.FIELD) public class OrderItemEmbedable {
 
 	private String menuId;
 	private String name;
@@ -60,13 +57,11 @@ public class OrderItemEmbedable {
 		this.quantity = quantity;
 	}
 
-	@Override
-	public boolean equals(Object o) {
+	@Override public boolean equals(Object o) {
 		return EqualsBuilder.reflectionEquals(this, o);
 	}
 
-	@Override
-	public int hashCode() {
+	@Override public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);
 	}
 

@@ -16,7 +16,6 @@ public class MenuItemRequest {
 	public MenuItemRequest() {
 	}
 
-
 	public String getId() {
 		return id;
 	}

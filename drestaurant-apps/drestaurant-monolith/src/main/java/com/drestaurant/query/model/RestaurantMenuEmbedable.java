@@ -1,21 +1,17 @@
 package com.drestaurant.query.model;
 
-import java.util.List;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
+import java.util.List;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+@Embeddable @Access(AccessType.FIELD) public class RestaurantMenuEmbedable {
 
-@Embeddable
-@Access(AccessType.FIELD)
-public class RestaurantMenuEmbedable {
-
-	@ElementCollection
-	private List<MenuItemEmbedable> menuItems;
+	@ElementCollection private List<MenuItemEmbedable> menuItems;
 	private String menuVersion;
 
 	public RestaurantMenuEmbedable(List<MenuItemEmbedable> menuItems, String menuVersion) {
@@ -44,13 +40,11 @@ public class RestaurantMenuEmbedable {
 		this.menuVersion = menuVersion;
 	}
 
-	@Override
-	public boolean equals(Object o) {
+	@Override public boolean equals(Object o) {
 		return EqualsBuilder.reflectionEquals(this, o);
 	}
 
-	@Override
-	public int hashCode() {
+	@Override public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);
 	}
 

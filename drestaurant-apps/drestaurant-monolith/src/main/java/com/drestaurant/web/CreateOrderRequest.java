@@ -46,6 +46,4 @@ public class CreateOrderRequest {
 		this.orderItems = orderItems;
 	}
 
-
-
 }

@@ -1,8 +1,8 @@
-# [projects](http://idugalic.github.io/projects)/digital-restaurant [![Build Status](https://travis-ci.org/idugalic/digital-restaurant.svg?branch=master)](https://travis-ci.org/idugalic/digital-restaurant)
+# [projects](http://idugalic.github.io/projects)/digital-restaurant (kotlin) [![Build Status](https://travis-ci.org/idugalic/digital-restaurant.svg?branch=kotlin)](https://travis-ci.org/idugalic/digital-restaurant)
 
 Customers use the website application to place food orders at local restaurants. Application coordinates a network of couriers who deliver the orders.
 
-*'d-restaurant-backend' is an example of an application that is built using Event Sourcing and CQRS. The application is written in Java, and uses Spring Boot. It is built using Axonframework, which is an application framework based on event sourcing and CQRS.*
+*'d-restaurant-backend' is an example of an application that is built using Event Sourcing and CQRS. The application is written in Kotlin and Java, and uses Spring Boot. It is built using Axonframework, which is an application framework based on event sourcing and CQRS.*
 
 ## Domain
 
@@ -198,7 +198,7 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 - [Axonframework (eventsourcing, CQRS)][axonframework]
 
 ### Continuous Integration and Delivery 
-- [GitlabCI (Continuous Integration)](https://about.gitlab.com/features/gitlab-ci-cd/)
+- Travis
 
 ### Infrastructure and Platform (As A Service)
 - [H2, MySQL (event store, materialized views)][mysql]

@@ -1,17 +1,13 @@
 package com.drestaurant.query.model;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Version;
+import java.math.BigDecimal;
 
-@Entity
-public class CustomerEntity {
-	@Id
-	private String id;
-	@Version
-	private Long version;
+@Entity public class CustomerEntity {
+	@Id private String id;
+	@Version private Long version;
 	private Long aggregateVersion;
 	private String firstName;
 	private String lastName;

@@ -22,7 +22,6 @@ public class CreateCourierRequest {
 	public CreateCourierRequest() {
 	}
 
-
 	public String getFirstName() {
 		return firstName;
 	}
@@ -46,5 +45,5 @@ public class CreateCourierRequest {
 	public void setMaxNumberOfActiveOrders(Integer maxNumberOfActiveOrders) {
 		this.maxNumberOfActiveOrders = maxNumberOfActiveOrders;
 	}
-	
+
 }

@@ -4,13 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
-@Entity
-public class CourierEntity {
+@Entity public class CourierEntity {
 
-	@Id
-	private String id;
-	@Version
-	private Long version;
+	@Id private String id;
+	@Version private Long version;
 	private Long aggregateVersion;
 	private String firstName;
 	private String lastName;

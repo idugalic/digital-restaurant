@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<artifactId>drestaurant-apps</artifactId>
-	<packaging>pom</packaging>
+    <artifactId>drestaurant-apps</artifactId>
+    <packaging>pom</packaging>
 
-	<name>drestaurant-apps (parent)</name>
-	<description>d-restaurant backend applications</description>
+    <name>drestaurant-apps (parent)</name>
+    <description>d-restaurant backend applications</description>
 
-	<parent>
-		<groupId>com.drestaurant</groupId>
-		<artifactId>drestaurant-backend</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>com.drestaurant</groupId>
+        <artifactId>drestaurant-backend</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
 
-	<modules>
-		<module>drestaurant-monolith</module>
-		<module>drestaurant-microservices</module>
-	</modules>
+    <modules>
+        <module>drestaurant-monolith</module>
+        <module>drestaurant-microservices</module>
+    </modules>
 
-	<build>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

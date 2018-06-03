@@ -1,46 +1,26 @@
 package com.drestaurant.query.model;
 
-import java.util.List;
-
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Version;
-
 import com.drestaurant.order.domain.model.OrderState;
 
-@Entity
-public class OrderEntity {
-	@Id
-	private String id;
+import javax.persistence.*;
+import java.util.List;
 
-	@Version
-	private Long version;
+@Entity public class OrderEntity {
+	@Id private String id;
+
+	@Version private Long version;
 
 	private Long aggregateVersion;
 
-	@ElementCollection
-	private List<OrderItemEmbedable> lineItems;
+	@ElementCollection private List<OrderItemEmbedable> lineItems;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "RESTAURANT_ID")
-	private RestaurantEntity restaurant;
+	@ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "RESTAURANT_ID") private RestaurantEntity restaurant;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "CUSTOMER_ID")
-	private CustomerEntity customer;
+	@ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "CUSTOMER_ID") private CustomerEntity customer;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "COURIER_ID")
-	private CourierEntity courier;
+	@ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "COURIER_ID") private CourierEntity courier;
 
-	@Enumerated(EnumType.STRING)
-	private OrderState state;
+	@Enumerated(EnumType.STRING) private OrderState state;
 
 	public OrderEntity(String id, Long aggregateVersion, List<OrderItemEmbedable> lineItems) {
 		this.id = id;

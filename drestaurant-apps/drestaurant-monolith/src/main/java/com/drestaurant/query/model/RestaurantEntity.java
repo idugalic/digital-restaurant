@@ -5,17 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
-@Entity
-public class RestaurantEntity {
+@Entity public class RestaurantEntity {
 
-	@Id
-	private String id;
-	@Version
-	private Long version;
+	@Id private String id;
+	@Version private Long version;
 	private Long aggregateVersion;
 	private String name;
-	@Embedded
-	private RestaurantMenuEmbedable menu;
+	@Embedded private RestaurantMenuEmbedable menu;
 
 	public RestaurantEntity(String id, Long aggregateVersion, String name, RestaurantMenuEmbedable menu) {
 		this.id = id;

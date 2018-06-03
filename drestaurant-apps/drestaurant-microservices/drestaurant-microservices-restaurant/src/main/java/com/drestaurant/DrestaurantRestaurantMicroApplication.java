@@ -1,39 +1,35 @@
 package com.drestaurant;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.drestaurant.common.domain.model.AuditEntry;
+import com.drestaurant.common.domain.model.Money;
+import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand;
+import com.drestaurant.restaurant.domain.model.MenuItem;
+import com.drestaurant.restaurant.domain.model.RestaurantMenu;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.drestaurant.common.domain.model.AuditEntry;
-import com.drestaurant.common.domain.model.Money;
-import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand;
-import com.drestaurant.restaurant.domain.model.MenuItem;
-import com.drestaurant.restaurant.domain.model.RestaurantMenu;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
-@SpringBootApplication
-public class DrestaurantRestaurantMicroApplication implements CommandLineRunner {
+@SpringBootApplication public class DrestaurantRestaurantMicroApplication implements CommandLineRunner {
 
-	@Autowired
-	private CommandGateway commandGateway;
-	
-    private static final String WHO = "johndoe";
-	
+	@Autowired private CommandGateway commandGateway;
+
+	private static final String WHO = "johndoe";
+
 	public static void main(String[] args) {
-		SpringApplication  app = new SpringApplication(DrestaurantRestaurantMicroApplication.class);
+		SpringApplication app = new SpringApplication(DrestaurantRestaurantMicroApplication.class);
 		app.run(args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-		AuditEntry auditEntry = new AuditEntry(WHO);		
+	@Override public void run(String... args) throws Exception {
+		AuditEntry auditEntry = new AuditEntry(WHO, Calendar.getInstance().getTime());
 
-		
 		//1. ######## Create a Restaurant & Menu ########
 		String restaurantName = String.valueOf("Fancy");
 		List<MenuItem> menuItems = new ArrayList<>();
@@ -42,15 +38,13 @@ public class DrestaurantRestaurantMicroApplication implements CommandLineRunner 
 		menuItems.add(item1);
 		menuItems.add(item2);
 		RestaurantMenu menu = new RestaurantMenu(menuItems, "version1");
-		
+
 		CreateRestaurantCommand createRestaurantCommand = new CreateRestaurantCommand(restaurantName, menu, auditEntry);
 		String restaurantId = commandGateway.sendAndWait(createRestaurantCommand);
-	
+
 		//2. ########## Mark restaurant order as prepared and ready for delivery ##########
-//		MarkRestaurantOrderAsPreparedCommand markRestaurantOrderAsPreparedCommand = new MarkRestaurantOrderAsPreparedCommand("restaurantOrder_" + orderId, auditEntry);
-//		commandGateway.sendAndWait(markRestaurantOrderAsPreparedCommand);
-		
-	
-		
+		//		MarkRestaurantOrderAsPreparedCommand markRestaurantOrderAsPreparedCommand = new MarkRestaurantOrderAsPreparedCommand("restaurantOrder_" + orderId, auditEntry);
+		//		commandGateway.sendAndWait(markRestaurantOrderAsPreparedCommand);
+
 	}
 }

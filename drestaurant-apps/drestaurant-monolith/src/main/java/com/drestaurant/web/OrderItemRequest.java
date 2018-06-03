@@ -17,7 +17,6 @@ public class OrderItemRequest {
 	public OrderItemRequest() {
 	}
 
-
 	public String getId() {
 		return id;
 	}
@@ -49,6 +48,5 @@ public class OrderItemRequest {
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
-	
 
 }
