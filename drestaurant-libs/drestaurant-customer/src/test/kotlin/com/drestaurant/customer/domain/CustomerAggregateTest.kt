@@ -12,28 +12,29 @@ import org.axonframework.test.aggregate.FixtureConfiguration
 import org.junit.Before
 import org.junit.Test
 import java.math.BigDecimal
+import java.util.*
 
 class CustomerAggregateTest {
 
-    private var fixture: FixtureConfiguration<Customer>? = null
+    private lateinit var fixture: FixtureConfiguration<Customer>
     private val WHO = "johndoe"
-    private val auditEntry: AuditEntry? = AuditEntry(WHO)
-    private val auditEntry2: AuditEntry? = AuditEntry(WHO + "2")
+    private val auditEntry: AuditEntry = AuditEntry(WHO, Calendar.getInstance().time)
+    private val auditEntry2: AuditEntry = AuditEntry(WHO + "2", Calendar.getInstance().time)
     private val orderLimit = Money(BigDecimal.valueOf(1000000))
 
     @Before
     fun setUp() {
         fixture = AggregateTestFixture(Customer::class.java)
-        fixture!!.registerCommandDispatchInterceptor(BeanValidationInterceptor())
+        fixture.registerCommandDispatchInterceptor(BeanValidationInterceptor())
     }
 
     @Test
     fun createCustomerTest() {
         val name = PersonName("Ivan", "Dugalic")
-        val createCustomerCommand = CreateCustomerCommand(name, orderLimit, auditEntry!!)
-        val customerCreatedEvent = CustomerCreatedEvent(name, orderLimit, createCustomerCommand.targetAggregateIdentifier, auditEntry!!)
+        val createCustomerCommand = CreateCustomerCommand(name, orderLimit, auditEntry)
+        val customerCreatedEvent = CustomerCreatedEvent(name, orderLimit, createCustomerCommand.targetAggregateIdentifier, auditEntry)
 
-        fixture!!
+        fixture
                 .given()
                 .`when`(createCustomerCommand)
                 .expectEvents(customerCreatedEvent)
@@ -42,11 +43,11 @@ class CustomerAggregateTest {
     @Test(expected = AxonAssertionError::class)
     fun createCustomerAxonAssertionErrorTest() {
         val name = PersonName("Ivan", "Dugalic")
-        val createCustomerCommand = CreateCustomerCommand(name, orderLimit, auditEntry!!)
+        val createCustomerCommand = CreateCustomerCommand(name, orderLimit, auditEntry)
         // Setting the WRONG auditEntry
-        val customerCreatedEvent = CustomerCreatedEvent(name, orderLimit, createCustomerCommand.targetAggregateIdentifier, auditEntry2!!)
+        val customerCreatedEvent = CustomerCreatedEvent(name, orderLimit, createCustomerCommand.targetAggregateIdentifier, auditEntry2)
 
-        fixture!!
+        fixture
                 .given()
                 .`when`(createCustomerCommand)
                 .expectException(AxonAssertionError::class.java)

@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-@SpringBootApplication public class DrestaurantOrderMicroApplication implements CommandLineRunner {
+@SpringBootApplication
+public class DrestaurantOrderMicroApplication implements CommandLineRunner {
 
-	@Autowired private CommandGateway commandGateway;
+	@Autowired
+	private CommandGateway commandGateway;
 
 	private static final String WHO = "johndoe";
 
@@ -36,7 +38,8 @@ import java.util.List;
 		app.run(args);
 	}
 
-	@Override public void run(String... args) throws Exception {
+	@Override
+	public void run(String... args) throws Exception {
 		AuditEntry auditEntry = new AuditEntry(WHO, Calendar.getInstance().getTime());
 
 		//1. ######## Register/Create a Customer ########
@@ -66,8 +69,8 @@ import java.util.List;
 
 		//4. ######## Place/Create an order ########
 		List<OrderLineItem> lineItems = new ArrayList<OrderLineItem>();
-		OrderLineItem lineItem1 = new OrderLineItem("menuItemId1", "name1", new Money(100), 2);
-		OrderLineItem lineItem2 = new OrderLineItem("menuItemId2", "name2", new Money(110), 3);
+		OrderLineItem lineItem1 = new OrderLineItem("menuItemId1", "name1", new Money(BigDecimal.valueOf(100)), 2);
+		OrderLineItem lineItem2 = new OrderLineItem("menuItemId2", "name2", new Money(BigDecimal.valueOf(110)), 3);
 		lineItems.add(lineItem1);
 		lineItems.add(lineItem2);
 		OrderInfo orderInfo = new OrderInfo(consumerId, restaurantId, lineItems);

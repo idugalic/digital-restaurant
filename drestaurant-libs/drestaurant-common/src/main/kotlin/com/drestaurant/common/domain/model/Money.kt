@@ -4,40 +4,34 @@ import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
 import java.math.BigDecimal
-import javax.validation.constraints.NotNull
 
 /**
- *
  * @author: idugalic
  */
-class Money {
+class Money(val amount: BigDecimal) {
 
-    @NotNull
-    var amount: BigDecimal? = null
-        private set
-
-    constructor(amount: BigDecimal) {
-        this.amount = amount
+    fun add(delta: Money): Money {
+        return Money(amount.add(delta.amount))
     }
 
-    constructor(s: String) {
-        this.amount = BigDecimal(s)
+    fun isGreaterThanOrEqual(other: Money): Boolean {
+        return amount.compareTo(other.amount) >= 0
     }
 
-    constructor(i: Int) {
-        this.amount = BigDecimal(i)
+    fun multiply(x: Int): Money {
+        return Money(amount.multiply(BigDecimal(x)))
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o)
+    override fun equals(other: Any?): Boolean {
+        if (this === other)
             return true
 
-        if (o == null || javaClass != o.javaClass)
+        if (other == null || javaClass != other.javaClass)
             return false
 
-        val money = o as Money?
+        val money = other as Money
 
-        return EqualsBuilder().append(amount, money!!.amount).isEquals
+        return EqualsBuilder().append(amount, money.amount).isEquals
     }
 
     override fun hashCode(): Int {
@@ -48,19 +42,4 @@ class Money {
         return ToStringBuilder(this).append("amount", amount).toString()
     }
 
-    fun add(delta: Money): Money {
-        return Money(amount!!.add(delta.amount!!))
-    }
-
-    fun isGreaterThanOrEqual(other: Money): Boolean {
-        return amount!!.compareTo(other.amount!!) >= 0
-    }
-
-    fun asString(): String {
-        return amount!!.toPlainString()
-    }
-
-    fun multiply(x: Int): Money {
-        return Money(amount!!.multiply(BigDecimal(x)))
-    }
 }

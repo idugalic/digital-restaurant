@@ -9,14 +9,14 @@ import javax.validation.constraints.NotNull
 /**
  * @author: idugalic
  */
-open class OrderInfo(@field:NotNull val consumerId: String, @field:NotNull val restaurantId: String, @field:NotNull @field:Valid val lineItems: List<OrderLineItem>) {
+open class OrderInfo(val consumerId: String, val restaurantId: String, @field:Valid val lineItems: List<OrderLineItem>) {
 
     override fun toString(): String {
         return ToStringBuilder.reflectionToString(this)
     }
 
-    override fun equals(o: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, o)
+    override fun equals(other: Any?): Boolean {
+        return EqualsBuilder.reflectionEquals(this, other)
     }
 
     override fun hashCode(): Int {

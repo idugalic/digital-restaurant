@@ -14,38 +14,37 @@ internal class RestaurantOrderSaga {
 
     @Autowired
     @Transient
-    private val commandGateway: CommandGateway? = null
-    private var orderId: String? = null
+    private lateinit var commandGateway: CommandGateway
+    private lateinit var orderId: String
 
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
     fun on(event: RestaurantOrderCreationInitiatedEvent) {
         this.orderId = event.aggregateIdentifier
         associateWith("orderId", this.orderId)
-        val command = ValidateOrderByRestaurantCommand(this.orderId!!, event.restaurantId,
-                event.orderDetails.getLineItems(), event.auditEntry)
-        commandGateway!!.send(command, LoggingCallback.INSTANCE)
+        val command = ValidateOrderByRestaurantCommand(this.orderId, event.restaurantId, event.orderDetails.lineItems, event.auditEntry)
+        commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
     fun on(event: RestaurantNotFoundForOrderEvent) {
         val command = MarkRestaurantOrderAsRejectedCommand(event.orderId, event.auditEntry)
-        commandGateway!!.send(command, LoggingCallback.INSTANCE)
+        commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
     fun on(event: OrderValidatedWithSuccessByRestaurantEvent) {
         val command = MarkRestaurantOrderAsCreatedCommand(event.orderId, event.auditEntry)
-        commandGateway!!.send(command, LoggingCallback.INSTANCE)
+        commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
     fun on(event: OrderValidatedWithErrorByRestaurantEvent) {
         val command = MarkRestaurantOrderAsRejectedCommand(event.orderId, event.auditEntry)
-        commandGateway!!.send(command, LoggingCallback.INSTANCE)
+        commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
 }

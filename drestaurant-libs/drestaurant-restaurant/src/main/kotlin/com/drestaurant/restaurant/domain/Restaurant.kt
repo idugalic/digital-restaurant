@@ -31,10 +31,10 @@ internal class Restaurant {
      * annotation 'AggregateIdentifier' identifies the id field as such.
      */
     @AggregateIdentifier
-    private var id: String? = null
-    private var name: String? = null
-    private var menu: RestaurantMenu? = null
-    private var state: RestaurantState? = null
+    private lateinit var id: String
+    private lateinit var name: String
+    private lateinit var menu: RestaurantMenu
+    private lateinit var state: RestaurantState
 
     /**
      * This default constructor is used by the Repository to construct a prototype
@@ -42,7 +42,7 @@ internal class Restaurant {
      * Restaurant's Id in order to make the Aggregate reflect it's true logical
      * state.
      */
-    constructor() {}
+    constructor()
 
     /**
      * This constructor is marked as a 'CommandHandler' for the
@@ -84,11 +84,11 @@ internal class Restaurant {
      * @param auditEntry
      */
     fun validateOrder(orderId: String, lineItems: List<RestaurantOrderLineItem>, auditEntry: AuditEntry) {
-        if (menu!!.getMenuItems().stream().map { mi -> mi.id }.collect(Collectors.toList()).containsAll(lineItems.stream().map { li -> li.menuItemId }.collect(Collectors.toList()))) {
-            apply(OrderValidatedWithSuccessByRestaurantEvent(this.id!!, orderId, auditEntry))
+        if (menu.menuItems.stream().map { mi -> mi.id }.collect(Collectors.toList()).containsAll(lineItems.stream().map { li -> li.menuItemId }.collect(Collectors.toList()))) {
+            apply(OrderValidatedWithSuccessByRestaurantEvent(this.id, orderId, auditEntry))
 
         } else {
-            apply(OrderValidatedWithErrorByRestaurantEvent(this.id!!, orderId, auditEntry))
+            apply(OrderValidatedWithErrorByRestaurantEvent(this.id, orderId, auditEntry))
         }
     }
 
@@ -96,8 +96,8 @@ internal class Restaurant {
         return ToStringBuilder.reflectionToString(this)
     }
 
-    override fun equals(o: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, o)
+    override fun equals(other: Any?): Boolean {
+        return EqualsBuilder.reflectionEquals(this, other)
     }
 
     override fun hashCode(): Int {

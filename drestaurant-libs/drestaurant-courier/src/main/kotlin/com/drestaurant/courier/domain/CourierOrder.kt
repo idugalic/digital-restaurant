@@ -15,11 +15,11 @@ import org.axonframework.spring.stereotype.Aggregate
 internal class CourierOrder {
 
     @AggregateIdentifier
-    private var id: String? = null
-    private var cuourierId: String? = null
-    private var state: CourierOrderState? = null
+    private lateinit var id: String
+    private lateinit var cuourierId: String
+    private lateinit var state: CourierOrderState
 
-    constructor() {}
+    constructor()
 
     @CommandHandler
     constructor(command: CreateCourierOrderCommand) {
@@ -93,8 +93,8 @@ internal class CourierOrder {
         return ToStringBuilder.reflectionToString(this)
     }
 
-    override fun equals(o: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, o)
+    override fun equals(other: Any?): Boolean {
+        return EqualsBuilder.reflectionEquals(this, other)
     }
 
     override fun hashCode(): Int {

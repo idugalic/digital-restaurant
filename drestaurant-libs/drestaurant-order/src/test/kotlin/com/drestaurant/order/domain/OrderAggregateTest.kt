@@ -12,29 +12,30 @@ import org.axonframework.test.aggregate.AggregateTestFixture
 import org.axonframework.test.aggregate.FixtureConfiguration
 import org.junit.Before
 import org.junit.Test
+import java.math.BigDecimal
 import java.util.*
 
 
 class OrderAggregateTest {
 
-    private var fixture: FixtureConfiguration<Order>? = null
+    private lateinit var fixture: FixtureConfiguration<Order>
     private val WHO = "johndoe"
-    private var auditEntry: AuditEntry = AuditEntry(WHO)
+    private var auditEntry: AuditEntry = AuditEntry(WHO, Calendar.getInstance().time)
 
     private val lineItems: MutableList<OrderLineItem> = ArrayList<OrderLineItem>()
-    private val lineItem1: OrderLineItem = OrderLineItem("menuItemId1", "name1", Money(11), 2)
-    private val lineItem2: OrderLineItem = OrderLineItem("menuItemId2", "name2", Money(22), 3)
+    private val lineItem1: OrderLineItem = OrderLineItem("menuItemId1", "name1", Money(BigDecimal.valueOf(11)), 2)
+    private val lineItem2: OrderLineItem = OrderLineItem("menuItemId2", "name2", Money(BigDecimal.valueOf(22)), 3)
     private var orderInfo: OrderInfo = OrderInfo("consumerId", "restaurantId", lineItems)
-    private var orderDetails: OrderDetails = OrderDetails(orderInfo, lineItems.stream().map(OrderLineItem::total).reduce(Money(0), Money::add))
+    private var orderDetails: OrderDetails = OrderDetails(orderInfo, lineItems.stream().map(OrderLineItem::total).reduce(Money(BigDecimal.ZERO), Money::add))
     private val orderId: String = "orderId"
 
     @Before
     fun setUp() {
         fixture = AggregateTestFixture(Order::class.java)
-        fixture!!.registerCommandDispatchInterceptor(BeanValidationInterceptor())
-        lineItems!!.add(lineItem1)
-        lineItems!!.add(lineItem2)
-        orderDetails = OrderDetails(orderInfo, lineItems.stream().map(OrderLineItem::total).reduce(Money(0), Money::add));
+        fixture.registerCommandDispatchInterceptor(BeanValidationInterceptor())
+        lineItems.add(lineItem1)
+        lineItems.add(lineItem2)
+        orderDetails = OrderDetails(orderInfo, lineItems.stream().map(OrderLineItem::total).reduce(Money(BigDecimal.ZERO), Money::add));
     }
 
     // ########## CREATE ###########
@@ -43,7 +44,7 @@ class OrderAggregateTest {
         val createOrderCommand = CreateOrderCommand(orderInfo, auditEntry)
         val orderCreationInitiatedEvent = OrderCreationInitiatedEvent(orderDetails, createOrderCommand.targetAggregateIdentifier, createOrderCommand.auditEntry)
 
-        fixture!!
+        fixture
                 .given()
                 .`when`(createOrderCommand)
                 .expectEvents(orderCreationInitiatedEvent)
@@ -55,7 +56,7 @@ class OrderAggregateTest {
         val orderCreationInitiatedEvent = OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
         val markOrderAsVerifiedByCustomerCommand = MarkOrderAsVerifiedByCustomerCommand(orderCreationInitiatedEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.consumerId, auditEntry)
         val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.consumerId, auditEntry)
-        fixture!!
+        fixture
                 .given(orderCreationInitiatedEvent)
                 .`when`(markOrderAsVerifiedByCustomerCommand)
                 .expectEvents(orderVerifiedByCustomerEvent)
@@ -67,7 +68,7 @@ class OrderAggregateTest {
         val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.consumerId, auditEntry)
         val markOrderAsVerifiedByRestaurantCommand = MarkOrderAsVerifiedByRestaurantCommand(orderVerifiedByCustomerEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.restaurantId, auditEntry)
         val orderVerifiedByRestaurantEvent = OrderVerifiedByRestaurantEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.restaurantId, auditEntry)
-        fixture!!
+        fixture
                 .given(orderCreationInitiatedEvent, orderVerifiedByCustomerEvent)
                 .`when`(markOrderAsVerifiedByRestaurantCommand)
                 .expectEvents(orderVerifiedByRestaurantEvent)
@@ -80,7 +81,7 @@ class OrderAggregateTest {
         val orderVerifiedByRestaurantEvent = OrderVerifiedByRestaurantEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.restaurantId, auditEntry)
         val markOrderAsPreparedCommand = MarkOrderAsPreparedCommand(orderVerifiedByRestaurantEvent.aggregateIdentifier, auditEntry)
         val orderPreparedEvent = OrderPreparedEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, auditEntry)
-        fixture!!
+        fixture
                 .given(orderCreationInitiatedEvent, orderVerifiedByCustomerEvent, orderVerifiedByRestaurantEvent)
                 .`when`(markOrderAsPreparedCommand)
                 .expectEvents(orderPreparedEvent)
@@ -95,7 +96,7 @@ class OrderAggregateTest {
         val markOrderAsReadyForDeliveryCommand = MarkOrderAsReadyForDeliveryCommand(orderPreparedEvent.aggregateIdentifier, auditEntry)
         val orderReadyForDeliveryEvent = OrderReadyForDeliveryEvent(orderPreparedEvent.aggregateIdentifier, auditEntry)
 
-        fixture!!
+        fixture
                 .given(orderCreationInitiatedEvent, orderVerifiedByCustomerEvent, orderVerifiedByRestaurantEvent, orderPreparedEvent)
                 .`when`(markOrderAsReadyForDeliveryCommand)
                 .expectEvents(orderReadyForDeliveryEvent)
@@ -111,7 +112,7 @@ class OrderAggregateTest {
         val markOrderAsDeliveredCommand = MarkOrderAsDeliveredCommand(orderReadyForDeliveryEvent.aggregateIdentifier, auditEntry)
         val orderDeliveredEvent = OrderDeliveredEvent(orderReadyForDeliveryEvent.aggregateIdentifier, auditEntry)
 
-        fixture!!
+        fixture
                 .given(orderCreationInitiatedEvent, orderVerifiedByCustomerEvent, orderVerifiedByRestaurantEvent, orderPreparedEvent, orderReadyForDeliveryEvent)
                 .`when`(markOrderAsDeliveredCommand)
                 .expectEvents(orderDeliveredEvent)
@@ -123,7 +124,7 @@ class OrderAggregateTest {
         val orderCreationInitiatedEvent = OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
         val markOrderAsRejectedCommand = MarkOrderAsRejectedCommand(orderCreationInitiatedEvent.aggregateIdentifier, auditEntry)
         val orderVerifiedByCustomerEvent = OrderRejectedEvent(orderCreationInitiatedEvent.aggregateIdentifier, auditEntry)
-        fixture!!
+        fixture
                 .given(orderCreationInitiatedEvent)
                 .`when`(markOrderAsRejectedCommand)
                 .expectEvents(orderVerifiedByCustomerEvent)

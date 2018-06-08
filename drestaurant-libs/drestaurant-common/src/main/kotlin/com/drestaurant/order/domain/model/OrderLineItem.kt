@@ -11,24 +11,16 @@ import javax.validation.constraints.NotNull
 /**
  * @author: idugalic
  */
-class OrderLineItem(@field:NotNull val menuItemId: String, @field:NotNull val name: String, @field:NotNull @field:Valid val price: Money, @field:NotNull private val quantity: Int?) {
+class OrderLineItem(val menuItemId: String, val name: String, @field:Valid val price: Money, val quantity: Int) {
 
-    val total: Money get() = price.multiply(quantity!!)
-
-    fun deltaForChangedQuantity(newQuantity: Int): Money {
-        return price.multiply(newQuantity - quantity!!)
-    }
-
-    fun getQuantity(): Int {
-        return quantity!!
-    }
+    val total: Money get() = price.multiply(quantity)
 
     override fun toString(): String {
         return ToStringBuilder.reflectionToString(this)
     }
 
-    override fun equals(o: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, o)
+    override fun equals(other: Any?): Boolean {
+        return EqualsBuilder.reflectionEquals(this, other)
     }
 
     override fun hashCode(): Int {

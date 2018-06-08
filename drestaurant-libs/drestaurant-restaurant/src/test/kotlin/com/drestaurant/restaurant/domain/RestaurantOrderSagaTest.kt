@@ -11,7 +11,7 @@ import java.util.*
 
 class RestaurantOrderSagaTest {
 
-    private var testFixture: FixtureConfiguration? = null
+    private lateinit var testFixture: FixtureConfiguration
 
     private val orderId: String = "orderId"
     private val restuarantId: String = "restuarantId"
@@ -19,44 +19,45 @@ class RestaurantOrderSagaTest {
     private var lineItems: MutableList<RestaurantOrderLineItem> = ArrayList()
     private val orderDetails: RestaurantOrderDetails = RestaurantOrderDetails(lineItems)
     private val WHO = "johndoe"
-    private val auditEntry: AuditEntry = AuditEntry(WHO)
+    private val auditEntry: AuditEntry = AuditEntry(WHO, Calendar.getInstance().time)
 
 
     @Before
     fun setUp() {
+
         testFixture = SagaTestFixture(RestaurantOrderSaga::class.java)
-        lineItems!!.add(lineItem)
+        lineItems.add(lineItem)
     }
 
     @Test
     fun restaurantOrderCreationInitiatedTest() {
 
         testFixture!!.givenNoPriorActivity().whenAggregate(orderId)
-                .publishes(RestaurantOrderCreationInitiatedEvent(orderDetails!!, restuarantId!!, orderId!!, auditEntry!!)).expectActiveSagas(1)
-                .expectDispatchedCommands(ValidateOrderByRestaurantCommand(orderId!!, restuarantId!!, orderDetails!!.getLineItems(), auditEntry!!))
+                .publishes(RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry)).expectActiveSagas(1)
+                .expectDispatchedCommands(ValidateOrderByRestaurantCommand(orderId, restuarantId, orderDetails.lineItems, auditEntry))
     }
 
     @Test
     fun restaurantNotFoundTest() {
 
-        testFixture!!.givenAggregate(orderId).published(RestaurantOrderCreationInitiatedEvent(orderDetails!!, restuarantId!!, orderId!!, auditEntry!!))
-                .whenPublishingA(RestaurantNotFoundForOrderEvent(restuarantId!!, orderId!!, auditEntry!!)).expectActiveSagas(0)
-                .expectDispatchedCommands(MarkRestaurantOrderAsRejectedCommand(orderId!!, auditEntry!!))
+        testFixture!!.givenAggregate(orderId).published(RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry))
+                .whenPublishingA(RestaurantNotFoundForOrderEvent(restuarantId, orderId, auditEntry)).expectActiveSagas(0)
+                .expectDispatchedCommands(MarkRestaurantOrderAsRejectedCommand(orderId, auditEntry))
     }
 
     @Test
     fun restaurantOrderNotValidAndRejected() {
 
-        testFixture!!.givenAggregate(orderId).published(RestaurantOrderCreationInitiatedEvent(orderDetails!!, restuarantId!!, orderId!!, auditEntry!!))
-                .whenPublishingA(OrderValidatedWithErrorByRestaurantEvent(restuarantId!!, orderId!!, auditEntry!!)).expectActiveSagas(0)
-                .expectDispatchedCommands(MarkRestaurantOrderAsRejectedCommand(orderId!!, auditEntry!!))
+        testFixture!!.givenAggregate(orderId).published(RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry))
+                .whenPublishingA(OrderValidatedWithErrorByRestaurantEvent(restuarantId, orderId, auditEntry)).expectActiveSagas(0)
+                .expectDispatchedCommands(MarkRestaurantOrderAsRejectedCommand(orderId, auditEntry))
     }
 
     @Test
     fun restaurantOrderValidAndCreated() {
 
-        testFixture!!.givenAggregate(orderId).published(RestaurantOrderCreationInitiatedEvent(orderDetails!!, restuarantId!!, orderId!!, auditEntry!!))
-                .whenPublishingA(OrderValidatedWithSuccessByRestaurantEvent(restuarantId!!, orderId!!, auditEntry!!)).expectActiveSagas(0)
-                .expectDispatchedCommands(MarkRestaurantOrderAsCreatedCommand(orderId!!, auditEntry!!))
+        testFixture!!.givenAggregate(orderId).published(RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry))
+                .whenPublishingA(OrderValidatedWithSuccessByRestaurantEvent(restuarantId, orderId, auditEntry)).expectActiveSagas(0)
+                .expectDispatchedCommands(MarkRestaurantOrderAsCreatedCommand(orderId, auditEntry))
     }
 }

@@ -9,12 +9,13 @@ import org.axonframework.test.aggregate.FixtureConfiguration
 import org.junit.Before
 import org.junit.Test
 import java.math.BigDecimal
+import java.util.*
 
 class CustomerOrderAggregateTest {
 
-    private var fixture: FixtureConfiguration<CustomerOrder>? = null
+    private lateinit var fixture: FixtureConfiguration<CustomerOrder>
     private val WHO = "johndoe"
-    private val auditEntry: AuditEntry = AuditEntry(WHO)
+    private val auditEntry: AuditEntry = AuditEntry(WHO, Calendar.getInstance().time)
     private val orderId: String = "orderId"
     private val customerId: String = "customerId"
     private val orderTotal: Money = Money(BigDecimal.valueOf(100))
@@ -22,15 +23,15 @@ class CustomerOrderAggregateTest {
     @Before
     fun setUp() {
         fixture = AggregateTestFixture(CustomerOrder::class.java)
-        fixture!!.registerCommandDispatchInterceptor(BeanValidationInterceptor())
+        fixture.registerCommandDispatchInterceptor(BeanValidationInterceptor())
     }
 
     @Test
     fun createCustomerOrderTest() {
-        val createCustomerOrderCommand = CreateCustomerOrderCommand(orderId!!, orderTotal!!, customerId!!, auditEntry!!)
-        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedEvent(orderTotal!!, customerId!!, orderId!!, auditEntry!!)
+        val createCustomerOrderCommand = CreateCustomerOrderCommand(orderId, orderTotal, customerId, auditEntry)
+        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry)
 
-        fixture!!
+        fixture
                 .given()
                 .`when`(createCustomerOrderCommand)
                 .expectEvents(customerOrderCreationInitiatedEvent)
@@ -38,11 +39,11 @@ class CustomerOrderAggregateTest {
 
     @Test
     fun markOrderAsCreatedTest() {
-        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedEvent(orderTotal!!, customerId!!, orderId!!, auditEntry!!)
-        val markCustomerOrderAsCreatedCommand = MarkCustomerOrderAsCreatedCommand(orderId!!, auditEntry!!)
-        val customertOrderCreatedEvent = CustomerOrderCreatedEvent(orderId!!, auditEntry!!)
+        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry)
+        val markCustomerOrderAsCreatedCommand = MarkCustomerOrderAsCreatedCommand(orderId, auditEntry)
+        val customertOrderCreatedEvent = CustomerOrderCreatedEvent(orderId, auditEntry)
 
-        fixture!!
+        fixture
                 .given(customerOrderCreationInitiatedEvent)
                 .`when`(markCustomerOrderAsCreatedCommand)
                 .expectEvents(customertOrderCreatedEvent)
@@ -50,11 +51,11 @@ class CustomerOrderAggregateTest {
 
     @Test
     fun markOrderAsRejectedTest() {
-        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedEvent(orderTotal!!, customerId!!, orderId!!, auditEntry!!)
-        val markCustomerOrderAsRejectedCommand = MarkCustomerOrderAsRejectedCommand(orderId!!, auditEntry!!)
-        val customerOrderRejectedEvent = CustomerOrderRejectedEvent(orderId!!, auditEntry!!)
+        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry)
+        val markCustomerOrderAsRejectedCommand = MarkCustomerOrderAsRejectedCommand(orderId, auditEntry)
+        val customerOrderRejectedEvent = CustomerOrderRejectedEvent(orderId, auditEntry)
 
-        fixture!!
+        fixture
                 .given(customerOrderCreationInitiatedEvent)
                 .`when`(markCustomerOrderAsRejectedCommand)
                 .expectEvents(customerOrderRejectedEvent)
@@ -62,13 +63,13 @@ class CustomerOrderAggregateTest {
 
     @Test
     fun markOrderAsDeliveredTest() {
-        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedEvent(orderTotal!!, customerId!!, orderId!!, auditEntry!!)
-        val customertOrderCreatedEvent = CustomerOrderCreatedEvent(orderId!!, auditEntry!!)
+        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry)
+        val customertOrderCreatedEvent = CustomerOrderCreatedEvent(orderId, auditEntry)
 
-        val markCustomerOrderAsDeliveredCommand = MarkCustomerOrderAsDeliveredCommand(orderId!!, auditEntry!!)
-        val customerOrderDeliveredEvent = CustomerOrderDeliveredEvent(orderId!!, auditEntry!!)
+        val markCustomerOrderAsDeliveredCommand = MarkCustomerOrderAsDeliveredCommand(orderId, auditEntry)
+        val customerOrderDeliveredEvent = CustomerOrderDeliveredEvent(orderId, auditEntry)
 
-        fixture!!
+        fixture
                 .given(customerOrderCreationInitiatedEvent, customertOrderCreatedEvent)
                 .`when`(markCustomerOrderAsDeliveredCommand)
                 .expectEvents(customerOrderDeliveredEvent)

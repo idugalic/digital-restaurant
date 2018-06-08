@@ -11,17 +11,23 @@ import org.axonframework.commandhandling.model.AggregateIdentifier
 import org.axonframework.commandhandling.model.AggregateLifecycle.apply
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.spring.stereotype.Aggregate
+import java.math.BigDecimal
 
 @Aggregate
 internal class CustomerOrder {
 
     @AggregateIdentifier
-    private var id: String? = null
-    private var customerId: String? = null
-    private var state: CustomerOrderState? = null
-    private var orderTotal: Money? = null
+    private lateinit var id: String
+    private lateinit var customerId: String
+    private lateinit var state: CustomerOrderState
+    private lateinit var orderTotal: Money
 
-    constructor() {}
+    /**
+     * This default constructor is used by the Repository to construct a prototype
+     * [Customer]. Events are then used to set properties such as the
+     * Customer's Id in order to make the Aggregate reflect it's true logical state.
+     */
+    constructor()
 
     @CommandHandler
     constructor(command: CreateCustomerOrderCommand) {
@@ -83,8 +89,8 @@ internal class CustomerOrder {
         return ToStringBuilder.reflectionToString(this)
     }
 
-    override fun equals(o: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, o)
+    override fun equals(other: Any?): Boolean {
+        return EqualsBuilder.reflectionEquals(this, other)
     }
 
     override fun hashCode(): Int {

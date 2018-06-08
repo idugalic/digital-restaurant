@@ -30,17 +30,16 @@ internal class Customer {
      * annotation 'AggregateIdentifier' identifies the id field as such.
      */
     @AggregateIdentifier
-    private var id: String? = null
-    private var name: PersonName? = null
-    private var orderLimit: Money? = null
-    private val MILLION = 1000000
+    private lateinit var id: String
+    private lateinit var name: PersonName
+    private lateinit var orderLimit: Money
 
     /**
      * This default constructor is used by the Repository to construct a prototype
      * [Customer]. Events are then used to set properties such as the
      * Customer's Id in order to make the Aggregate reflect it's true logical state.
      */
-    constructor() {}
+    constructor()
 
     /**
      * This constructor is marked as a 'CommandHandler' for the
@@ -58,11 +57,11 @@ internal class Customer {
     }
 
     fun validateOrder(orderId: String, orderTotal: Money, auditEntry: AuditEntry) {
-        if (orderTotal.isGreaterThanOrEqual(this.orderLimit!!)) {
-            apply(OrderValidatedWithErrorByCustomerEvent(this.id!!, orderId, orderTotal, auditEntry))
+        if (orderTotal.isGreaterThanOrEqual(this.orderLimit)) {
+            apply(OrderValidatedWithErrorByCustomerEvent(this.id, orderId, orderTotal, auditEntry))
 
         } else {
-            apply(OrderValidatedWithSuccessByCustomerEvent(this.id!!, orderId, orderTotal, auditEntry))
+            apply(OrderValidatedWithSuccessByCustomerEvent(this.id, orderId, orderTotal, auditEntry))
         }
     }
 
@@ -79,19 +78,15 @@ internal class Customer {
     fun on(event: CustomerCreatedEvent) {
         this.id = event.aggregateIdentifier
         this.name = event.name
-        if (event.orderLimit == null) {
-            this.orderLimit = Money(BigDecimal.valueOf(MILLION.toLong()))
-        } else {
-            this.orderLimit = event.orderLimit
-        }
+        this.orderLimit = event.orderLimit
     }
 
     override fun toString(): String {
         return ToStringBuilder.reflectionToString(this)
     }
 
-    override fun equals(o: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, o)
+    override fun equals(other: Any?): Boolean {
+        return EqualsBuilder.reflectionEquals(this, other)
     }
 
     override fun hashCode(): Int {

@@ -14,6 +14,7 @@ import org.axonframework.commandhandling.model.AggregateIdentifier
 import org.axonframework.commandhandling.model.AggregateLifecycle.apply
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.spring.stereotype.Aggregate
+import java.math.BigDecimal
 
 /**
  *
@@ -32,12 +33,12 @@ internal class Order {
     @AggregateIdentifier
     private var id: String? = null
 
-    private var lineItems: List<OrderLineItem>? = null
-    private var restaurantId: String? = null
-    private var consumerId: String? = null
-    private var state: OrderState? = null
+    private lateinit var lineItems: List<OrderLineItem>
+    private lateinit var restaurantId: String
+    private lateinit var consumerId: String
+    private lateinit var state: OrderState
 
-    val orderTotal: Money get() = this.calculateOrderTotal(this.lineItems!!)
+    val orderTotal: Money get() = this.calculateOrderTotal(this.lineItems)
 
     /**
      * This default constructor is used by the Repository to construct a prototype
@@ -45,7 +46,7 @@ internal class Order {
      * Order's Id in order to make the Aggregate reflect it's true
      * logical state.
      */
-    constructor() {}
+    constructor()
 
     // CREATE
     /**
@@ -164,15 +165,15 @@ internal class Order {
     }
 
     private fun calculateOrderTotal(lineItems: List<OrderLineItem>): Money {
-        return lineItems.stream().map(OrderLineItem::total).reduce(Money(0), Money::add);
+        return lineItems.stream().map(OrderLineItem::total).reduce(Money(BigDecimal.ZERO), Money::add);
     }
 
     override fun toString(): String {
         return ToStringBuilder.reflectionToString(this)
     }
 
-    override fun equals(o: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, o)
+    override fun equals(other: Any?): Boolean {
+        return EqualsBuilder.reflectionEquals(this, other)
     }
 
     override fun hashCode(): Int {

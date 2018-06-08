@@ -17,22 +17,23 @@ import org.axonframework.spring.stereotype.Aggregate
 internal class RestaurantOrder {
 
     @AggregateIdentifier
-    private var id: String? = null
-    private var restaurantId: String? = null
-    private var state: RestaurantOrderState? = null
-    private var lineItems: List<RestaurantOrderLineItem>? = null
+    private lateinit var id: String
+    private lateinit var restaurantId: String
+    private lateinit var state: RestaurantOrderState
+    private lateinit var lineItems: List<RestaurantOrderLineItem>
 
-    constructor() {}
+    constructor()
 
-    @CommandHandler constructor(command: CreateRestaurantOrderCommand) {
-        apply(RestaurantOrderCreationInitiatedEvent(RestaurantOrderDetails(command.orderDetails.getLineItems()), command.restaurantId, command.targetAggregateIdentifier, command.auditEntry))
+    @CommandHandler
+    constructor(command: CreateRestaurantOrderCommand) {
+        apply(RestaurantOrderCreationInitiatedEvent(RestaurantOrderDetails(command.orderDetails.lineItems), command.restaurantId, command.targetAggregateIdentifier, command.auditEntry))
     }
 
     @EventSourcingHandler
     fun on(event: RestaurantOrderCreationInitiatedEvent) {
         this.id = event.aggregateIdentifier
         this.restaurantId = event.restaurantId
-        this.lineItems = event.orderDetails.getLineItems()
+        this.lineItems = event.orderDetails.lineItems
         this.state = RestaurantOrderState.CREATE_PENDING
     }
 
@@ -83,12 +84,11 @@ internal class RestaurantOrder {
         return ToStringBuilder.reflectionToString(this)
     }
 
-    override fun equals(o: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, o)
+    override fun equals(other: Any?): Boolean {
+        return EqualsBuilder.reflectionEquals(this, other)
     }
 
     override fun hashCode(): Int {
         return HashCodeBuilder.reflectionHashCode(this)
     }
-
 }

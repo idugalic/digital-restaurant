@@ -26,20 +26,21 @@ import org.axonframework.test.saga.FixtureConfiguration
 import org.axonframework.test.saga.SagaTestFixture
 import org.junit.Before
 import org.junit.Test
+import java.math.BigDecimal
 import java.util.*
 
 class OrderSagaTest {
 
-    private var testFixture: FixtureConfiguration? = null
+    private lateinit var testFixture: FixtureConfiguration
 
     private val WHO = "johndoe"
-    private var auditEntry: AuditEntry = AuditEntry(WHO)
+    private var auditEntry: AuditEntry = AuditEntry(WHO, Calendar.getInstance().time)
 
     private val lineItems: MutableList<OrderLineItem> = ArrayList<OrderLineItem>()
-    private val lineItem1: OrderLineItem = OrderLineItem("menuItemId1", "name1", Money(11), 2)
-    private val lineItem2: OrderLineItem = OrderLineItem("menuItemId2", "name2", Money(22), 3)
+    private val lineItem1: OrderLineItem = OrderLineItem("menuItemId1", "name1", Money(BigDecimal.valueOf(11)), 2)
+    private val lineItem2: OrderLineItem = OrderLineItem("menuItemId2", "name2", Money(BigDecimal.valueOf(22)), 3)
     private var orderInfo: OrderInfo = OrderInfo("customerId", "restaurantId", lineItems)
-    private val orderDetails: OrderDetails = OrderDetails(orderInfo, lineItems.stream().map(OrderLineItem::total).reduce(Money(0), Money::add))
+    private val orderDetails: OrderDetails = OrderDetails(orderInfo, lineItems.stream().map(OrderLineItem::total).reduce(Money(BigDecimal.ZERO), Money::add))
     private val orderId: String = "orderId"
     private var customerId: String = "customerId"
     private var restaurantId: String = "restaurantId"
@@ -50,35 +51,35 @@ class OrderSagaTest {
     @Before
     fun setUp() {
         testFixture = SagaTestFixture(OrderSaga::class.java)
-        lineItems!!.add(lineItem1)
-        lineItems!!.add(lineItem2)
+        lineItems.add(lineItem1)
+        lineItems.add(lineItem2)
 
-        for (oli in this.orderDetails!!.lineItems) {
-            val roli = RestaurantOrderLineItem(oli.getQuantity(), oli.menuItemId, oli.name)
-            restaurantLineItems!!.add(roli)
+        for (oli in this.orderDetails.lineItems) {
+            val roli = RestaurantOrderLineItem(oli.quantity, oli.menuItemId, oli.name)
+            restaurantLineItems.add(roli)
         }
     }
 
     @Test
     fun orderCreationInitiatedTest() {
 
-        testFixture!!.givenNoPriorActivity()
+        testFixture.givenNoPriorActivity()
                 .whenAggregate(orderId)
                 .publishes(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
                 )
                 .expectActiveSagas(1)
-                .expectDispatchedCommands(CreateCustomerOrderCommand("customerOrder_" + orderId!!, orderDetails!!.orderTotal, customerId, auditEntry))
+                .expectDispatchedCommands(CreateCustomerOrderCommand("customerOrder_" + orderId, orderDetails.orderTotal, customerId, auditEntry))
     }
 
     @Test
     fun customerOrderCreatedTest() {
 
-        testFixture!!.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId)
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
                 )
-                .whenPublishingA(CustomerOrderCreatedEvent("customerOrder_" + orderId!!, auditEntry))
+                .whenPublishingA(CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
                 .expectDispatchedCommands(MarkOrderAsVerifiedByCustomerCommand(orderId, customerId, auditEntry))
     }
@@ -86,25 +87,25 @@ class OrderSagaTest {
     @Test
     fun orderVerifiedByCustomerTest() {
 
-        testFixture!!.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId)
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
                 )
                 .whenPublishingA(OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry))
                 .expectActiveSagas(1)
-                .expectDispatchedCommands(CreateRestaurantOrderCommand("restaurantOrder_" + orderId!!, restaurantOrderDetails, restaurantId, auditEntry))
+                .expectDispatchedCommands(CreateRestaurantOrderCommand("restaurantOrder_" + orderId, restaurantOrderDetails, restaurantId, auditEntry))
     }
 
     @Test
     fun restaurantOrderCreatedEventTest() {
 
-        testFixture!!.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId)
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent("customerOrder_" + orderId!!, auditEntry),
+                        CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry)
                 )
-                .whenPublishingA(RestaurantOrderCreatedEvent("restaurantOrder_" + orderId!!, auditEntry))
+                .whenPublishingA(RestaurantOrderCreatedEvent("restaurantOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
                 .expectDispatchedCommands(MarkOrderAsVerifiedByRestaurantCommand(orderId, restaurantId, auditEntry))
     }
@@ -112,14 +113,14 @@ class OrderSagaTest {
     @Test
     fun restaurantOrderPreparedEventTest() {
 
-        testFixture!!.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId)
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent("customerOrder_" + orderId!!, auditEntry),
+                        CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId!!, auditEntry)
+                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId, auditEntry)
                 )
-                .whenPublishingA(RestaurantOrderPreparedEvent("restaurantOrder_" + orderId!!, auditEntry))
+                .whenPublishingA(RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
                 .expectDispatchedCommands(MarkOrderAsPreparedCommand(orderId, auditEntry))
     }
@@ -127,32 +128,32 @@ class OrderSagaTest {
     @Test
     fun orderPreparedEventTest() {
 
-        testFixture!!.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId)
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent("customerOrder_" + orderId!!, auditEntry),
+                        CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId!!, auditEntry),
-                        RestaurantOrderPreparedEvent("restaurantOrder_" + orderId!!, auditEntry)
+                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId, auditEntry),
+                        RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry)
                 )
                 .whenPublishingA(OrderPreparedEvent(orderId, auditEntry))
                 .expectActiveSagas(1)
-                .expectDispatchedCommands(CreateCourierOrderCommand("courierOrder_" + orderId!!, auditEntry))
+                .expectDispatchedCommands(CreateCourierOrderCommand("courierOrder_" + orderId, auditEntry))
     }
 
     @Test
     fun courierOrderCreatedEventTest() {
 
-        testFixture!!.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId)
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent("customerOrder_" + orderId!!, auditEntry),
+                        CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId!!, auditEntry),
-                        RestaurantOrderPreparedEvent("restaurantOrder_" + orderId!!, auditEntry),
+                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId, auditEntry),
+                        RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry),
                         OrderPreparedEvent(orderId, auditEntry)
                 )
-                .whenPublishingA(CourierOrderCreatedEvent("courierOrder_" + orderId!!, auditEntry))
+                .whenPublishingA(CourierOrderCreatedEvent("courierOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
                 .expectDispatchedCommands(MarkOrderAsReadyForDeliveryCommand(orderId, auditEntry))
     }
@@ -160,17 +161,17 @@ class OrderSagaTest {
     @Test
     fun courierOrderDeliveredEventTest() {
 
-        testFixture!!.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId)
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent("customerOrder_" + orderId!!, auditEntry),
+                        CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId!!, auditEntry),
-                        RestaurantOrderPreparedEvent("restaurantOrder_" + orderId!!, auditEntry),
+                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId, auditEntry),
+                        RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry),
                         OrderPreparedEvent(orderId, auditEntry),
-                        CourierOrderCreatedEvent("courierOrder_" + orderId!!, auditEntry)
+                        CourierOrderCreatedEvent("courierOrder_" + orderId, auditEntry)
                 )
-                .whenPublishingA(CourierOrderDeliveredEvent("courierOrder_" + orderId!!, auditEntry))
+                .whenPublishingA(CourierOrderDeliveredEvent("courierOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
                 .expectDispatchedCommands(MarkOrderAsDeliveredCommand(orderId, auditEntry))
     }
@@ -178,30 +179,30 @@ class OrderSagaTest {
     @Test
     fun customerOrderDeliveredEventTest() {
 
-        testFixture!!.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId)
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent("customerOrder_" + orderId!!, auditEntry),
+                        CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId!!, auditEntry),
-                        RestaurantOrderPreparedEvent("restaurantOrder_" + orderId!!, auditEntry),
+                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId, auditEntry),
+                        RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry),
                         OrderPreparedEvent(orderId, auditEntry),
-                        CourierOrderCreatedEvent("courierOrder_" + orderId!!, auditEntry),
-                        CourierOrderDeliveredEvent("courierOrder_" + orderId!!, auditEntry)
+                        CourierOrderCreatedEvent("courierOrder_" + orderId, auditEntry),
+                        CourierOrderDeliveredEvent("courierOrder_" + orderId, auditEntry)
                 )
                 .whenPublishingA(OrderDeliveredEvent(orderId, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkCustomerOrderAsDeliveredCommand("customerOrder_" + orderId!!, auditEntry))
+                .expectDispatchedCommands(MarkCustomerOrderAsDeliveredCommand("customerOrder_" + orderId, auditEntry))
     }
 
     @Test
     fun customerOrderRejectedEventTest() {
 
-        testFixture!!.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId)
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
                 )
-                .whenPublishingA(CustomerOrderRejectedEvent("customerOrder_" + orderId!!, auditEntry))
+                .whenPublishingA(CustomerOrderRejectedEvent("customerOrder_" + orderId, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkOrderAsRejectedCommand(orderId, auditEntry))
     }
@@ -209,13 +210,13 @@ class OrderSagaTest {
     @Test
     fun restaurantOrderRejectedEventTest() {
 
-        testFixture!!.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId)
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent("customerOrder_" + orderId!!, auditEntry),
+                        CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry)
                 )
-                .whenPublishingA(RestaurantOrderRejectedEvent("restaurantOrder_" + orderId!!, auditEntry))
+                .whenPublishingA(RestaurantOrderRejectedEvent("restaurantOrder_" + orderId, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkOrderAsRejectedCommand(orderId, auditEntry))
     }

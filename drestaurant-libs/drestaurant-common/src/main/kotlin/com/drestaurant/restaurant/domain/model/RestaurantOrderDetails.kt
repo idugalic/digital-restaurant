@@ -3,20 +3,15 @@ package com.drestaurant.restaurant.domain.model
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
-import java.util.*
 
-class RestaurantOrderDetails(private val lineItems: List<RestaurantOrderLineItem>) {
-
-    fun getLineItems(): List<RestaurantOrderLineItem> {
-        return Collections.unmodifiableList(lineItems)
-    }
+class RestaurantOrderDetails(val lineItems: List<RestaurantOrderLineItem>) {
 
     override fun toString(): String {
         return ToStringBuilder.reflectionToString(this)
     }
 
-    override fun equals(o: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, o)
+    override fun equals(other: Any?): Boolean {
+        return EqualsBuilder.reflectionEquals(this, other)
     }
 
     override fun hashCode(): Int {

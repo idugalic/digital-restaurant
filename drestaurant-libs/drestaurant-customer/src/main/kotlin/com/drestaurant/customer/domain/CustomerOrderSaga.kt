@@ -14,38 +14,36 @@ internal class CustomerOrderSaga {
 
     @Autowired
     @Transient
-    private val commandGateway: CommandGateway? = null
-    private var orderId: String? = null
+    private lateinit var commandGateway: CommandGateway
+    private lateinit var orderId: String
 
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
     fun on(event: CustomerOrderCreationInitiatedEvent) {
         this.orderId = event.aggregateIdentifier
         associateWith("orderId", this.orderId)
-        val command = ValidateOrderByCustomerCommand(this.orderId!!, event.customerId, event.orderTotal, event.auditEntry)
-        commandGateway!!.send(command, LoggingCallback.INSTANCE)
+        val command = ValidateOrderByCustomerCommand(this.orderId, event.customerId, event.orderTotal, event.auditEntry)
+        commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
     fun on(event: CustomerNotFoundForOrderEvent) {
         val command = MarkCustomerOrderAsRejectedCommand(event.orderId, event.auditEntry)
-        commandGateway!!.send(command, LoggingCallback.INSTANCE)
+        commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
     fun on(event: OrderValidatedWithSuccessByCustomerEvent) {
         val command = MarkCustomerOrderAsCreatedCommand(event.orderId, event.auditEntry)
-        commandGateway!!.send(command, LoggingCallback.INSTANCE)
+        commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
     fun on(event: OrderValidatedWithErrorByCustomerEvent) {
         val command = MarkCustomerOrderAsRejectedCommand(event.orderId, event.auditEntry)
-        commandGateway!!.send(command, LoggingCallback.INSTANCE)
+        commandGateway.send(command, LoggingCallback.INSTANCE)
     }
-
-
 }

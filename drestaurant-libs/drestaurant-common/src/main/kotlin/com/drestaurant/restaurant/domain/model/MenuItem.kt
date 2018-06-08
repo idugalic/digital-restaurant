@@ -1,18 +1,22 @@
 package com.drestaurant.restaurant.domain.model
 
 import com.drestaurant.common.domain.model.Money
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
+import org.apache.commons.lang.builder.ToStringBuilder
 
-class MenuItem {
-    var id: String? = null
-    var name: String? = null
-    var price: Money? = null
+class MenuItem(val id: String, val name: String, val price: Money) {
 
-    constructor(id: String, name: String, price: Money) {
-        this.id = id
-        this.name = name
-        this.price = price
+    override fun toString(): String {
+        return ToStringBuilder.reflectionToString(this)
     }
 
-    constructor() {}
+    override fun equals(other: Any?): Boolean {
+        return EqualsBuilder.reflectionEquals(this, other)
+    }
+
+    override fun hashCode(): Int {
+        return HashCodeBuilder.reflectionHashCode(this)
+    }
 
 }

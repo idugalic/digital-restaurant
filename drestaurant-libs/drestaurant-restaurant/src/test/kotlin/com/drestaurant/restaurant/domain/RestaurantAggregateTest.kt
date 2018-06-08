@@ -17,15 +17,15 @@ import java.util.*
 
 class RestaurantAggregateTest {
 
-    private var fixture: FixtureConfiguration<Restaurant>? = null
+    private lateinit var fixture: FixtureConfiguration<Restaurant>
     private val WHO = "johndoe"
-    private var auditEntry: AuditEntry = AuditEntry(WHO);
+    private var auditEntry: AuditEntry = AuditEntry(WHO, Calendar.getInstance().time);
 
 
     @Before
     fun setUp() {
         fixture = AggregateTestFixture(Restaurant::class.java)
-        fixture!!.registerCommandDispatchInterceptor(BeanValidationInterceptor())
+        fixture.registerCommandDispatchInterceptor(BeanValidationInterceptor())
     }
 
     @Test
@@ -38,7 +38,7 @@ class RestaurantAggregateTest {
         val createRestaurantCommand = CreateRestaurantCommand(name, menu, auditEntry)
         val restaurantCreatedEvent = RestaurantCreatedEvent(name, menu, createRestaurantCommand.targetAggregateIdentifier, auditEntry)
 
-        fixture!!.given().`when`(createRestaurantCommand).expectEvents(restaurantCreatedEvent)
+        fixture.given().`when`(createRestaurantCommand).expectEvents(restaurantCreatedEvent)
     }
 
     @Test(expected = JSR303ViolationException::class)
@@ -50,7 +50,7 @@ class RestaurantAggregateTest {
         val menu = RestaurantMenu(menuItems, "v1")
         val createRestaurantCommand = CreateRestaurantCommand(name, menu, auditEntry)
 
-        fixture!!.given().`when`(createRestaurantCommand).expectException(JSR303ViolationException::class.java)
+        fixture.given().`when`(createRestaurantCommand).expectException(JSR303ViolationException::class.java)
     }
 
 }
