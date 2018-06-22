@@ -6,7 +6,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
 
 /**
- * @author: idugalic
+ * Order 'details' extends the [OrderInfo] with the total amount
  */
 class OrderDetails(orderInfo: OrderInfo, val orderTotal: Money) : OrderInfo(orderInfo.consumerId, orderInfo.restaurantId, orderInfo.lineItems) {
 
@@ -21,5 +21,4 @@ class OrderDetails(orderInfo: OrderInfo, val orderTotal: Money) : OrderInfo(orde
     override fun hashCode(): Int {
         return HashCodeBuilder.reflectionHashCode(this)
     }
-
 }

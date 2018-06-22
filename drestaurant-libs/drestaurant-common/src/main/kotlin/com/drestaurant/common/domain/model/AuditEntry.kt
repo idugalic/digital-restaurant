@@ -6,7 +6,7 @@ import org.apache.commons.lang.builder.ToStringBuilder
 import java.util.*
 
 /**
- * @author: idugalic
+ * Audit entry holds the information of 'who' and 'when' performed the commands/actions
  */
 class AuditEntry(val who: String, val `when`: Date) {
     override fun toString(): String {

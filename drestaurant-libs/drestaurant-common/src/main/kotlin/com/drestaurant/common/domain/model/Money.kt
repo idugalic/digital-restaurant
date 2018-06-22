@@ -6,7 +6,7 @@ import org.apache.commons.lang.builder.ToStringBuilder
 import java.math.BigDecimal
 
 /**
- * @author: idugalic
+ * A simple abstraction of the 'money' concept
  */
 class Money(val amount: BigDecimal) {
 

@@ -1,0 +1,88 @@
+package com.drestaurant.query.handler
+
+import com.drestaurant.order.domain.api.*
+import com.drestaurant.order.domain.model.OrderLineItem
+import com.drestaurant.order.domain.model.OrderState
+import com.drestaurant.query.model.CustomerEntity
+import com.drestaurant.query.model.OrderEntity
+import com.drestaurant.query.model.OrderItemEmbedable
+import com.drestaurant.query.model.RestaurantEntity
+import com.drestaurant.query.repository.CourierRepository
+import com.drestaurant.query.repository.CustomerRepository
+import com.drestaurant.query.repository.OrderRepository
+import com.drestaurant.query.repository.RestaurantRepository
+import org.axonframework.config.ProcessingGroup
+import org.axonframework.eventhandling.EventHandler
+import org.axonframework.eventsourcing.SequenceNumber
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
+
+import java.util.ArrayList
+
+@ProcessingGroup("default")
+@Component
+internal class OrderEventHandler @Autowired constructor(private val orderRepository: OrderRepository, private val customerRepository: CustomerRepository, private val restaurantRepository: RestaurantRepository, private val courierRepository: CourierRepository) {
+
+    @EventHandler
+    fun handle(event: OrderCreationInitiatedEvent, @SequenceNumber aggregateVersion: Long) {
+        val orderItems = ArrayList<OrderItemEmbedable>()
+        for (item in event.orderDetails.lineItems) {
+            val orderItem = OrderItemEmbedable(item.menuItemId, item.name, item.price.amount, item.quantity)
+            orderItems.add(orderItem)
+        }
+        orderRepository.save(OrderEntity(event.aggregateIdentifier, aggregateVersion, orderItems, null, null, null, OrderState.CREATE_PENDING))
+    }
+
+    @EventHandler
+    fun handle(event: OrderVerifiedByCustomerEvent, @SequenceNumber aggregateVersion: Long) {
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
+        val customerEntity = customerRepository.findById(event.customerId).get()
+        orderEntity.customer = customerEntity
+        orderEntity.state = OrderState.VERIFIED_BY_CUSTOMER
+        orderEntity.aggregateVersion = aggregateVersion
+        orderRepository.save(orderEntity)
+    }
+
+    @EventHandler
+    fun handle(event: OrderVerifiedByRestaurantEvent, @SequenceNumber aggregateVersion: Long) {
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
+        val restaurantEntity = restaurantRepository.findById(event.restaurantId).get()
+        orderEntity.aggregateVersion = aggregateVersion
+        orderEntity.restaurant = restaurantEntity
+        orderEntity.state = OrderState.VERIFIED_BY_RESTAURANT
+        orderRepository.save(orderEntity)
+    }
+
+    @EventHandler
+    fun handle(event: OrderPreparedEvent, @SequenceNumber aggregateVersion: Long) {
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
+        orderEntity.aggregateVersion = aggregateVersion
+        orderEntity.state = OrderState.PREPARED
+        orderRepository.save(orderEntity)
+    }
+
+    @EventHandler
+    fun handle(event: OrderReadyForDeliveryEvent, @SequenceNumber aggregateVersion: Long) {
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
+        orderEntity.aggregateVersion = aggregateVersion
+        orderEntity.state = OrderState.READY_FOR_DELIVERY
+        orderRepository.save(orderEntity)
+    }
+
+    @EventHandler
+    fun handle(event: OrderDeliveredEvent, @SequenceNumber aggregateVersion: Long) {
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
+        orderEntity.aggregateVersion = aggregateVersion
+        orderEntity.state = OrderState.DELIVERED
+        orderRepository.save(orderEntity)
+    }
+
+    @EventHandler
+    fun handle(event: OrderRejectedEvent, @SequenceNumber aggregateVersion: Long) {
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
+        orderEntity.aggregateVersion = aggregateVersion
+        orderEntity.state = OrderState.REJECTED
+        orderRepository.save(orderEntity)
+    }
+
+}

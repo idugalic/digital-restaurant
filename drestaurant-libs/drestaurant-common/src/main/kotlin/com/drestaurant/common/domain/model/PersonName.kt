@@ -4,6 +4,9 @@ import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
 
+/**
+ * First name and last name
+ */
 class PersonName(val firstName: String, val lastName: String) {
     override fun toString(): String {
         return ToStringBuilder.reflectionToString(this)

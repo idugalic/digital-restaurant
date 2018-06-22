@@ -5,6 +5,9 @@ import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
 
+/**
+ * Item in the restaurant menu
+ */
 class MenuItem(val id: String, val name: String, val price: Money) {
 
     override fun toString(): String {

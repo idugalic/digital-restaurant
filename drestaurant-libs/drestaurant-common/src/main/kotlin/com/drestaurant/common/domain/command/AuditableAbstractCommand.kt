@@ -5,4 +5,4 @@ import com.drestaurant.common.domain.model.AuditEntry
 /**
  * @author: idugalic
  */
-open class AuditableAbstractCommand(val auditEntry: AuditEntry)
+open class AuditableAbstractCommand(open val auditEntry: AuditEntry)

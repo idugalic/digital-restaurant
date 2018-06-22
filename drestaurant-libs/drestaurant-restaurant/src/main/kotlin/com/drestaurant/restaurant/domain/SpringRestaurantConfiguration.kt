@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration
 
 
 @Configuration
-internal open class SpringRestaurantConfiguration {
+internal class SpringRestaurantConfiguration {
 
-    open @Bean
+    @Bean
     fun restaurantCommandHandler(axonConfiguration: AxonConfiguration, eventBus: EventBus): RestaurantCommandHandler {
         return RestaurantCommandHandler(axonConfiguration.repository(Restaurant::class.java), eventBus)
     }

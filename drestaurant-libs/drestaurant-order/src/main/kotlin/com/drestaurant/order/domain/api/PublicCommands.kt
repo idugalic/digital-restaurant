@@ -9,9 +9,8 @@ import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
 /**
- * @author: idugalic
+ * This command is used to construct/place new order
  */
-
 class CreateOrderCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, @field:NotNull @field:Valid val orderInfo: OrderInfo, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
 
     constructor(orderInfo: OrderInfo, auditEntry: AuditEntry) : this(UUID.randomUUID().toString(), orderInfo, auditEntry)

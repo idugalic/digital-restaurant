@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Configuration
 
 
 @Configuration
-internal open class SpringCustomerConfiguration {
+internal class SpringCustomerConfiguration {
 
 
-    open @Bean
+    @Bean
     fun customerCommandHandler(axonConfiguration: AxonConfiguration, eventBus: EventBus): CustomerCommandHandler {
         return CustomerCommandHandler(axonConfiguration.repository(Customer::class.java), eventBus)
     }

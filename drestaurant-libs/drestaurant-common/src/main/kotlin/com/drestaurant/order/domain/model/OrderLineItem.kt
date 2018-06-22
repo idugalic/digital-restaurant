@@ -9,7 +9,7 @@ import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
 /**
- * @author: idugalic
+ * Order line item is referencing the restaurant menu item that is ordered with specific price and quantity
  */
 class OrderLineItem(val menuItemId: String, val name: String, @field:Valid val price: Money, val quantity: Int) {
 

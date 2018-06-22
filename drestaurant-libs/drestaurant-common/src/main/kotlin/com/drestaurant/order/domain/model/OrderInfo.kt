@@ -6,8 +6,9 @@ import org.apache.commons.lang.builder.ToStringBuilder
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
+
 /**
- * @author: idugalic
+ * Order 'info' holds the list of [OrderLineItem]s, and reference to customer and restaurant
  */
 open class OrderInfo(val consumerId: String, val restaurantId: String, @field:Valid val lineItems: List<OrderLineItem>) {
 

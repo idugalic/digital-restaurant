@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration
 
 
 @Configuration
-internal open class SpringCourierConfiguration {
+internal class SpringCourierConfiguration {
 
-    open @Bean
+    @Bean
     fun courierCommandHandler(axonConfiguration: AxonConfiguration, eventBus: EventBus): CourierCommandHandler {
         return CourierCommandHandler(axonConfiguration.repository(Courier::class.java), eventBus)
     }
