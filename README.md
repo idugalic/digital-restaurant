@@ -1,26 +1,27 @@
-# [projects](http://idugalic.github.io/projects)/digital-restaurant [![Build Status](https://travis-ci.org/idugalic/digital-restaurant.svg?branch=master)](https://travis-ci.org/idugalic/digital-restaurant)
+# [projects](http://idugalic.github.io/projects)/digital-restaurant (kotlin) [![Build Status](https://travis-ci.org/idugalic/digital-restaurant.svg?branch=kotlin)](https://travis-ci.org/idugalic/digital-restaurant)
+
 
 Customers use the website application to place food orders at local restaurants. Application coordinates a network of couriers who deliver the orders.
 
-*'d-restaurant-backend' is an example of an application that is built using Event Sourcing and CQRS. The application is written in Java (Kotlin is available on this [branch](https://github.com/idugalic/digital-restaurant/tree/kotlin)), and uses Spring Boot. It is built using Axonframework, which is an application framework based on event sourcing and CQRS.*
+*'d-restaurant-backend' is an example of an application that is built using Event Sourcing and CQRS. The application is written in Kotlin and Java, and uses Spring Boot. It is built using Axonframework, which is an application framework based on event sourcing and CQRS.*
 
 ## Domain
 
 *This layer contains information about the domain. This is the heart of the business software. The state of business objects is held here. Persistence of the business objects and possibly their state is delegated to the infrastructure layer*
 
 Business capabilities of 'Digital Restaurant' include:
-- [Courier component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier) 
+- [Courier component](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-courier) 
   - Managing courier information
   - A courier view of an order (managing the delivery of orders)
-- [Restaurant component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant)
+- [Restaurant component](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-restaurant)
   - Managing restaurant menus and other information including location and opening hours
   - A restaurant view of an order  (managing the preparation of orders at a restaurant)
-- [Customer component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer)
+- [Customer component](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-customer)
   - Managing information about customers/consumers
   - A customer view of an order (managing the orders-customer invariants)
-- [Order component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order)
+- [Order component](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-order)
   - Order taking and fulfillment management
-- [Accounting component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-accounting)
+- [Accounting component](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-accounting)
   - Consumer accounting - managing billing of consumers
   - Restaurant accounting - managing payments to restaurants 
   - Courier accounting - managing payments to couriers
@@ -38,13 +39,13 @@ The end result is very likely to be subdomains that are similar to the business 
 
 ![](digital-restaurant.png)
 
-The [Order](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order/src/main/java/com/drestaurant/order/domain/Order.java) ([RestaurantOrder](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant/src/main/java/com/drestaurant/restaurant/domain/RestaurantOrder.java), [CustomerOrder](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer/src/main/java/com/drestaurant/customer/domain/CustomerOrder.java), [CourierOrder](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier/src/main/java/com/drestaurant/courier/domain/CourierOrder.java)) [aggregate](https://docs.axonframework.org/part-ii-domain-logic/command-model#aggregate) class in each domain model represent different term of the same 'Order' business concept.
+The [Order](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/Order.kt) ([RestaurantOrder](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-restaurant/src/main/kotlin/com/drestaurant/restaurant/domain/RestaurantOrder.kt), [CustomerOrder](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-customer/src/main/kotlin/com/drestaurant/customer/domain/CustomerOrder.kt), [CourierOrder](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-courier/src/main/kotlin/com/drestaurant/courier/domain/CourierOrder.kt)) [aggregate](https://docs.axonframework.org/part-ii-domain-logic/command-model#aggregate) class in each domain model represent different term of the same 'Order' business concept.
 
-The Restaurant component has a simpler view of an order aggregate (RestaurantOrder). Its version of an Order simply consist of a status and a list of line item, which tell the restaurant what to prepare. Additionally, we use event-driven mechanism called [sagas](https://docs.axonframework.org/part-ii-domain-logic/sagas) to [manage invariants between Restaurant aggregate and RestaurantOrder aggregate](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant/src/main/java/com/drestaurant/restaurant/domain/RestaurantOrderSaga.java) (e.g. Restaurant order should have only menu items that are on the Restaurant menu)
+The Restaurant component has a simpler view of an order aggregate (RestaurantOrder). Its version of an Order simply consist of a status and a list of line item, which tell the restaurant what to prepare. Additionally, we use event-driven mechanism called [sagas](https://docs.axonframework.org/part-ii-domain-logic/sagas) to [manage invariants between Restaurant aggregate and RestaurantOrder aggregate](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-restaurant/src/main/kotlin/com/drestaurant/restaurant/domain/RestaurantOrderSaga.kt) (e.g. Restaurant order should have only menu items that are on the Restaurant menu)
 
-The Courier component has a different view of an order aggregate (CourierOrder). Its version of an Order simply consist of a status and a address, which tell the courier how and where to deliver the order. Additionally, we use saga to [manage invariants between Courier aggregate and CourierOrder aggregate](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier/src/main/java/com/drestaurant/courier/domain/CourierOrderSaga.java) (e.g. Courier can deliver a limited number of orders)
+The Courier component has a different view of an order aggregate (CourierOrder). Its version of an Order simply consist of a status and a address, which tell the courier how and where to deliver the order. Additionally, we use saga to [manage invariants between Courier aggregate and CourierOrder aggregate](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-courier/src/main/kotlin/com/drestaurant/courier/domain/CourierOrderSaga.kt) (e.g. Courier can deliver a limited number of orders)
 
-We must maintain consistency between these different 'order' aggregates in different components/domains. For example, once the Order component has initiated order creation it must trigger the creation of RestaurantOrder in the Restaurant component. Similarly, if the restaurant rejects the order via the Restaurant component it must be rejected in the Order component. We will [maintain consistency between components using sagas](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order/src/main/java/com/drestaurant/order/domain/OrderSaga.java).
+We must maintain consistency between these different 'order' aggregates in different components/domains. For example, once the Order component has initiated order creation it must trigger the creation of RestaurantOrder in the Restaurant component. Similarly, if the restaurant rejects the order via the Restaurant component it must be rejected in the Order component. We will [maintain consistency between components using sagas](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/OrderSaga.kt).
 
 We use [event sourcing](http://microservices.io/patterns/data/event-sourcing.html) to persist our [event sourced aggregates](https://docs.axonframework.org/part-ii-domain-logic/command-model#event-sourced-aggregates) as a sequence of events. Each event represents a state change of the aggregate. An application rebuild the current state of an aggregate by replaying the events.
 
@@ -63,11 +64,10 @@ Event sourcing also has drawbacks:
 When you make all types in your application public, the packages are simply an organisation mechanism (a grouping, like folders) rather than being used for encapsulation. Since public types can be used from anywhere in a codebase, you can effectively ignore the packages.
 
 The way Java types are placed into packages (components) can actually make a huge difference to how accessible (or inaccessible) those types can be when Java's access modifiers are applied appropriately. Bundling the types into a smaller number of packages allows for something a little more radical. Since there are fewer inter-package dependencies, you can start to restrict the access modifiers.
+Kotlin language doesn't have 'package' modifer as Java has. It has 'internal' modifer which restricts accessiblity of the class to the whole module (compile unit, jar file...). This makes a difference, and you have more freedom to structure your source code, and provide good public API of the component.
 
-For example, our [Customer component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer) classes are placed in one `com.drestaurant.customer.domain` package, with all classes marked as package protected (the default modifier).
-Public classes are placed in `com.drestaurant.customer.domain.api` and they are forming an API for this component. This API consist of [commands](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer/src/main/java/com/drestaurant/customer/domain/api) and [events](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-common/src/main/java/com/drestaurant/customer/domain/api) only.
-
-Traditional architectural style like 'Layered architecture' would create more packages in your component. For example, `com.drestaurant.customer.domain.dao` and `com.drestaurant.customer.domain.service`. This would force you to make some of the DAO classes public and make them part of the API for that component, which is wrong.
+For example, our [Customer component](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-customer) classes are placed in one `com.drestaurant.customer.domain` package, with all classes marked as 'internal'.
+Public classes are placed in `com.drestaurant.customer.domain.api` and they are forming an API for this component. This API consist of [commands](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-customer/src/main/kotlin/com/drestaurant/customer/domain/api) and [events](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-libs/drestaurant-common/src/main/kotlin/com/drestaurant/customer/domain/api) only.
 
 ## Application
 
@@ -75,11 +75,11 @@ Traditional architectural style like 'Layered architecture' would create more pa
 
 ### Monolith
 
-Application exposes capabilities of our 'domain' via the [REST API component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/java/com/drestaurant/web) that is responsible for
+Application exposes capabilities of our 'domain' via the [REST API component](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-apps/drestaurant-monolith/src/main/java/com/drestaurant/web) that is responsible for
  - dispatching commands
- - querying the materialized views - [REST repository](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/java/com/drestaurant/query/repository)
+ - querying the materialized views - [REST repository](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-apps/drestaurant-monolith/src/main/java/com/drestaurant/query/repository)
 
-[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/java/com/drestaurant/query/handler) is a central component. It consumes events, and creates materialized views (projections) of aggregates. This makes querying of event-sourced aggregates easy.
+[Event listener](https://github.com/idugalic/digital-restaurant/tree/kotlin/drestaurant-apps/drestaurant-monolith/src/main/java/com/drestaurant/query/handler) is a central component. It consumes events, and creates materialized views (projections) of aggregates. This makes querying of event-sourced aggregates easy.
 
 #### 'Command' API
 
