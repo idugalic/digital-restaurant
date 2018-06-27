@@ -3,7 +3,7 @@
 
 Customers use the website application to place food orders at local restaurants. Application coordinates a network of couriers who deliver the orders.
 
-*'d-restaurant-backend' is an example of an application that is built using Event Sourcing and CQRS. The application is written in Kotlin and Java, and uses Spring Boot. It is built using Axonframework, which is an application framework based on event sourcing and CQRS.*
+*'d-restaurant-backend' is an example of an application that is built using Event Sourcing and CQRS. The application is written in Kotlin, and uses Spring Boot. It is built using Axonframework, which is an application framework based on event sourcing and CQRS.*
 
 ## Domain
 
@@ -75,11 +75,11 @@ Public classes are placed in `com.drestaurant.customer.domain.api` and they are 
 
 ### Monolith
 
-Application exposes capabilities of our 'domain' via the [REST API component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/java/com/drestaurant/web) that is responsible for
+Application exposes capabilities of our 'domain' via the [REST API component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/web) that is responsible for
  - dispatching commands
- - querying the materialized views - [REST repository](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/java/com/drestaurant/query/repository)
+ - querying the materialized views - [REST repository](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository)
 
-[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/java/com/drestaurant/query/handler) is a central component. It consumes events, and creates materialized views (projections) of aggregates. This makes querying of event-sourced aggregates easy.
+[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates materialized views (projections) of aggregates. This makes querying of event-sourced aggregates easy.
 
 #### 'Command' API
 
