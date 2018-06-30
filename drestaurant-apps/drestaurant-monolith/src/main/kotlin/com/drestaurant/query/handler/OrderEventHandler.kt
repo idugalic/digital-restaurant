@@ -15,13 +15,14 @@ import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Component
 
 import java.util.ArrayList
 
 @ProcessingGroup("default")
 @Component
-internal class OrderEventHandler @Autowired constructor(private val orderRepository: OrderRepository, private val customerRepository: CustomerRepository, private val restaurantRepository: RestaurantRepository, private val courierRepository: CourierRepository) {
+internal class OrderEventHandler @Autowired constructor(private val orderRepository: OrderRepository, private val customerRepository: CustomerRepository, private val restaurantRepository: RestaurantRepository, private val courierRepository: CourierRepository, private val messagingTemplate: SimpMessageSendingOperations) {
 
     @EventHandler
     fun handle(event: OrderCreationInitiatedEvent, @SequenceNumber aggregateVersion: Long) {
@@ -30,7 +31,9 @@ internal class OrderEventHandler @Autowired constructor(private val orderReposit
             val orderItem = OrderItemEmbedable(item.menuItemId, item.name, item.price.amount, item.quantity)
             orderItems.add(orderItem)
         }
-        orderRepository.save(OrderEntity(event.aggregateIdentifier, aggregateVersion, orderItems, null, null, null, OrderState.CREATE_PENDING))
+        orderRepository.save(OrderEntity(event.aggregateIdentifier, aggregateVersion, orderItems, null, null, null, OrderState.CREATE_PENDING));
+        messagingTemplate.convertAndSend("/topic/orders.updates", event);
+
     }
 
     @EventHandler
