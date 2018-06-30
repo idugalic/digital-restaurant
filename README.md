@@ -81,7 +81,7 @@ Application exposes capabilities of our 'domain' via the [REST API component](ht
 
 [Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates materialized views (projections) of aggregates. This makes querying of event-sourced aggregates easy.
 
-#### 'Command' API
+#### 'Command' REST/HTTP API
 
 ##### 1. Create new Restaurant
 ```
@@ -149,7 +149,7 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' 'h
 
 ```
 
-#### 'Query' API
+#### 'Query' REST/HTTP API
 Application is using an event handler to subscribe to all interested domain events. Events are materialized in denormalized SQL database schema. 
 
 REST API for browsing the materialized data:
@@ -157,7 +157,13 @@ REST API for browsing the materialized data:
 ```
 curl http://localhost:8080/api/query
 ```
+#### WebSocket(STOMP) API
+Additioanly we provide a WebSocket API (ws://localhost:8080/drestaurant/websocket) with available 'destinitations/topics' for client to subscribe on:
 
+ - /topic/couriers.updates (noting that courier list has been updated, e.g. new courier has been created)
+ - /topic/customers.updates (noting that customer list has been updated, e.g. new customer has been created)
+ - /topic/orders.updates (noting that order list has been updated, e.g. new order has been created)
+ - /topic/restaurants.updates (noting that restaurant list has been updated, e.g. new restaurant has been created)
 
 ### Microservices
 
