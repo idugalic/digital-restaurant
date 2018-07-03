@@ -49,6 +49,8 @@ The Courier component has a different view of an order aggregate (CourierOrder).
 
 We must maintain consistency between these different 'order' aggregates in different components/domains. For example, once the Order component has initiated order creation it must trigger the creation of RestaurantOrder in the Restaurant component. Similarly, if the restaurant rejects the order via the Restaurant component it must be rejected in the Order component. We will [maintain consistency between components using sagas](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/OrderSaga.kt).
 
+![](digital-restaurant-state-machine.png)
+
 We use [event sourcing](http://microservices.io/patterns/data/event-sourcing.html) to persist our [event sourced aggregates](https://docs.axonframework.org/part-ii-domain-logic/command-model#event-sourced-aggregates) as a sequence of events. Each event represents a state change of the aggregate. An application rebuild the current state of an aggregate by replaying the events.
 
 Event sourcing has several important benefits:
