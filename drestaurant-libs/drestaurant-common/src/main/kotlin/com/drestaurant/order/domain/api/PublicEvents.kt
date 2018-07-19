@@ -2,12 +2,23 @@ package com.drestaurant.order.domain.api
 
 import com.drestaurant.common.domain.event.AuditableAbstractEvent
 import com.drestaurant.common.domain.model.AuditEntry
+import com.drestaurant.common.domain.model.Money
+import com.drestaurant.common.domain.model.PersonName
 import com.drestaurant.order.domain.model.OrderDetails
+import com.drestaurant.restaurant.domain.model.RestaurantOrderDetails
+import javax.validation.Valid
 
 /**
  * An event, noting that order has been initiated (creation has been initiated)
  */
 class OrderCreationInitiatedEvent(val orderDetails: OrderDetails, aggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractEvent(aggregateIdentifier, auditEntry)
+/**
+ * An event, noting that customer order creation has been requested
+ */
+class CustomerOrderCreationRequestedEvent(aggregateIdentifier: String, val orderTotal: Money, val customerId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(aggregateIdentifier, auditEntry)
+class RestaurantOrderCreationRequestedEvent(aggregateIdentifier: String, val orderDetails: RestaurantOrderDetails, val restaurantId: String, auditEntry: AuditEntry): AuditableAbstractEvent(aggregateIdentifier, auditEntry)
+class CourierOrderCreationRequestedEvent(aggregateIdentifier: String, auditEntry: AuditEntry): AuditableAbstractEvent(aggregateIdentifier, auditEntry)
+
 /**
  * An event, noting that order has been delivered
  */

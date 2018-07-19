@@ -1,4 +1,9 @@
+server:
+  port: 8084
 spring:
+  data:
+    rest:
+      base-path: /api/query/restaurant
   datasource:
     url: jdbc:h2:mem:restaurant
   jpa:

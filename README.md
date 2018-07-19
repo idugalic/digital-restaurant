@@ -15,10 +15,10 @@ Business capabilities of 'Digital Restaurant' include:
   - A courier view of an order (managing the delivery of orders)
 - [Restaurant component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant)
   - Managing restaurant menus and other information including location and opening hours
-  - A restaurant view of an order  (managing the preparation of orders at a restaurant)
+  - A restaurant view of an order  (managing the preparation of orders at a restaurant kitchen)
 - [Customer component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer)
   - Managing information about customers/consumers
-  - A customer view of an order (managing the orders-customer invariants)
+  - A customer view of an order (managing the order-customer invariants, e.g order limits)
 - [Order component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order)
   - Order taking and fulfillment management
 - [Accounting component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-accounting)
@@ -36,16 +36,23 @@ The problem with this kind of modeling is that:
 
 Subdomains are identified using the same approach as identifying business capabilities: analyze the business and identify the different areas of expertise. 
 The end result is very likely to be subdomains that are similar to the business capabilities.
+Each subdomain model belongs to one bounded context
+
+- [Courier subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier) 
+- [Restaurant subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant)
+- [Customer subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer)
+- [Order subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order)
+- [Accounting subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-accounting)
 
 ![](digital-restaurant.png)
 
-The [Order](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/Order.kt) ([RestaurantOrder](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant/src/main/kotlin/com/drestaurant/restaurant/domain/RestaurantOrder.kt), [CustomerOrder](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer/src/main/kotlin/com/drestaurant/customer/domain/CustomerOrder.kt), [CourierOrder](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier/src/main/kotlin/com/drestaurant/courier/domain/CourierOrder.kt)) [aggregate](https://docs.axonframework.org/part-ii-domain-logic/command-model#aggregate) class in each domain model represent different term of the same 'Order' business concept.
+The [Order](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/Order.kt) ([RestaurantOrder](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant/src/main/kotlin/com/drestaurant/restaurant/domain/RestaurantOrder.kt), [CustomerOrder](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer/src/main/kotlin/com/drestaurant/customer/domain/CustomerOrder.kt), [CourierOrder](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier/src/main/kotlin/com/drestaurant/courier/domain/CourierOrder.kt)) [aggregate](https://docs.axonframework.org/part-ii-domain-logic/command-model#aggregate) class in each subdomain model represent different term of the same 'Order' business concept.
 
 The Restaurant component has a simpler view of an order aggregate (RestaurantOrder). Its version of an Order simply consist of a status and a list of line item, which tell the restaurant what to prepare. Additionally, we use event-driven mechanism called [sagas](https://docs.axonframework.org/part-ii-domain-logic/sagas) to [manage invariants between Restaurant aggregate and RestaurantOrder aggregate](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant/src/main/kotlin/com/drestaurant/restaurant/domain/RestaurantOrderSaga.kt) (e.g. Restaurant order should have only menu items that are on the Restaurant menu)
 
 The Courier component has a different view of an order aggregate (CourierOrder). Its version of an Order simply consist of a status and a address, which tell the courier how and where to deliver the order. Additionally, we use saga to [manage invariants between Courier aggregate and CourierOrder aggregate](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier/src/main/kotlin/com/drestaurant/courier/domain/CourierOrderSaga.kt) (e.g. Courier can deliver a limited number of orders)
 
-We must maintain consistency between these different 'order' aggregates in different components/domains. For example, once the Order component has initiated order creation it must trigger the creation of RestaurantOrder in the Restaurant component. Similarly, if the restaurant rejects the order via the Restaurant component it must be rejected in the Order component. We will [maintain consistency between components using sagas](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/OrderSaga.kt).
+We must maintain consistency between these different 'order' aggregates in different components/domains. For example, once the Order component has initiated order creation it must trigger the creation of RestaurantOrder in the Restaurant component. We will [maintain consistency between components using sagas](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/OrderSaga.kt).
 
 We use [event sourcing](http://microservices.io/patterns/data/event-sourcing.html) to persist our [event sourced aggregates](https://docs.axonframework.org/part-ii-domain-logic/command-model#event-sourced-aggregates) as a sequence of events. Each event represents a state change of the aggregate. An application rebuild the current state of an aggregate by replaying the events.
 
@@ -73,13 +80,26 @@ Public classes are placed in `com.drestaurant.customer.domain.api` and they are 
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
-### Monolith
+### Monolith (REST by segregating Command and Query)
 
-Application exposes capabilities of our 'domain' via the [REST API component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/web) that is responsible for
- - dispatching commands
- - querying the materialized views - [REST repository](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository)
+Sometimes, you are simply being required to deliver REST API :(
 
-[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates materialized views (projections) of aggregates. This makes querying of event-sourced aggregates easy.
+A recurring question with CQRS and EventSourcing is how to put a synchronous REST front-end on top of an async CQRS back-end.
+
+In general there are two approaches:
+
+ - segregating Command and Query
+ - not segregating Command and Query
+ 
+ This application is using second approach ('segregating Command and Query') by exposing capabilities of our 'domain' via the [REST API component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/web) that is responsible for
+ - dispatching commands - [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/web/CommandController.kt)
+ - querying the materialized views - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository)
+
+[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates materialized views (projections) of aggregates.
+This makes querying of event-sourced aggregates easy.
+
+Aditonally, our event listener is publishing a WebSocket events on every update of materialized views. 
+This can be usefull on the front-end to re-fetch the data via REST endpoints. 
 
 #### 'Command' API
 
@@ -150,7 +170,7 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' 'h
 ```
 
 #### 'Query' API
-Application is using an event handler to subscribe to all interested domain events. Events are materialized in denormalized SQL database schema. 
+Application is using an event handler to subscribe to all interested domain events. Events are materialized in SQL database schema. 
 
 REST API for browsing the materialized data:
 
@@ -158,6 +178,14 @@ REST API for browsing the materialized data:
 curl http://localhost:8080/api/query
 ```
 
+#### WebSocket (STOMP) API
+
+WebSocket API (ws://localhost:8080/drestaurant/websocket) topics:
+
+ - /topic/couriers.updates (noting that courier list has been updated, e.g. new courier has been created)
+ - /topic/customers.updates (noting that customer list has been updated, e.g. new customer has been created)
+ - /topic/orders.updates (noting that order list has been updated, e.g. new order has been created)
+ - /topic/restaurants.updates (noting that restaurant list has been updated, e.g. new restaurant has been created)
 
 ### Microservices
 
