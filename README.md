@@ -5,6 +5,8 @@ Customers use the website application to place food orders at local restaurants.
 
 *'d-restaurant-backend' is an example of an application that is built using Event Sourcing and CQRS. The application is written in Kotlin, and uses Spring Boot. It is built using Axonframework, which is an application framework based on event sourcing and CQRS.*
 
+Note: Frontend part of the solution is available here [http://idugalic.github.io/digital-restaurant-angular](http://idugalic.github.io/digital-restaurant-angular/)
+
 ## Domain
 
 *This layer contains information about the domain. This is the heart of the business software. The state of business objects is held here. Persistence of the business objects and possibly their state is delegated to the infrastructure layer*
@@ -54,6 +56,8 @@ The Courier component has a different view of an order aggregate (CourierOrder).
 
 We must maintain consistency between these different 'order' aggregates in different components/domains. For example, once the Order component has initiated order creation it must trigger the creation of RestaurantOrder in the Restaurant component. We will [maintain consistency between components using sagas](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/OrderSaga.kt).
 
+![](digital-restaurant-state-machine.png)
+
 We use [event sourcing](http://microservices.io/patterns/data/event-sourcing.html) to persist our [event sourced aggregates](https://docs.axonframework.org/part-ii-domain-logic/command-model#event-sourced-aggregates) as a sequence of events. Each event represents a state change of the aggregate. An application rebuild the current state of an aggregate by replaying the events.
 
 Event sourcing has several important benefits:
@@ -101,7 +105,7 @@ This makes querying of event-sourced aggregates easy.
 Aditonally, our event listener is publishing a WebSocket events on every update of materialized views. 
 This can be usefull on the front-end to re-fetch the data via REST endpoints. 
 
-#### 'Command' API
+#### 'Command' REST/HTTP API
 
 ##### 1. Create new Restaurant
 ```
@@ -169,7 +173,8 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' 'h
 
 ```
 
-#### 'Query' API
+
+#### 'Query' REST/HTTP API
 Application is using an event handler to subscribe to all interested domain events. Events are materialized in SQL database schema. 
 
 REST API for browsing the materialized data:
