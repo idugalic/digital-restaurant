@@ -1,11 +1,49 @@
 # [projects](http://idugalic.github.io/projects)/digital-restaurant [![Build Status](https://travis-ci.org/idugalic/digital-restaurant.svg?branch=kotlin)](https://travis-ci.org/idugalic/digital-restaurant)
 
+*'d-restaurant' is an example of an application that is built using Event Sourcing and CQRS. The application is written in Kotlin, and uses Spring Boot. It is built using Axonframework, which is an application framework based on event sourcing and CQRS.*
 
 Customers use the website application to place food orders at local restaurants. Application coordinates a network of couriers who deliver the orders.
 
-*'d-restaurant-backend' is an example of an application that is built using Event Sourcing and CQRS. The application is written in Kotlin, and uses Spring Boot. It is built using Axonframework, which is an application framework based on event sourcing and CQRS.*
 
-Note: Frontend part of the solution is available here [http://idugalic.github.io/digital-restaurant-angular](http://idugalic.github.io/digital-restaurant-angular/)
+## Table of Contents
+
+  * [Domain](#domain)
+     * [Core subdomains](#core-subdomains)
+     * [Generic subdomains](#generic-subdomains)
+     * [Organisation vs encapsulation](#organisation-vs-encapsulation)
+  * [Application/s](#applications)
+     * [Monolith (REST-ish by segregating Command and Query)](#monolith-rest-ish-by-segregating-command-and-query)
+        * ['Command' REST/HTTP API](#command-resthttp-api)
+           * [1. Create new Restaurant](#1-create-new-restaurant)
+           * [2. Create/Register new Customer](#2-createregister-new-customer)
+           * [3. Create/Hire new Courier](#3-createhire-new-courier)
+           * [4. Create/Place the Order](#4-createplace-the-order)
+           * [5. Restaurant marks the Order as prepared](#5-restaurant-marks-the-order-as-prepared)
+           * [6. Courier takes/claims the Order that is ready for delivery (prepared)](#6-courier-takesclaims-the-order-that-is-ready-for-delivery-prepared)
+           * [7. Courier marks the Order as delivered](#7-courier-marks-the-order-as-delivered)
+        * ['Query' REST/HTTP API](#query-resthttp-api)
+        * [WebSocket (STOMP) API](#websocket-stomp-api)
+     * [Monolith 2 (REST API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
+     * [Monolith 3 (WebSockets API. We are async all the way ;))](#monolith-3-websockets-api-we-are-async-all-the-way-)
+     * [Monolith 4 (Vaadin)](#monolith-4-vaadin)
+     * [Microservices](#microservices)
+        * [Microservices 1 (REST API by segregating Command and Query)](#microservices-1-rest-api-by-segregating-command-and-query)
+        * [Microservices 2 (REST API by not segregating Command and Query)](#microservices-2-rest-api-by-not-segregating-command-and-query)
+        * [Microservices 3 (WebSockets API. We are async all the way ;))](#microservices-3-websockets-api-we-are-async-all-the-way-)
+        * [Microservices 4 (Vaadin)](#microservices-4-vaadin)
+  * [Development](#development)
+     * [Clone](#clone)
+     * [Build](#build)
+     * [Run monolith](#run-monolith)
+  * [Continuous delivery](#continuous-delivery)
+  * [Technology](#technology)
+     * [Language](#language)
+     * [Frameworks and Platforms](#frameworks-and-platforms)
+     * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
+     * [Infrastructure and Platform (As A Service)](#infrastructure-and-platform-as-a-service)
+  * [References and further reading](#references-and-further-reading)
+
+
 
 ## Domain
 
@@ -97,15 +135,31 @@ Kotlin language doesn't have 'package' modifer as Java has. It has 'internal' mo
 For example, our [Customer component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer) classes are placed in one `com.drestaurant.customer.domain` package, with all classes marked as 'internal'.
 Public classes are placed in `com.drestaurant.customer.domain.api` and they are forming an API for this component. This API consist of [commands](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer/src/main/kotlin/com/drestaurant/customer/domain/api) and [events](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-common/src/main/kotlin/com/drestaurant/customer/domain/api) only.
 
-## Application
+## Application/s
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
-### Monolith (REST by segregating Command and Query)
+We are going to create more 'web' applications with different architectural styles, API designs and deployment strategies by utilizing components from the domain layer in different way:
+
+**Monolithic**
+
+ - Monolith 1 (REST-ish and WebSockets API by segregating Command and Query. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
+ - Monolith 2 (REST API by not segregating Command and Query. We synchronize on the backend side)
+ - Monolith 3 (WebSockets API. We are async all the way ;))
+ - Monolith 4 (Vaadin)
+
+**Microservices**
+
+ - Microservices 1 (REST-ish and WebSockets API by segregating Command and Query. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
+ - Microservices 2 (REST API by not segregating Command and Query. We synchronize on the backend side)
+ - Microservices 3 (WebSockets API. We are async all the way ;))
+ - Microservices 4 (Vaadin)
+ 
+### Monolith (REST-ish by segregating Command and Query)
 
 Sometimes, you are simply being required to deliver REST API :(
 
-A recurring question with CQRS and EventSourcing is how to put a synchronous REST front-end on top of an async CQRS back-end.
+A recurring question with CQRS and EventSourcing is how to put a synchronous REST front-end on top of an asynchronous CQRS back-end.
 
 In general there are two approaches:
 
@@ -213,7 +267,36 @@ WebSocket API (ws://localhost:8080/drestaurant/websocket) topics:
  - /topic/orders.updates (noting that order list has been updated, e.g. new order has been created)
  - /topic/restaurants.updates (noting that restaurant list has been updated, e.g. new restaurant has been created)
 
+
+Frontend part of the solution is available here [http://idugalic.github.io/digital-restaurant-angular](http://idugalic.github.io/digital-restaurant-angular/)
+
+### Monolith 2 (REST API by not segregating Command and Query)
+
+ ---TODO---
+ 
+### Monolith 3 (WebSockets API. We are async all the way ;))
+
+ ---TODO---
+ 
+### Monolith 4 (Vaadin)
+
+ ---TODO---
+
 ### Microservices
+
+#### Microservices 1 (REST API by segregating Command and Query)
+
+ ---TODO---
+ 
+#### Microservices 2 (REST API by not segregating Command and Query)
+
+ ---TODO---
+ 
+#### Microservices 3 (WebSockets API. We are async all the way ;))
+
+ ---TODO---
+ 
+#### Microservices 4 (Vaadin)
 
  ---TODO---
 
