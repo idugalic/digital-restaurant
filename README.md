@@ -38,7 +38,9 @@ The problem with this kind of modeling is that:
 
 Subdomains are identified using the same approach as identifying business capabilities: analyze the business and identify the different areas of expertise. 
 The end result is very likely to be subdomains that are similar to the business capabilities.
-Each sub-domain model belongs to exactly one bounded context. 
+Each sub-domain model belongs to exactly one bounded context.
+
+![](digital-restaurant.png)
 
 ### Core subdomains
 Some sub-domains are more important to the business then others. This is the domain that you want your most experienced people working on. Those are **core subdomains**:
@@ -74,7 +76,7 @@ Event sourcing also has drawbacks:
 
 Consider using event sourcing on you 'core subdomain' only!
 
-![](digital-restaurant.png)
+
 
 ### Generic subdomains
 Other subdomains facilitate the business, but are not core to the business. In general, these types of pieces can be purchased from a vendor or outsourced. Those are **generic subdomains**:
