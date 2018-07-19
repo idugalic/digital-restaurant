@@ -43,7 +43,7 @@ Each sub-domain model belongs to exactly one bounded context.
 ![](digital-restaurant.png)
 
 ### Core subdomains
-Some sub-domains are more important to the business then others. This is the domain that you want your most experienced people working on. Those are **core subdomains**:
+Some sub-domains are more important to the business then others. This are the subdomains that you want your most experienced people working on. Those are **core subdomains**:
 
 - [Courier subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier) 
 - [Restaurant subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant)
@@ -74,7 +74,7 @@ Event sourcing also has drawbacks:
  - Events will change shape over time.
  - Querying the event store is often difficult, which forces you to use the Command Query Responsibility Segragation (CQRS) pattern.
 
-Consider using event sourcing on you 'core subdomain' only!
+Consider using event sourcing within 'core subdomain' only!
 
 
 
