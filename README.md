@@ -7,41 +7,53 @@ Customers use the website application to place food orders at local restaurants.
 
 ## Table of Contents
 
-  * [Domain](#domain)
-     * [Core subdomains](#core-subdomains)
-     * [Generic subdomains](#generic-subdomains)
-     * [Organisation vs encapsulation](#organisation-vs-encapsulation)
-  * [Application/s](#applications)
-     * [Monolith (REST-ish by segregating Command and Query)](#monolith-rest-ish-by-segregating-command-and-query)
-        * ['Command' REST/HTTP API](#command-resthttp-api)
-           * [1. Create new Restaurant](#1-create-new-restaurant)
-           * [2. Create/Register new Customer](#2-createregister-new-customer)
-           * [3. Create/Hire new Courier](#3-createhire-new-courier)
-           * [4. Create/Place the Order](#4-createplace-the-order)
-           * [5. Restaurant marks the Order as prepared](#5-restaurant-marks-the-order-as-prepared)
-           * [6. Courier takes/claims the Order that is ready for delivery (prepared)](#6-courier-takesclaims-the-order-that-is-ready-for-delivery-prepared)
-           * [7. Courier marks the Order as delivered](#7-courier-marks-the-order-as-delivered)
-        * ['Query' REST/HTTP API](#query-resthttp-api)
-        * [WebSocket (STOMP) API](#websocket-stomp-api)
-     * [Monolith 2 (REST API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
-     * [Monolith 3 (WebSockets API. We are async all the way ;))](#monolith-3-websockets-api-we-are-async-all-the-way-)
-     * [Monolith 4 (Vaadin)](#monolith-4-vaadin)
-     * [Microservices](#microservices)
-        * [Microservices 1 (REST API by segregating Command and Query)](#microservices-1-rest-api-by-segregating-command-and-query)
-        * [Microservices 2 (REST API by not segregating Command and Query)](#microservices-2-rest-api-by-not-segregating-command-and-query)
-        * [Microservices 3 (WebSockets API. We are async all the way ;))](#microservices-3-websockets-api-we-are-async-all-the-way-)
-        * [Microservices 4 (Vaadin)](#microservices-4-vaadin)
-  * [Development](#development)
-     * [Clone](#clone)
-     * [Build](#build)
-     * [Run monolith](#run-monolith)
-  * [Continuous delivery](#continuous-delivery)
-  * [Technology](#technology)
-     * [Language](#language)
-     * [Frameworks and Platforms](#frameworks-and-platforms)
-     * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
-     * [Infrastructure and Platform (As A Service)](#infrastructure-and-platform-as-a-service)
-  * [References and further reading](#references-and-further-reading)
+* [Domain](#domain)
+   * [Core subdomains](#core-subdomains)
+   * [Generic subdomains](#generic-subdomains)
+   * [Organisation vs encapsulation](#organisation-vs-encapsulation)
+* [Application/s](#applications)
+   * [Monolith (REST-ish by segregating Command and Query)](#monolith-rest-ish-by-segregating-command-and-query)
+      * ['Command' REST/HTTP API](#command-resthttp-api)
+         * [1. Create new Restaurant](#1-create-new-restaurant)
+         * [2. Create/Register new Customer](#2-createregister-new-customer)
+         * [3. Create/Hire new Courier](#3-createhire-new-courier)
+         * [4. Create/Place the Order](#4-createplace-the-order)
+         * [5. Restaurant marks the Order as prepared](#5-restaurant-marks-the-order-as-prepared)
+         * [6. Courier takes/claims the Order that is ready for delivery (prepared)](#6-courier-takesclaims-the-order-that-is-ready-for-delivery-prepared)
+         * [7. Courier marks the Order as delivered](#7-courier-marks-the-order-as-delivered)
+      * ['Query' REST/HTTP API](#query-resthttp-api)
+      * [WebSocket (STOMP) API](#websocket-stomp-api)
+   * [Monolith 2 (REST API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
+      * [Restaurant management](#restaurant-management)
+         * [Read all restaurants](#read-all-restaurants)
+         * [Create new restaurant](#create-new-restaurant)
+      * [Customer management](#customer-management)
+         * [Read all customers](#read-all-customers)
+         * [Create/Register new Customer](#createregister-new-customer)
+      * [Courier management](#courier-management)
+         * [Read all couriers](#read-all-couriers)
+         * [Create/Hire new Courier](#createhire-new-courier)
+      * [Order management](#order-management)
+         * [Read all orders](#read-all-orders)
+         * [Create/Place the Order](#createplace-the-order)
+   * [Monolith 3 (WebSockets API. We are async all the way ;))](#monolith-3-websockets-api-we-are-async-all-the-way-)
+   * [Monolith 4 (Vaadin)](#monolith-4-vaadin)
+   * [Microservices](#microservices)
+      * [Microservices 1 (REST API by segregating Command and Query)](#microservices-1-rest-api-by-segregating-command-and-query)
+      * [Microservices 2 (REST API by not segregating Command and Query)](#microservices-2-rest-api-by-not-segregating-command-and-query)
+      * [Microservices 3 (WebSockets API. We are async all the way ;))](#microservices-3-websockets-api-we-are-async-all-the-way-)
+      * [Microservices 4 (Vaadin)](#microservices-4-vaadin)
+* [Development](#development)
+   * [Clone](#clone)
+   * [Build](#build)
+   * [Run monolith](#run-monolith)
+* [Continuous delivery](#continuous-delivery)
+* [Technology](#technology)
+   * [Language](#language)
+   * [Frameworks and Platforms](#frameworks-and-platforms)
+   * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
+   * [Infrastructure and Platform (As A Service)](#infrastructure-and-platform-as-a-service)
+* [References and further reading](#references-and-further-reading)
 
 
 
@@ -292,10 +304,6 @@ Frontend part of the solution is available here [http://idugalic.github.io/digit
  Additionally, it will emit 'any change on Query Model' to Axon subscription queries, and let us subscribe on them within our [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/web/CommandController.kt) keeping our architecture clean.
   
  Although fully asynchronous designs may be preferable for a number of reasons, it is a common scenario that back-end teams are forced to provide a synchronous REST API on top of asynchronous CQRS+ES back-ends.
-
- 
- 
- #### 'Command' REST/HTTP API
  
  #### Restaurant management
  
@@ -316,6 +324,7 @@ Frontend part of the solution is available here [http://idugalic.github.io/digit
    "name": "Fancy"
  }' 'http://localhost:8080/restaurants'
  ```
+ 
  #### Customer management
  
  ##### Read all customers
@@ -330,6 +339,7 @@ Frontend part of the solution is available here [http://idugalic.github.io/digit
    "orderLimit": 1000
  }' 'http://localhost:8080/customers'
  ```
+ 
  #### Courier management
  
  ##### Read all couriers
@@ -344,6 +354,7 @@ Frontend part of the solution is available here [http://idugalic.github.io/digit
    "maxNumberOfActiveOrders": 20
  }' 'http://localhost:8080/couriers'
  ```
+ 
  #### Order management
  
  ##### Read all orders
