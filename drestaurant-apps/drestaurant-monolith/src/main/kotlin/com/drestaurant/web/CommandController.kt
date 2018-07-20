@@ -44,14 +44,14 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
     @ResponseStatus(value = HttpStatus.CREATED)
     fun createCustomer(@RequestBody request: CreateCustomerRequest, response: HttpServletResponse) {
         val orderLimit = Money(request.orderLimit)
-        val command = CreateCustomerCommand(request.name, orderLimit, auditEntry)
+        val command = CreateCustomerCommand(PersonName(request.firstName, request.lastName), orderLimit, auditEntry)
         commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
     @RequestMapping(value = "/courier/createcommand", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(value = HttpStatus.CREATED)
     fun createCourier(@RequestBody request: CreateCourierRequest, response: HttpServletResponse) {
-        val command = CreateCourierCommand(request.name, request.maxNumberOfActiveOrders, auditEntry)
+        val command = CreateCourierCommand(PersonName(request.firstName, request.lastName), request.maxNumberOfActiveOrders, auditEntry)
         commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
@@ -106,12 +106,13 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
 /**
  * A request for creating a Courier
  */
-data class CreateCourierRequest(val name: PersonName, val maxNumberOfActiveOrders: Int)
+data class CreateCourierRequest(val firstName: String, val lastName: String, val maxNumberOfActiveOrders: Int)
 
 /**
  * A request for creating a Customer/Consumer
  */
-data class CreateCustomerRequest(val name: PersonName, val orderLimit: BigDecimal)
+data class CreateCustomerRequest(val firstName: String, val lastName: String, val orderLimit: BigDecimal)
+
 
 /**
  * A request for creating a Restaurant

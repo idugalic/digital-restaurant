@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Digital Restaurant - Monolith2</title>
+</head>
+<body>
+<h1>Digital Restaurant</h1>
+<h2 style="color: Grey;">Monolith2</h2>
+<p>This version of the application is deployed as a single monolithic application.</p>
+<p>Domain Driven Design is applied through Event Sourcing and CQRS.</p>
+
+
+<h3 style="color: Grey;">Database</h3>
+<p>We use in-memory H2 SQL database to persist domain events and materialized views. Schema is recreated (drop and create) on application start</p>
+<p>You can access it <a href="h2-console">here.</a></p>
+<ul>
+    <li>JDBC URL: jdbc:h2:mem:restaurant</li>
+    <li>Username: sa</li>
+    <li>Password:</li>
+</ul>
+</body>
+</html>
