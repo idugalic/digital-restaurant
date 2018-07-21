@@ -91,6 +91,7 @@ Each sub-domain model belongs to exactly one bounded context.
 ![](digital-restaurant.png)
 
 ### Core subdomains
+
 Some sub-domains are more important to the business then others. This are the subdomains that you want your most experienced people working on. Those are **core subdomains**:
 
 - [Courier subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier) 
@@ -279,100 +280,101 @@ Frontend part of the solution is available here [http://idugalic.github.io/digit
 
 ### Monolith 2 (REST API by not segregating Command and Query)
 
- Sometimes, you are simply being required to deliver REST API :(
+Sometimes, you are simply being required to deliver REST API :(
+
+A recurring question with CQRS and EventSourcing is how to put a synchronous REST front-end on top of an asynchronous CQRS back-end.
+
+In general there are two approaches:
+
+ - **segregating Command and Query** - resources representing Commands (request for changes) and resources representing the state of the domain (Read Models) are decoupled. By some opinions, this is not REST ;)
+ - **not segregating Command and Query** - one-to-one relation between a Command resource and a Query Model
+
+This application is using the second approach ('NOT segregating Command and Query') by exposing capabilities of our 'domain' via the REST API componenta that are responsible for
  
- A recurring question with CQRS and EventSourcing is how to put a synchronous REST front-end on top of an asynchronous CQRS back-end.
- 
- In general there are two approaches:
- 
-  - **segregating Command and Query** - resources representing Commands (request for changes) and resources representing the state of the domain (Read Models) are decoupled. By some opinions, this is not REST ;)
-  - **not segregating Command and Query** - one-to-one relation between a Command resource and a Query Model
-  
-  This application is using the second approach ('NOT segregating Command and Query') by exposing capabilities of our 'domain' via the REST API componenta that are responsible for
-  - dispatching commands - [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/web/CommandController.kt)
-  - querying the read model / materialized view - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/query/repository)
- 
- 
- **We create one-to-one relation between a Command resource and a Query Model (materialized view) resource.**
- Note that we are utilizing Spring Rest Data project to implement REST API, and that will position us on the third level of [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html)
- 
- [Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates Query Model / materialized views of aggregates.
- Additionally, it will emit 'any change on Query Model' to Axon subscription queries, and let us subscribe on them within our [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/web/CommandController.kt) keeping our architecture clean.
-  
- Although fully asynchronous designs may be preferable for a number of reasons, it is a common scenario that back-end teams are forced to provide a synchronous REST API on top of asynchronous CQRS+ES back-ends.
- 
- #### Restaurant management
- 
- ##### Read all restaurants
- ```
-  curl http://localhost:8080/restaurants
- ```
- ##### Create new restaurant
- ```
- curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
-   "menuItems": [
-     {
-       "id": "id1",
-       "name": "name1",
-       "price": 100
-     }
-   ],
-   "name": "Fancy"
- }' 'http://localhost:8080/restaurants'
- ```
- 
- #### Customer management
- 
- ##### Read all customers
-  ```
-   curl http://localhost:8080/customers
-  ```
- ##### Create/Register new Customer
- ```
- curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
-   "firstName": "Ivan",
-   "lastName": "Dugalic",
-   "orderLimit": 1000
- }' 'http://localhost:8080/customers'
- ```
- 
- #### Courier management
- 
- ##### Read all couriers
-   ```
-    curl http://localhost:8080/couriers
-   ```
- ##### Create/Hire new Courier
- ```
- curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
-   "firstName": "John",
-   "lastName": "Doe",
-   "maxNumberOfActiveOrders": 20
- }' 'http://localhost:8080/couriers'
- ```
- 
- #### Order management
- 
- ##### Read all orders
-    ```
-     curl http://localhost:8080/orders
-    ```
- 
- ##### Create/Place the Order
- ```
- curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
-   "customerId": "CUSTOMER_ID",
-   "orderItems": [
-     {
-       "id": "id1",
-       "name": "name1",
-       "price": 100,
-       "quantity": 0
-     }
-   ],
-   "restaurantId": "RESTAURANT_ID"
- }' 'http://localhost:8080/orders'
- ```
+ - dispatching commands - [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/web/CommandController.kt)
+ - querying the read model / materialized view - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/query/repository)
+
+
+**We create one-to-one relation between a Command resource and a Query Model (materialized view) resource.**
+Note that we are utilizing Spring Rest Data project to implement REST API, and that will position us on the third level of [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html)
+
+[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates Query Model / materialized views of aggregates.
+Additionally, it will emit 'any change on Query Model' to Axon subscription queries, and let us subscribe on them within our [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/web/CommandController.kt) keeping our architecture clean.
+
+Although fully asynchronous designs may be preferable for a number of reasons, it is a common scenario that back-end teams are forced to provide a synchronous REST API on top of asynchronous CQRS+ES back-ends.
+
+#### Restaurant management
+
+##### Read all restaurants
+```
+curl http://localhost:8080/restaurants
+```
+##### Create new restaurant
+```
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
+"menuItems": [
+ {
+   "id": "id1",
+   "name": "name1",
+   "price": 100
+ }
+],
+"name": "Fancy"
+}' 'http://localhost:8080/restaurants'
+```
+
+#### Customer management
+
+##### Read all customers
+```
+curl http://localhost:8080/customers
+```
+##### Create/Register new Customer
+```
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
+"firstName": "Ivan",
+"lastName": "Dugalic",
+"orderLimit": 1000
+}' 'http://localhost:8080/customers'
+```
+
+#### Courier management
+
+##### Read all couriers
+```
+curl http://localhost:8080/couriers
+```
+##### Create/Hire new Courier
+```
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
+"firstName": "John",
+"lastName": "Doe",
+"maxNumberOfActiveOrders": 20
+}' 'http://localhost:8080/couriers'
+```
+
+#### Order management
+
+##### Read all orders
+```
+ curl http://localhost:8080/orders
+```
+
+##### Create/Place the Order
+```
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
+"customerId": "CUSTOMER_ID",
+"orderItems": [
+ {
+   "id": "id1",
+   "name": "name1",
+   "price": 100,
+   "quantity": 0
+ }
+],
+"restaurantId": "RESTAURANT_ID"
+}' 'http://localhost:8080/orders'
+```
  Note: Replace CUSTOMER_ID and RESTAURANT_ID with concrete values.
  
 
