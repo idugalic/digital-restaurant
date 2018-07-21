@@ -12,7 +12,7 @@ Customers use the website application to place food orders at local restaurants.
    * [Generic subdomains](#generic-subdomains)
    * [Organisation vs encapsulation](#organisation-vs-encapsulation)
 * [Application/s](#applications)
-   * [Monolith (REST-ish by segregating Command and Query)](#monolith-rest-ish-by-segregating-command-and-query)
+   * [Monolith ('REST' / HTTP API by segregating Command and Query)](#monolith-rest-ish-by-segregating-command-and-query)
       * ['Command' REST/HTTP API](#command-resthttp-api)
          * [1. Create new Restaurant](#1-create-new-restaurant)
          * [2. Create/Register new Customer](#2-createregister-new-customer)
@@ -23,7 +23,7 @@ Customers use the website application to place food orders at local restaurants.
          * [7. Courier marks the Order as delivered](#7-courier-marks-the-order-as-delivered)
       * ['Query' REST/HTTP API](#query-resthttp-api)
       * [WebSocket (STOMP) API](#websocket-stomp-api)
-   * [Monolith 2 (REST API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
+   * [Monolith 2 (REST / HATEOAS API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
       * [Restaurant management](#restaurant-management)
          * [Read all restaurants](#read-all-restaurants)
          * [Create new restaurant](#create-new-restaurant)
@@ -37,12 +37,10 @@ Customers use the website application to place food orders at local restaurants.
          * [Read all orders](#read-all-orders)
          * [Create/Place the Order](#createplace-the-order)
    * [Monolith 3 (WebSockets API. We are async all the way ;))](#monolith-3-websockets-api-we-are-async-all-the-way-)
-   * [Monolith 4 (Vaadin)](#monolith-4-vaadin)
    * [Microservices](#microservices)
-      * [Microservices 1 (REST API by segregating Command and Query)](#microservices-1-rest-api-by-segregating-command-and-query)
-      * [Microservices 2 (REST API by not segregating Command and Query)](#microservices-2-rest-api-by-not-segregating-command-and-query)
+      * [Microservices 1 ('REST' / HTTP API by segregating Command and Query)](#microservices-1-rest-api-by-segregating-command-and-query)
+      * [Microservices 2 (REST / HATEOAS API by not segregating Command and Query)](#microservices-2-rest-api-by-not-segregating-command-and-query)
       * [Microservices 3 (WebSockets API. We are async all the way ;))](#microservices-3-websockets-api-we-are-async-all-the-way-)
-      * [Microservices 4 (Vaadin)](#microservices-4-vaadin)
 * [Development](#development)
    * [Clone](#clone)
    * [Build](#build)
@@ -155,17 +153,15 @@ We are going to create more 'web' applications with different architectural styl
 
 **Monolithic**
 
- - Monolith 1 (REST-ish and WebSockets API by segregating Command and Query. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
- - Monolith 2 (REST API by not segregating Command and Query. We synchronize on the backend side)
+ - Monolith 1 (REST-ish / HTTP and WebSockets API by segregating Command and Query. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
+ - Monolith 2 (REST / HATEOAS API by not segregating Command and Query. We synchronize on the backend side)
  - Monolith 3 (WebSockets API. We are async all the way ;))
- - Monolith 4 (Vaadin)
 
 **Microservices**
 
- - Microservices 1 (REST-ish and WebSockets API by segregating Command and Query. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
- - Microservices 2 (REST API by not segregating Command and Query. We synchronize on the backend side)
+ - Microservices 1 (REST-ish / HTTP and WebSockets API by segregating Command and Query. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
+ - Microservices 2 (REST / HATEOAS API by not segregating Command and Query. We synchronize on the backend side)
  - Microservices 3 (WebSockets API. We are async all the way ;))
- - Microservices 4 (Vaadin)
  
 ### Monolith (REST-ish by segregating Command and Query)
 
@@ -175,18 +171,17 @@ A recurring question with CQRS and EventSourcing is how to put a synchronous RES
 
 In general there are two approaches:
 
- - **segregating Command and Query** - resources representing Commands (request for changes) and resources representing the state of the domain (Read Models) are decoupled
- - **not segregating Command and Query**
+ - **segregating Command and Query** - resources representing Commands (request for changes) and resources representing the state of the domain (Read Models / materialized views) are decoupled
+ - **not segregating Command and Query** - one-to-one relation between a Command resource and a Query Model
  
- This application is using the first approach ('segregating Command and Query') by exposing capabilities of our 'domain' via the [REST API component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/web) that is responsible for
+ This application is using the first approach ('segregating Command and Query') by exposing capabilities of our 'domain' via the REST API components that are responsible for
  - dispatching commands - [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/web/CommandController.kt)
- - querying the materialized views - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository)
+ - querying the read model / materialized views - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository)
+
+**There is no one-to-one relation between a Command resource and a Query Model resource. This makes easier to implement multiple representations of the same underlying domain entity as separate resources.**
 
 
-No one-to-one relation between a Command resource and a Query Model resource. This makes easier to implement multiple representations of the same underlying domain entity as separate resources.
-
-
-[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates materialized views (projections) of aggregates.
+[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates Read Models / materialized views of aggregates.
 This makes querying of event-sourced aggregates easy.
 
 Aditonally, our event listener is publishing a WebSocket events on every update of materialized views. 
@@ -290,17 +285,18 @@ Frontend part of the solution is available here [http://idugalic.github.io/digit
  
  In general there are two approaches:
  
-  - **segregating Command and Query** - resources representing Commands (request for changes) and resources representing the state of the domain (Read Models) are decoupled
-  - **not segregating Command and Query**
+  - **segregating Command and Query** - resources representing Commands (request for changes) and resources representing the state of the domain (Read Models) are decoupled. By some opinions, this is not REST ;)
+  - **not segregating Command and Query** - one-to-one relation between a Command resource and a Query Model
   
-  This application is using the second approach ('NOT segregating Command and Query') by exposing capabilities of our 'domain' via the [REST API component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/web) that is responsible for
+  This application is using the second approach ('NOT segregating Command and Query') by exposing capabilities of our 'domain' via the REST API componenta that are responsible for
   - dispatching commands - [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/web/CommandController.kt)
-  - querying the materialized views - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/query/repository)
+  - querying the read model / materialized view - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/query/repository)
  
  
- We create one-to-one relation between a Command resource and a Query Model (materialized view) resource.
+ **We create one-to-one relation between a Command resource and a Query Model (materialized view) resource.**
+ Note that we are utilizing Spring Rest Data project to implement REST API, and that will position us on the third level of [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html)
  
- [Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates materialized views (projections) of aggregates.
+ [Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates Query Model / materialized views of aggregates.
  Additionally, it will emit 'any change on Query Model' to Axon subscription queries, and let us subscribe on them within our [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/web/CommandController.kt) keeping our architecture clean.
   
  Although fully asynchronous designs may be preferable for a number of reasons, it is a common scenario that back-end teams are forced to provide a synchronous REST API on top of asynchronous CQRS+ES back-ends.
@@ -385,9 +381,6 @@ Frontend part of the solution is available here [http://idugalic.github.io/digit
 
  ---TODO---
  
-### Monolith 4 (Vaadin)
-
- ---TODO---
 
 ### Microservices
 
@@ -403,9 +396,6 @@ Frontend part of the solution is available here [http://idugalic.github.io/digit
 
  ---TODO---
  
-#### Microservices 4 (Vaadin)
-
- ---TODO---
 
 ## Development
 
@@ -426,6 +416,13 @@ $ ./mvnw clean install
 
 ```bash
 $ cd d-restaurant-backend/drestaurant-apps/drestaurant-monolith
+$ ../../mvnw spring-boot:run
+```
+
+### Run monolith2
+
+```bash
+$ cd d-restaurant-backend/drestaurant-apps/drestaurant-monolith2
 $ ../../mvnw spring-boot:run
 ```
 
