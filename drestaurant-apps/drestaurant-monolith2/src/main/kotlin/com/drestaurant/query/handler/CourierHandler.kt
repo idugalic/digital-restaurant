@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 
 
 @Component
-internal class CourierEventHandler @Autowired constructor(private val repository: CourierRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
+internal class CourierHandler @Autowired constructor(private val repository: CourierRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
     @EventHandler
     fun handle(event: CourierCreatedEvent, @SequenceNumber aggregateVersion: Long) {

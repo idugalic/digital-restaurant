@@ -42,7 +42,7 @@ class RestaurantOrderAggregateTest {
     fun markOrderAsCreatedTest() {
         val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry)
         val markRestaurantOrderAsCreatedCommand = MarkRestaurantOrderAsCreatedCommand(orderId, auditEntry)
-        val restaurantOrderCreatedEvent = RestaurantOrderCreatedEvent(orderId, auditEntry)
+        val restaurantOrderCreatedEvent = RestaurantOrderCreatedEvent(lineItems, restuarantId, orderId, auditEntry)
 
         fixture.given(restaurantOrderCreationInitiatedEvent).`when`(markRestaurantOrderAsCreatedCommand).expectEvents(restaurantOrderCreatedEvent)
     }
@@ -69,7 +69,7 @@ class RestaurantOrderAggregateTest {
     @Test
     fun markOrderAsPreparedTest() {
         val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry)
-        val restaurantOrderCreatedEvent = RestaurantOrderCreatedEvent(orderId, auditEntry)
+        val restaurantOrderCreatedEvent = RestaurantOrderCreatedEvent(lineItems, restuarantId, orderId, auditEntry)
 
         val markRestaurantOrderAsPreparedCommand = MarkRestaurantOrderAsPreparedCommand(orderId, auditEntry)
         val restaurantOrderPreparedEvent = RestaurantOrderPreparedEvent(orderId, auditEntry)

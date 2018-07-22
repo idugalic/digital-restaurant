@@ -5,7 +5,6 @@ import com.drestaurant.query.FindAllCustomersQuery
 import com.drestaurant.query.FindCustomerQuery
 import com.drestaurant.query.model.CustomerEntity
 import com.drestaurant.query.repository.CustomerRepository
-import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
@@ -14,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-internal class CustomerEventHandler @Autowired constructor(private val repository: CustomerRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
+internal class CustomerHandler @Autowired constructor(private val repository: CustomerRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
     @EventHandler
     fun handle(event: CustomerCreatedEvent, @SequenceNumber aggregateVersion: Long) {

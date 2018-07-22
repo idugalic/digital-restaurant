@@ -27,6 +27,7 @@ Customers use the website application to place food orders at local restaurants.
       * [Restaurant management](#restaurant-management)
          * [Read all restaurants](#read-all-restaurants)
          * [Create new restaurant](#create-new-restaurant)
+         * [Mark restaurant order as prepared](#mark-restaurant-order-as-prepared)
       * [Customer management](#customer-management)
          * [Read all customers](#read-all-customers)
          * [Create/Register new Customer](#createregister-new-customer)
@@ -322,7 +323,11 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d
 "name": "Fancy"
 }' 'http://localhost:8080/restaurants'
 ```
+##### Mark restaurant order as prepared
+```
+curl -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8080/restaurants/RESTAURANT_ID/orders/RESTAURANT_ORDER_ID/markprepared'
 
+```
 #### Customer management
 
 ##### Read all customers

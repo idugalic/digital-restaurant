@@ -4,7 +4,7 @@ import java.math.BigDecimal
 import javax.persistence.*
 
 @Entity
-data class RestaurantEntity(@Id var id: String, var aggregateVersion: Long, var name: String, @Embedded var menu: RestaurantMenuEmbedable)
+data class RestaurantEntity(@Id var id: String, var aggregateVersion: Long, var name: String, @Embedded var menu: RestaurantMenuEmbedable, @OneToMany(mappedBy="restaurant") var orders: List<RestaurantOrderEntity>)
 
 @Embeddable
 @Access(AccessType.FIELD)

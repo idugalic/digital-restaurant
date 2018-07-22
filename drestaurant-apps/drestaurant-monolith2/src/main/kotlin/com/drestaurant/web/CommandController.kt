@@ -9,30 +9,28 @@ import com.drestaurant.order.domain.api.CreateOrderCommand
 import com.drestaurant.order.domain.model.OrderInfo
 import com.drestaurant.order.domain.model.OrderLineItem
 import com.drestaurant.order.domain.model.OrderState
-import com.drestaurant.query.FindCourierQuery
-import com.drestaurant.query.FindCustomerQuery
-import com.drestaurant.query.FindOrderQuery
-import com.drestaurant.query.FindRestaurantQuery
-import com.drestaurant.query.model.CourierEntity
-import com.drestaurant.query.model.CustomerEntity
-import com.drestaurant.query.model.OrderEntity
-import com.drestaurant.query.model.RestaurantEntity
+import com.drestaurant.query.*
+import com.drestaurant.query.model.*
 import com.drestaurant.query.repository.CourierRepository
 import com.drestaurant.query.repository.CustomerRepository
 import com.drestaurant.query.repository.OrderRepository
 import com.drestaurant.query.repository.RestaurantRepository
 import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand
+import com.drestaurant.restaurant.domain.api.MarkRestaurantOrderAsPreparedCommand
 import com.drestaurant.restaurant.domain.model.MenuItem
 import com.drestaurant.restaurant.domain.model.RestaurantMenu
+import com.drestaurant.restaurant.domain.model.RestaurantOrderState
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.queryhandling.QueryGateway
 import org.axonframework.queryhandling.responsetypes.ResponseTypes
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -89,11 +87,9 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
                 ResponseTypes.instanceOf<CourierEntity>(CourierEntity::class.java))
         try {
             val commandResult: String = commandGateway.sendAndWait(command)
-            /* Returning the first update sent to our find courier query. */
             val courierEntity = queryResult.updates().blockFirst()
             return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(CourierRepository::class.java, courierEntity?.id).href)).body(courierEntity)
         } finally {
-            /* Closing the subscription query. */
             queryResult.close();
         }
 
@@ -116,11 +112,9 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
 
         try {
             val commandResult: String = commandGateway.sendAndWait(command)
-            /* Returning the first update sent to our find restaurant query. */
             val restaurantEntity = queryResult.updates().blockFirst()
             return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(RestaurantRepository::class.java, restaurantEntity?.id).href)).body(restaurantEntity)
         } finally {
-            /* Closing the subscription query. */
             queryResult.close();
         }
     }
@@ -142,22 +136,33 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
 
         try {
             val commandResult: String = commandGateway.sendAndWait(command)
-            /* Returning the first update sent to our find order query. */
             val orderEntity = queryResult.updates().filter(Predicate { it.state.equals(OrderState.VERIFIED_BY_RESTAURANT)}).blockFirst()
             return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(OrderRepository::class.java, orderEntity?.id).href)).body(orderEntity)
         } finally {
-            /* Closing the subscription query. */
             queryResult.close();
         }
     }
 
-//    @RequestMapping(value = "/restaurant/order/{id}/markpreparedcommand", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
-//    @ResponseStatus(value = HttpStatus.CREATED)
-//    fun markRestaurantOrderAsPrepared(@PathVariable id: String, response: HttpServletResponse) {
-//        val command = MarkRestaurantOrderAsPreparedCommand(id, auditEntry)
-//        commandGateway.send(command, LoggingCallback.INSTANCE)
-//    }
-//
+    @RequestMapping(value = "/restaurants/{rid}/orders/{roid}/markprepared", method = [RequestMethod.PUT], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    fun markRestaurantOrderAsPrepared(@PathVariable rid: String, @PathVariable roid: String, response: HttpServletResponse): ResponseEntity<RestaurantOrderEntity> {
+
+        val command = MarkRestaurantOrderAsPreparedCommand(roid, auditEntry)
+
+        val queryResult = queryGateway.subscriptionQuery(
+                FindRestaurantOrderQuery(command.targetAggregateIdentifier),
+                ResponseTypes.instanceOf<RestaurantOrderEntity>(RestaurantOrderEntity::class.java),
+                ResponseTypes.instanceOf<RestaurantOrderEntity>(RestaurantOrderEntity::class.java))
+
+        try {
+            val commandResult: String? = commandGateway.sendAndWait(command)
+            val restaurantOrderEntity = queryResult.updates().filter(Predicate { it.state.equals(RestaurantOrderState.PREPARED)}).blockFirst()
+
+            return ResponseEntity<RestaurantOrderEntity>(restaurantOrderEntity, HttpStatus.OK)
+        } finally {
+            queryResult.close();
+        }
+    }
+
 //    @RequestMapping(value = "/courier/{cid}/order/{oid}/assigncommand", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
 //    @ResponseStatus(value = HttpStatus.CREATED)
 //    fun assignOrderToCourier(@PathVariable cid: String, @PathVariable oid: String, response: HttpServletResponse) {

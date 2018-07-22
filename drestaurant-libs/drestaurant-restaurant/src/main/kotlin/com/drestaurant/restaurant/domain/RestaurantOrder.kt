@@ -40,7 +40,7 @@ internal class RestaurantOrder {
     @CommandHandler
     fun markOrderAsCreated(command: MarkRestaurantOrderAsCreatedCommand) {
         if (RestaurantOrderState.CREATE_PENDING == state) {
-            apply(RestaurantOrderCreatedEvent(command.targetAggregateIdentifier, command.auditEntry))
+            apply(RestaurantOrderCreatedEvent(this.lineItems, this.restaurantId, command.targetAggregateIdentifier, command.auditEntry))
         } else {
             throw UnsupportedOperationException("The current state is not CREATE_PENDING")
         }

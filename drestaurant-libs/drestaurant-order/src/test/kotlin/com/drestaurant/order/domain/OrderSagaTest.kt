@@ -99,7 +99,7 @@ class OrderSagaTest {
                         CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry)
                 )
-                .whenPublishingA(RestaurantOrderCreatedEvent("restaurantOrder_" + orderId, auditEntry))
+                .whenPublishingA(RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId,"restaurantOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
                 .expectDispatchedCommands(MarkOrderAsVerifiedByRestaurantCommand(orderId, restaurantId, auditEntry))
     }
@@ -112,7 +112,7 @@ class OrderSagaTest {
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
                         CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId, auditEntry)
+                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId,"restaurantOrder_" + orderId, auditEntry)
                 )
                 .whenPublishingA(RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
@@ -127,7 +127,7 @@ class OrderSagaTest {
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
                         CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId, auditEntry),
+                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId,"restaurantOrder_" + orderId, auditEntry),
                         RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry)
                 )
                 .whenPublishingA(OrderPreparedEvent(orderId, auditEntry))
@@ -143,7 +143,7 @@ class OrderSagaTest {
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
                         CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId, auditEntry),
+                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId,"restaurantOrder_" + orderId, auditEntry),
                         RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry),
                         OrderPreparedEvent(orderId, auditEntry)
                 )
@@ -160,7 +160,7 @@ class OrderSagaTest {
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
                         CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent("restaurantOrder_" + orderId, auditEntry),
+                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId,"restaurantOrder_" + orderId, auditEntry),
                         RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry),
                         OrderPreparedEvent(orderId, auditEntry),
                         CourierOrderCreatedEvent("courierOrder_" + orderId, auditEntry)
