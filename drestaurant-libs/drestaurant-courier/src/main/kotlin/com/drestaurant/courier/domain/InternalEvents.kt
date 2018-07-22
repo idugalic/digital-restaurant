@@ -14,5 +14,3 @@ internal class CourierOrderAssigningInitiatedEvent(val courierId: String, aggreg
 internal class OrderValidatedWithErrorByCourierEvent(val courierId: String, val orderId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(courierId, auditEntry)
 
 internal class OrderValidatedWithSuccessByCourierEvent(val courierId: String, val orderId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(courierId, auditEntry)
-
-internal class CourierOrderNotAssignedEvent(orderId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(orderId, auditEntry)

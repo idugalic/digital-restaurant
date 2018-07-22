@@ -20,3 +20,7 @@ class CourierOrderCreatedEvent(orderId: String, auditEntry: AuditEntry) : Audita
  * An event, noting that courier order has been delivered
  */
 class CourierOrderDeliveredEvent(orderId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(orderId, auditEntry)
+/**
+ * An event, noting that courier order was not assigned to courier
+ */
+class CourierOrderNotAssignedEvent(orderId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(orderId, auditEntry)

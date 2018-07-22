@@ -3,6 +3,7 @@ package com.drestaurant.query.handler
 import com.drestaurant.courier.domain.api.CourierOrderAssignedEvent
 import com.drestaurant.courier.domain.api.CourierOrderCreatedEvent
 import com.drestaurant.courier.domain.api.CourierOrderDeliveredEvent
+import com.drestaurant.courier.domain.api.CourierOrderNotAssignedEvent
 import com.drestaurant.courier.domain.model.CourierOrderState
 import com.drestaurant.query.FindAllCourierOrdersQuery
 import com.drestaurant.query.FindAllRestaurantOrdersQuery
@@ -41,6 +42,27 @@ internal class CourierOrderHandler @Autowired constructor(private val repository
         record.state = CourierOrderState.ASSIGNED
         record.courier = courierEntity
         repository.save(record)
+
+        /* sending it to subscription queries of type FindCourierOrderQuery, but only if the courier order id matches. */
+        queryUpdateEmitter.emit(
+                FindCourierOrderQuery::class.java,
+                { query -> query.courierOrderId.equals(event.aggregateIdentifier) },
+                record
+        )
+
+        /* sending it to subscription queries of type FindAllCourierOrders. */
+        queryUpdateEmitter.emit(
+                FindAllCourierOrdersQuery::class.java,
+                { query -> true },
+                record
+        )
+    }
+
+    @EventHandler
+    fun handle(event: CourierOrderNotAssignedEvent, @SequenceNumber aggregateVersion: Long) {
+        val record = repository.findById(event.aggregateIdentifier).get()
+        //record.state = CourierOrderState.CREATED
+        //repository.save(record)
 
         /* sending it to subscription queries of type FindCourierOrderQuery, but only if the courier order id matches. */
         queryUpdateEmitter.emit(
