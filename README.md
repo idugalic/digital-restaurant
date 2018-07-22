@@ -23,20 +23,22 @@ Customers use the website application to place food orders at local restaurants.
          * [7. Courier marks the Order as delivered](#7-courier-marks-the-order-as-delivered)
       * ['Query' REST/HTTP API](#query-resthttp-api)
       * [WebSocket (STOMP) API](#websocket-stomp-api)
-   * [Monolith 2 (REST / HATEOAS API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
-      * [Restaurant management](#restaurant-management)
-         * [Read all restaurants](#read-all-restaurants)
-         * [Create new restaurant](#create-new-restaurant)
-         * [Mark restaurant order as prepared](#mark-restaurant-order-as-prepared)
-      * [Customer management](#customer-management)
-         * [Read all customers](#read-all-customers)
-         * [Create/Register new Customer](#createregister-new-customer)
-      * [Courier management](#courier-management)
-         * [Read all couriers](#read-all-couriers)
-         * [Create/Hire new Courier](#createhire-new-courier)
-      * [Order management](#order-management)
-         * [Read all orders](#read-all-orders)
-         * [Create/Place the Order](#createplace-the-order)
+   * [Monolith 2 (REST API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
+       * [Restaurant management](#restaurant-management)
+          * [Read all restaurants](#read-all-restaurants)
+          * [Create new restaurant](#create-new-restaurant)
+          * [Mark restaurant order as prepared](#mark-restaurant-order-as-prepared)
+       * [Customer management](#customer-management)
+          * [Read all customers](#read-all-customers)
+          * [Create/Register new Customer](#createregister-new-customer)
+       * [Courier management](#courier-management)
+          * [Read all couriers](#read-all-couriers)
+          * [Create/Hire new Courier](#createhire-new-courier)
+          * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared)
+          * [Courier marks the order as delivered](#courier-marks-the-order-as-delivered)
+       * [Order management](#order-management)
+          * [Read all orders](#read-all-orders)
+          * [Create/Place the Order](#createplace-the-order)
    * [Monolith 3 (WebSockets API. We are async all the way ;))](#monolith-3-websockets-api-we-are-async-all-the-way-)
    * [Microservices](#microservices)
       * [Microservices 1 ('REST' / HTTP API by segregating Command and Query)](#microservices-1-rest-api-by-segregating-command-and-query)
@@ -312,7 +314,7 @@ curl http://localhost:8080/restaurants
 ```
 ##### Create new restaurant
 ```
-curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
+curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
 "menuItems": [
  {
    "id": "id1",
@@ -325,7 +327,7 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d
 ```
 ##### Mark restaurant order as prepared
 ```
-curl -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8080/restaurants/RESTAURANT_ID/orders/RESTAURANT_ORDER_ID/markprepared'
+curl -i -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8080/restaurants/RESTAURANT_ID/orders/RESTAURANT_ORDER_ID/markprepared'
 
 ```
 #### Customer management
@@ -336,7 +338,7 @@ curl http://localhost:8080/customers
 ```
 ##### Create/Register new Customer
 ```
-curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
+curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
 "firstName": "Ivan",
 "lastName": "Dugalic",
 "orderLimit": 1000
@@ -351,11 +353,20 @@ curl http://localhost:8080/couriers
 ```
 ##### Create/Hire new Courier
 ```
-curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
+curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
 "firstName": "John",
 "lastName": "Doe",
 "maxNumberOfActiveOrders": 20
 }' 'http://localhost:8080/couriers'
+```
+##### Courier takes/claims the Order that is ready for delivery (prepared)
+```
+curl -i -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8080/couriers/COURIER_ID/orders/COURIER_ORDER_ID/assign'
+```
+
+##### Courier marks the order as delivered
+```
+curl -i -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8080/couriers/COURIER_ID/orders/COURIER_ORDER_ID/markdelivered'
 ```
 
 #### Order management
@@ -367,7 +378,7 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d
 
 ##### Create/Place the Order
 ```
-curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
+curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
 "customerId": "CUSTOMER_ID",
 "orderItems": [
  {

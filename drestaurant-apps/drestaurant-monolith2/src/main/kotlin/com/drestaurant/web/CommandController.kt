@@ -3,7 +3,10 @@ package com.drestaurant.web
 import com.drestaurant.common.domain.model.AuditEntry
 import com.drestaurant.common.domain.model.Money
 import com.drestaurant.common.domain.model.PersonName
+import com.drestaurant.courier.domain.api.AssignCourierOrderToCourierCommand
 import com.drestaurant.courier.domain.api.CreateCourierCommand
+import com.drestaurant.courier.domain.api.MarkCourierOrderAsDeliveredCommand
+import com.drestaurant.courier.domain.model.CourierOrderState
 import com.drestaurant.customer.domain.api.CreateCustomerCommand
 import com.drestaurant.order.domain.api.CreateOrderCommand
 import com.drestaurant.order.domain.model.OrderInfo
@@ -26,7 +29,6 @@ import org.axonframework.queryhandling.responsetypes.ResponseTypes
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
@@ -61,7 +63,6 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
     fun createCustomer(@RequestBody request: CreateCustomerRequest, response: HttpServletResponse): ResponseEntity<Any> {
         val orderLimit = Money(request.orderLimit)
         val command = CreateCustomerCommand(PersonName(request.firstName, request.lastName), orderLimit, auditEntry)
-
         val queryResult = queryGateway.subscriptionQuery(
                 FindCustomerQuery(command.targetAggregateIdentifier),
                 ResponseTypes.instanceOf<CustomerEntity>(CustomerEntity::class.java),
@@ -70,7 +71,7 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
             val commandResult: String = commandGateway.sendAndWait(command)
             /* Returning the first update sent to our find customer query. */
             val customerEntity = queryResult.updates().blockFirst()
-            return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(CustomerRepository::class.java, customerEntity?.id).href)).body(customerEntity)
+            return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(CustomerRepository::class.java, customerEntity?.id).href)).build()
         } finally {
             /* Closing the subscription query. */
             queryResult.close();
@@ -80,7 +81,6 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
     @RequestMapping(value = "/couriers", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun createCourier(@RequestBody request: CreateCourierRequest, response: HttpServletResponse): ResponseEntity<Any> {
         val command = CreateCourierCommand(PersonName(request.firstName, request.lastName), request.maxNumberOfActiveOrders, auditEntry)
-
         val queryResult = queryGateway.subscriptionQuery(
                 FindCourierQuery(command.targetAggregateIdentifier),
                 ResponseTypes.instanceOf<CourierEntity>(CourierEntity::class.java),
@@ -88,7 +88,8 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
         try {
             val commandResult: String = commandGateway.sendAndWait(command)
             val courierEntity = queryResult.updates().blockFirst()
-            return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(CourierRepository::class.java, courierEntity?.id).href)).body(courierEntity)
+
+            return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(CourierRepository::class.java, courierEntity?.id).href)).build()
         } finally {
             queryResult.close();
         }
@@ -104,7 +105,6 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
         }
         val menu = RestaurantMenu(menuItems, "ver.0")
         val command = CreateRestaurantCommand(request.name, menu, auditEntry)
-
         val queryResult = queryGateway.subscriptionQuery(
                 FindRestaurantQuery(command.targetAggregateIdentifier),
                 ResponseTypes.instanceOf<RestaurantEntity>(RestaurantEntity::class.java),
@@ -113,7 +113,8 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
         try {
             val commandResult: String = commandGateway.sendAndWait(command)
             val restaurantEntity = queryResult.updates().blockFirst()
-            return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(RestaurantRepository::class.java, restaurantEntity?.id).href)).body(restaurantEntity)
+
+            return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(RestaurantRepository::class.java, restaurantEntity?.id).href)).build()
         } finally {
             queryResult.close();
         }
@@ -128,7 +129,6 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
         }
         val orderInfo = OrderInfo(request.customerId!!, request.restaurantId!!, lineItems)
         val command = CreateOrderCommand(orderInfo, auditEntry)
-
         val queryResult = queryGateway.subscriptionQuery(
                 FindOrderQuery(command.targetAggregateIdentifier),
                 ResponseTypes.instanceOf<OrderEntity>(OrderEntity::class.java),
@@ -136,8 +136,9 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
 
         try {
             val commandResult: String = commandGateway.sendAndWait(command)
-            val orderEntity = queryResult.updates().filter(Predicate { it.state.equals(OrderState.VERIFIED_BY_RESTAURANT)}).blockFirst()
-            return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(OrderRepository::class.java, orderEntity?.id).href)).body(orderEntity)
+            val orderEntity = queryResult.updates().blockFirst()
+
+            return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(OrderRepository::class.java, orderEntity?.id).href)).build()
         } finally {
             queryResult.close();
         }
@@ -145,9 +146,7 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
 
     @RequestMapping(value = "/restaurants/{rid}/orders/{roid}/markprepared", method = [RequestMethod.PUT], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun markRestaurantOrderAsPrepared(@PathVariable rid: String, @PathVariable roid: String, response: HttpServletResponse): ResponseEntity<RestaurantOrderEntity> {
-
         val command = MarkRestaurantOrderAsPreparedCommand(roid, auditEntry)
-
         val queryResult = queryGateway.subscriptionQuery(
                 FindRestaurantOrderQuery(command.targetAggregateIdentifier),
                 ResponseTypes.instanceOf<RestaurantOrderEntity>(RestaurantOrderEntity::class.java),
@@ -155,27 +154,52 @@ class CommandController @Autowired constructor(private val commandGateway: Comma
 
         try {
             val commandResult: String? = commandGateway.sendAndWait(command)
-            val restaurantOrderEntity = queryResult.updates().filter(Predicate { it.state.equals(RestaurantOrderState.PREPARED)}).blockFirst()
+            val restaurantOrderEntity = queryResult.updates().blockFirst()
 
-            return ResponseEntity<RestaurantOrderEntity>(restaurantOrderEntity, HttpStatus.OK)
+            if (RestaurantOrderState.PREPARED == restaurantOrderEntity?.state) return ResponseEntity.ok().build() else return ResponseEntity.badRequest().build()
+
         } finally {
             queryResult.close();
         }
     }
 
-//    @RequestMapping(value = "/courier/{cid}/order/{oid}/assigncommand", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
-//    @ResponseStatus(value = HttpStatus.CREATED)
-//    fun assignOrderToCourier(@PathVariable cid: String, @PathVariable oid: String, response: HttpServletResponse) {
-//        val command = AssignCourierOrderToCourierCommand(oid, cid, auditEntry)
-//        commandGateway.send(command, LoggingCallback.INSTANCE)
-//    }
-//
-//    @RequestMapping(value = "/courier/order/{id}/markdeliveredcommand", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
-//    @ResponseStatus(value = HttpStatus.CREATED)
-//    fun markCourierOrderAsDelivered(@PathVariable id: String, response: HttpServletResponse) {
-//        val command = MarkCourierOrderAsDeliveredCommand(id, auditEntry)
-//        commandGateway.send(command, LoggingCallback.INSTANCE)
-//    }
+    @RequestMapping(value = "/couriers/{cid}/orders/{coid}/assign", method = [RequestMethod.PUT], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    fun assignOrderToCourier(@PathVariable cid: String, @PathVariable coid: String, response: HttpServletResponse): ResponseEntity<CourierOrderEntity> {
+        val command = AssignCourierOrderToCourierCommand(coid, cid, auditEntry)
+        val queryResult = queryGateway.subscriptionQuery(
+                FindCourierOrderQuery(command.targetAggregateIdentifier),
+                ResponseTypes.instanceOf<CourierOrderEntity>(CourierOrderEntity::class.java),
+                ResponseTypes.instanceOf<CourierOrderEntity>(CourierOrderEntity::class.java))
+
+        try {
+            val commandResult: String? = commandGateway.sendAndWait(command)
+            val courierOrderEntity = queryResult.updates().blockFirst()
+
+            if (CourierOrderState.ASSIGNED == courierOrderEntity?.state) return ResponseEntity.ok().build() else return ResponseEntity.badRequest().build()
+
+            return ResponseEntity.ok().build()
+        } finally {
+            queryResult.close();
+        }
+    }
+
+    @RequestMapping(value = "/couriers/{cid}/orders/{coid}/markdelivered", method = [RequestMethod.PUT], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    fun markCourierOrderAsDelivered(@PathVariable cid: String, @PathVariable coid: String, response: HttpServletResponse): ResponseEntity<CourierOrderEntity> {
+        val command = MarkCourierOrderAsDeliveredCommand(coid, auditEntry)
+        val queryResult = queryGateway.subscriptionQuery(
+                FindCourierOrderQuery(command.targetAggregateIdentifier),
+                ResponseTypes.instanceOf<CourierOrderEntity>(CourierOrderEntity::class.java),
+                ResponseTypes.instanceOf<CourierOrderEntity>(CourierOrderEntity::class.java))
+
+        try {
+            val commandResult: String? = commandGateway.sendAndWait(command)
+            val courierOrderEntity = queryResult.updates().blockFirst()
+
+            if (CourierOrderState.DELIVERED == courierOrderEntity?.state) return ResponseEntity.ok().build() else return ResponseEntity.badRequest().build()
+        } finally {
+            queryResult.close();
+        }
+    }
 }
 
 /**

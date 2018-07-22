@@ -37,7 +37,7 @@ internal class RestaurantOrderHandler @Autowired constructor(private val reposit
         record.state = RestaurantOrderState.PREPARED
         repository.save(record)
 
-        /* sending it to subscription queries of type FindRestaurantOrderQuery, but only if the restaurant id matches. */
+        /* sending it to subscription queries of type FindRestaurantOrderQuery, but only if the restaurant order id matches. */
         queryUpdateEmitter.emit(
                 FindRestaurantOrderQuery::class.java,
                 { query -> query.restaurantOrderId.equals(event.aggregateIdentifier) },
