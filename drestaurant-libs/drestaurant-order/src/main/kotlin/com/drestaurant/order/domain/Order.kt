@@ -23,7 +23,7 @@ import java.math.BigDecimal
  * @author: idugalic
  */
 
-@Aggregate
+@Aggregate(repository="orderAggregateRepository")
 internal class Order {
 
     /**

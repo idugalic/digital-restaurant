@@ -7,6 +7,7 @@ import com.drestaurant.query.model.RestaurantEntity
 import com.drestaurant.query.model.RestaurantMenuEmbedable
 import com.drestaurant.query.repository.RestaurantRepository
 import com.drestaurant.restaurant.domain.api.RestaurantCreatedEvent
+import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
@@ -16,6 +17,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 @Component
+@ProcessingGroup("restaurant")
 internal class RestaurantHandler(private val repository: RestaurantRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
     @EventHandler

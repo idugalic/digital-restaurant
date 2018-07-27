@@ -5,6 +5,7 @@ import com.drestaurant.query.FindAllCustomersQuery
 import com.drestaurant.query.FindCustomerQuery
 import com.drestaurant.query.model.CustomerEntity
 import com.drestaurant.query.repository.CustomerRepository
+import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
@@ -12,6 +13,7 @@ import org.axonframework.queryhandling.QueryUpdateEmitter
 import org.springframework.stereotype.Component
 
 @Component
+@ProcessingGroup("customer")
 internal class CustomerHandler(private val repository: CustomerRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
     @EventHandler

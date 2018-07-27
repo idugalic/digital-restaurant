@@ -5,6 +5,7 @@ import com.drestaurant.query.FindAllCouriersQuery
 import com.drestaurant.query.FindCourierQuery
 import com.drestaurant.query.model.CourierEntity
 import com.drestaurant.query.repository.CourierRepository
+import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
@@ -14,6 +15,7 @@ import java.util.*
 
 
 @Component
+@ProcessingGroup("courier")
 internal class CourierHandler(private val repository: CourierRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
     @EventHandler

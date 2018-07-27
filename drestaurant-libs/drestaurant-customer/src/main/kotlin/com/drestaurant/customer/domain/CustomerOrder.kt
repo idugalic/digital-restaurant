@@ -13,7 +13,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.spring.stereotype.Aggregate
 import java.math.BigDecimal
 
-@Aggregate
+@Aggregate(repository="customerOrderAggregateRepository")
 internal class CustomerOrder {
 
     @AggregateIdentifier

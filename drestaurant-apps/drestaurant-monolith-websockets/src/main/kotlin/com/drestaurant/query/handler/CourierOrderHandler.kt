@@ -8,6 +8,7 @@ import com.drestaurant.courier.domain.model.CourierOrderState
 import com.drestaurant.query.model.CourierOrderEntity
 import com.drestaurant.query.repository.CourierOrderRepository
 import com.drestaurant.query.repository.CourierRepository
+import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
@@ -16,6 +17,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Component
 
 @Component
+@ProcessingGroup("courierorder")
 internal class CourierOrderHandler(private val repository: CourierOrderRepository, private val courierRepository: CourierRepository, private val messagingTemplate: SimpMessageSendingOperations) {
 
     @EventHandler

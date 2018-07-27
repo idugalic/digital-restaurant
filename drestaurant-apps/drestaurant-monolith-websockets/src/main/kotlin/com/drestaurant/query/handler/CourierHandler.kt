@@ -3,6 +3,7 @@ package com.drestaurant.query.handler
 import com.drestaurant.courier.domain.api.CourierCreatedEvent
 import com.drestaurant.query.model.CourierEntity
 import com.drestaurant.query.repository.CourierRepository
+import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.springframework.messaging.simp.SimpMessageSendingOperations
@@ -11,6 +12,7 @@ import java.util.*
 
 
 @Component
+@ProcessingGroup("courier")
 internal class CourierHandler(private val repository: CourierRepository, private val messagingTemplate: SimpMessageSendingOperations) {
 
     @EventHandler

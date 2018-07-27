@@ -23,7 +23,7 @@ import java.util.stream.Collectors
  * @author: idugalic
  */
 
-@Aggregate
+@Aggregate(repository="restaurantAggregateRepository")
 internal class Restaurant {
 
     /**

@@ -10,6 +10,7 @@ import com.drestaurant.query.repository.CourierRepository
 import com.drestaurant.query.repository.CustomerRepository
 import com.drestaurant.query.repository.OrderRepository
 import com.drestaurant.query.repository.RestaurantRepository
+import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryUpdateEmitter
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
+@ProcessingGroup("order")
 internal class OrderHandler(private val orderRepository: OrderRepository, private val customerRepository: CustomerRepository, private val restaurantRepository: RestaurantRepository, private val courierRepository: CourierRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
     @EventHandler
