@@ -17,8 +17,10 @@
 
     <modules>
         <module>drestaurant-monolith</module>
-        <module>drestaurant-monolith2</module>
+        <module>drestaurant-monolith-rest</module>
+        <module>drestaurant-monolith-websockets</module>
         <module>drestaurant-microservices</module>
+
     </modules>
 
     <build>

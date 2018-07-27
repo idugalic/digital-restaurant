@@ -10,9 +10,10 @@ import org.axonframework.eventsourcing.SequenceNumber
 import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Component
 import java.util.*
+import kotlin.collections.ArrayList
 
 @Component
-internal class RestaurantEventHandler(private val repository: RestaurantRepository, private val messagingTemplate: SimpMessageSendingOperations) {
+internal class RestaurantHandler(private val repository: RestaurantRepository, private val messagingTemplate: SimpMessageSendingOperations) {
 
     @EventHandler
     fun handle(event: RestaurantCreatedEvent, @SequenceNumber aggregateVersion: Long) {
@@ -22,9 +23,12 @@ internal class RestaurantEventHandler(private val repository: RestaurantReposito
             val menuItem = MenuItemEmbedable(item.id, item.name, item.price.amount)
             menuItems.add(menuItem)
         }
-        val menu = RestaurantMenuEmbedable(menuItems, event.menu.menuVersion);
-        repository.save(RestaurantEntity(event.aggregateIdentifier, aggregateVersion, event.name, menu));
-        messagingTemplate.convertAndSend("/topic/restaurants.updates", event);
+        val menu = RestaurantMenuEmbedable(menuItems, event.menu.menuVersion)
+        repository.save(RestaurantEntity(event.aggregateIdentifier, aggregateVersion, event.name, menu, Collections.emptyList()))
+        broadcastUpdates()
     }
 
+    private fun broadcastUpdates() {
+        messagingTemplate.convertAndSend("/topic/restaurants.updates", repository.findAll())
+    }
 }

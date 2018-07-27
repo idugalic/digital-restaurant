@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-internal class OrderEventHandler(private val orderRepository: OrderRepository, private val customerRepository: CustomerRepository, private val restaurantRepository: RestaurantRepository, private val courierRepository: CourierRepository, private val messagingTemplate: SimpMessageSendingOperations) {
+internal class OrderHandler(private val orderRepository: OrderRepository, private val customerRepository: CustomerRepository, private val restaurantRepository: RestaurantRepository, private val courierRepository: CourierRepository, private val messagingTemplate: SimpMessageSendingOperations) {
 
     @EventHandler
     fun handle(event: OrderCreationInitiatedEvent, @SequenceNumber aggregateVersion: Long) {
@@ -24,8 +24,8 @@ internal class OrderEventHandler(private val orderRepository: OrderRepository, p
             val orderItem = OrderItemEmbedable(item.menuItemId, item.name, item.price.amount, item.quantity)
             orderItems.add(orderItem)
         }
-        orderRepository.save(OrderEntity(event.aggregateIdentifier, aggregateVersion, orderItems, null, null, null, OrderState.CREATE_PENDING));
-        messagingTemplate.convertAndSend("/topic/orders.updates", event);
+        orderRepository.save(OrderEntity(event.aggregateIdentifier, aggregateVersion, orderItems, null, null, null, OrderState.CREATE_PENDING))
+        broadcastUpdates()
 
     }
 
@@ -37,6 +37,7 @@ internal class OrderEventHandler(private val orderRepository: OrderRepository, p
         orderEntity.state = OrderState.VERIFIED_BY_CUSTOMER
         orderEntity.aggregateVersion = aggregateVersion
         orderRepository.save(orderEntity)
+        broadcastUpdates()
     }
 
     @EventHandler
@@ -47,6 +48,7 @@ internal class OrderEventHandler(private val orderRepository: OrderRepository, p
         orderEntity.restaurant = restaurantEntity
         orderEntity.state = OrderState.VERIFIED_BY_RESTAURANT
         orderRepository.save(orderEntity)
+        broadcastUpdates()
     }
 
     @EventHandler
@@ -55,6 +57,7 @@ internal class OrderEventHandler(private val orderRepository: OrderRepository, p
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.PREPARED
         orderRepository.save(orderEntity)
+        broadcastUpdates()
     }
 
     @EventHandler
@@ -63,6 +66,7 @@ internal class OrderEventHandler(private val orderRepository: OrderRepository, p
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.READY_FOR_DELIVERY
         orderRepository.save(orderEntity)
+        broadcastUpdates()
     }
 
     @EventHandler
@@ -71,6 +75,7 @@ internal class OrderEventHandler(private val orderRepository: OrderRepository, p
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.DELIVERED
         orderRepository.save(orderEntity)
+        broadcastUpdates()
     }
 
     @EventHandler
@@ -79,6 +84,11 @@ internal class OrderEventHandler(private val orderRepository: OrderRepository, p
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.REJECTED
         orderRepository.save(orderEntity)
+        broadcastUpdates()
+    }
+
+    private fun broadcastUpdates() {
+        messagingTemplate.convertAndSend("/topic/orders.updates", orderRepository.findAll())
     }
 
 }

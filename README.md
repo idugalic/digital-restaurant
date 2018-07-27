@@ -157,43 +157,43 @@ We are going to create more 'web' applications with different architectural styl
 
 **Monolithic**
 
- - Monolith 1 (REST-ish / HTTP and WebSockets API by segregating Command and Query. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
- - Monolith 2 (REST / HATEOAS API by not segregating Command and Query. We synchronize on the backend side)
+ - Monolith 1 (HTTP and WebSockets API **by segregating Command and Query**. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
+ - Monolith 2 (REST API **by not segregating Command and Query**. We synchronize on the backend side)
  - Monolith 3 (WebSockets API. We are async all the way ;))
 
 **Microservices**
 
- - Microservices 1 (REST-ish / HTTP and WebSockets API by segregating Command and Query. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
- - Microservices 2 (REST / HATEOAS API by not segregating Command and Query. We synchronize on the backend side)
+ - Microservices 1 (HTTP and WebSockets API **by segregating Command and Query**. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
+ - Microservices 2 (REST / HATEOAS API **by not segregating Command and Query**. We synchronize on the backend side)
  - Microservices 3 (WebSockets API. We are async all the way ;))
  
-### Monolith (REST-ish by segregating Command and Query)
+### Monolith (HTTP and WebSockets API by segregating Command and Query)
 
-Sometimes, you are simply being required to deliver REST API :(
+Sometimes, you are simply being required to deliver HTTP API :(
 
-A recurring question with CQRS and EventSourcing is how to put a synchronous REST front-end on top of an asynchronous CQRS back-end.
+A recurring question with CQRS and EventSourcing is how to put a synchronous HTTP front-end on top of an asynchronous CQRS back-end.
 
 In general there are two approaches:
 
- - **segregating Command and Query** - resources representing Commands (request for changes) and resources representing the state of the domain (Read Models / materialized views) are decoupled
- - **not segregating Command and Query** - one-to-one relation between a Command resource and a Query Model
+ - **segregating Command and Query** - resources representing Commands (request for changes) and resources representing Query Models (the state of the domain) are decoupled
+ - **not segregating Command and Query** - one-to-one relation between a Command Model resource and a Query Model resource
  
- This application is using the first approach ('segregating Command and Query') by exposing capabilities of our 'domain' via the REST API components that are responsible for
+ This application is using the first approach ('segregating Command and Query') by exposing capabilities of our 'domain' via the HTTP/REST API components that are responsible for
  - dispatching commands - [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/web/CommandController.kt)
- - querying the read model / materialized views - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository)
+ - querying the 'query model' (materialized views) - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository)
 
 **There is no one-to-one relation between a Command resource and a Query Model resource. This makes easier to implement multiple representations of the same underlying domain entity as separate resources.**
 
 
-[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates Read Models / materialized views of aggregates.
+[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates 'query models' (materialized views) of aggregates.
 This makes querying of event-sourced aggregates easy.
 
-Aditonally, our event listener is publishing a WebSocket events on every update of materialized views. 
-This can be usefull on the front-end to re-fetch the data via REST endpoints. 
+Aditonally, our event listener is publishing a WebSocket events on every update of a query model. 
+This can be usefull on the front-end to re-fetch the data via HTTP/REST endpoints. 
 
-#### 'Command' REST/HTTP API
+#### 'Command' HTTP API
 
-##### 1. Create new Restaurant
+##### Create new Restaurant
 ```
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
   "menuItems": [
@@ -206,7 +206,7 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d
   "name": "Fancy"
 }' 'http://localhost:8080/api/command/restaurant/createcommand'
 ```
-##### 2. Create/Register new Customer
+##### Create/Register new Customer
 ```
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
   "firstName": "Ivan",
@@ -214,7 +214,7 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d
   "orderLimit": 1000
 }' 'http://localhost:8080/api/command/customer/createcommand'
 ```
-##### 3. Create/Hire new Courier
+##### Create/Hire new Courier
 ```
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
   "firstName": "John",
@@ -222,7 +222,7 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d
   "maxNumberOfActiveOrders": 20
 }' 'http://localhost:8080/api/command/courier/createcommand'
 ```
-##### 4. Create/Place the Order
+##### Create/Place the Order
 ```
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
   "customerId": "CUSTOMER_ID",
@@ -239,31 +239,31 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d
 ```
 Note: Replace CUSTOMER_ID and RESTAURANT_ID with concrete values.
 
-##### 5. Restaurant marks the Order as prepared
+##### Restaurant marks the Order as prepared
 ```
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8080/api/command/restaurant/order/RESTAURANT_ORDER_ID/markpreparedcommand'
 
 ```
 Note: Replace RESTAURANT_ORDER_ID with concrete value.
 
-##### 6. Courier takes/claims the Order that is ready for delivery (prepared)
+##### Courier takes/claims the Order that is ready for delivery (prepared)
 ```
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8080/api/command/courier/COURIER_ID/order/COURIER_ORDER_ID/assigncommand'
 
 ```
 Note: Replace COURIER_ID and COURIER_ORDER_ID with concrete values.
 
-##### 7. Courier marks the Order as delivered
+##### Courier marks the Order as delivered
 ```
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8080/api/command/courier/order/COURIER_ORDER_ID/markdeliveredcommand'
 
 ```
 
 
-#### 'Query' REST/HTTP API
+#### 'Query' HTTP API
 Application is using an event handler to subscribe to all interested domain events. Events are materialized in SQL database schema. 
 
-REST API for browsing the materialized data:
+HTTP/REST API for browsing the materialized data:
 
 ```
 curl http://localhost:8080/api/query
@@ -283,26 +283,26 @@ Frontend part of the solution is available here [http://idugalic.github.io/digit
 
 ### Monolith 2 (REST API by not segregating Command and Query)
 
-Sometimes, you are simply being required to deliver REST API :(
+Sometimes, you are simply being required to deliver REST API.
 
 A recurring question with CQRS and EventSourcing is how to put a synchronous REST front-end on top of an asynchronous CQRS back-end.
 
 In general there are two approaches:
 
- - **segregating Command and Query** - resources representing Commands (request for changes) and resources representing the state of the domain (Read Models) are decoupled. By some opinions, this is not REST ;)
- - **not segregating Command and Query** - one-to-one relation between a Command resource and a Query Model
-
-This application is using the second approach ('NOT segregating Command and Query') by exposing capabilities of our 'domain' via the REST API componenta that are responsible for
+ - **segregating Command and Query** - resources representing Commands (request for changes) and resources representing Query Models (the state of the domain) are decoupled
+ - **not segregating Command and Query** - one-to-one relation between a Command Model resource and a Query Model resource
  
- - dispatching commands - [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/web/CommandController.kt)
- - querying the read model / materialized view - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/query/repository)
+This application is using the second approach ('NOT segregating Command and Query') by exposing capabilities of our 'domain' via the REST API components that are responsible for
+ 
+ - dispatching commands - [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt)
+ - querying the 'query model' (materialized views) - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/repository)
 
 
-**We create one-to-one relation between a Command resource and a Query Model (materialized view) resource.**
+**We create one-to-one relation between a Command Model resource and a Query Model (materialized view) resource.**
 Note that we are utilizing Spring Rest Data project to implement REST API, and that will position us on the third level of [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html)
 
-[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates Query Model / materialized views of aggregates.
-Additionally, it will emit 'any change on Query Model' to Axon subscription queries, and let us subscribe on them within our [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith2/src/main/kotlin/com/drestaurant/web/CommandController.kt) keeping our architecture clean.
+[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates Query Model / materialized views of aggregates.
+Additionally, it will emit 'any change on Query Model' to Axon subscription queries, and let us subscribe on them within our [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt) keeping our architecture clean.
 
 Although fully asynchronous designs may be preferable for a number of reasons, it is a common scenario that back-end teams are forced to provide a synchronous REST API on top of asynchronous CQRS+ES back-ends.
 
@@ -395,10 +395,51 @@ curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*'
  
 
  
-### Monolith 3 (WebSockets API. We are async all the way ;))
+### Monolith 3 (STOMP over WebSockets API. We are async all the way ;))
 
- ---TODO---
+The WebSocket protocol (RFC 6455) defines an important new capability for web applications: full-duplex, two-way communication between client and server. It is an exciting new capability on the heels of a long history of techniques to make the web more interactive including Java Applets, XMLHttpRequest, Adobe Flash, ActiveXObject, various Comet techniques, server-sent events, and others.
+
+This application is utilizing STOMP over Websockets protocol to expose capabilities of our 'domain' via components:
  
+ - [WebController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/web/WebController.kt)
+ - [Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes domain events, and creates 'query models' (materialized views) of aggregates. Aditonally, our event listener is publishing a WebSocket messages to topics on every update of a query model. 
+
+#### STOMP over WebSockets API
+
+WebSocket SockJS endpoint: `ws://localhost:8080/drestaurant/websocket`
+
+##### Topics:
+
+ - `/topic/couriers.updates` (courier list has been updated, e.g. new courier has been created)
+ - `/topic/customers.updates` (customer list has been updated, e.g. new customer has been created)
+ - `/topic/orders.updates` (order list has been updated, e.g. new order has been created)
+ - `/topic/restaurants.updates` (restaurant list has been updated, e.g. new restaurant has been created)
+ - `/topic/couriers/orders.updates` (courier order list has been updated, e.g. new courier order has been created)
+ - `/topic/restaurants/orders.updates`(restaurant order list has been updated, e.g. new restaurant order has been created)
+
+ 
+##### Message endpoints:
+
+ - `/customers/createcommand`, messageType=[MESSAGE]
+ - `/customers`, messageType=[SUBSCRIBE]
+ - `/customers/{id}`, messageType=[SUBSCRIBE]
+ - `/couriers/createcommand`, messageType=[MESSAGE]
+ - `/couriers`, messageType=[SUBSCRIBE]
+ - `/couriers/{id}`, messageType=[SUBSCRIBE]
+ - `/couriers/orders/assigncommand`, messageType=[MESSAGE]
+ - `/couriers/orders/markdeliveredcommand`, messageType=[MESSAGE]
+ - `/couriers/orders`, messageType=[SUBSCRIBE]
+ - `/couriers/orders/{id}`, messageType=[SUBSCRIBE]
+ - `/restaurants/createcommand`, messageType=[MESSAGE]
+ - `/restaurants`, messageType=[SUBSCRIBE]
+ - `/restaurants/{id}`, messageType=[SUBSCRIBE]
+ - `/orders/createcommand`, messageType=[MESSAGE]
+ - `/orders`, messageType=[SUBSCRIBE]
+ - `/orders/{id}`, messageType=[SUBSCRIBE]
+ - `/restaurants/orders/markpreparedcommand`, messageType=[MESSAGE]
+ - `/restaurants/orders`, messageType=[SUBSCRIBE]
+ - `/restaurants/orders/{id}`, messageType=[SUBSCRIBE]
+
 
 ### Microservices
 

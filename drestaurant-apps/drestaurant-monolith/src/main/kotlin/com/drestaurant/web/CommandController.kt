@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @RestController
 @RequestMapping(value = "/api/command")
-class CommandController @Autowired constructor(private val commandGateway: CommandGateway) {
+class CommandController(private val commandGateway: CommandGateway) {
 
     private val currentUser: String
         get() = if (SecurityContextHolder.getContext().authentication != null) {
