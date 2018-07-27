@@ -7,58 +7,60 @@ Customers use the website application to place food orders at local restaurants.
 
 ## Table of Contents
 
- * [Domain](#domain)
-     * [Core subdomains](#core-subdomains)
-     * [Generic subdomains](#generic-subdomains)
-     * [Organisation vs encapsulation](#organisation-vs-encapsulation)
- * [Application/s](#applications)
-     * [Monolith (HTTP and WebSockets API by segregating Command and Query)](#monolith-http-and-websockets-api-by-segregating-command-and-query)
-        * ['Command' HTTP API](#command-http-api)
-           * [Create new Restaurant](#create-new-restaurant)
-           * [Create/Register new Customer](#createregister-new-customer)
-           * [Create/Hire new Courier](#createhire-new-courier)
-           * [Create/Place the Order](#createplace-the-order)
-           * [Restaurant marks the Order as prepared](#restaurant-marks-the-order-as-prepared)
-           * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared)
-           * [Courier marks the Order as delivered](#courier-marks-the-order-as-delivered)
-        * ['Query' HTTP API](#query-http-api)
-        * [WebSocket (STOMP) API](#websocket-stomp-api)
-     * [Monolith 2 (REST API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
-        * [Restaurant management](#restaurant-management)
-           * [Read all restaurants](#read-all-restaurants)
-           * [Create new restaurant](#create-new-restaurant-1)
-           * [Mark restaurant order as prepared](#mark-restaurant-order-as-prepared)
-        * [Customer management](#customer-management)
-           * [Read all customers](#read-all-customers)
-           * [Create/Register new Customer](#createregister-new-customer-1)
-        * [Courier management](#courier-management)
-           * [Read all couriers](#read-all-couriers)
-           * [Create/Hire new Courier](#createhire-new-courier-1)
-           * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared-1)
-           * [Courier marks the order as delivered](#courier-marks-the-order-as-delivered-1)
-        * [Order management](#order-management)
-           * [Read all orders](#read-all-orders)
-           * [Create/Place the Order](#createplace-the-order-1)
-     * [Monolith 3 (STOMP over WebSockets API. We are async all the way)](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
-        * [STOMP over WebSockets API](#stomp-over-websockets-api)
-           * [Topics:](#topics)
-           * [Message endpoints:](#message-endpoints)
-     * [Microservices](#microservices)
-        * [Microservices 1 (HTTP and WebSockets API by segregating Command and Query)](#microservices-1-http-and-websockets-api-by-segregating-command-and-query)
-        * [Microservices 2 (REST API by not segregating Command and Query)](#microservices-2-rest-api-by-not-segregating-command-and-query)
-        * [Microservices 3 (WebSockets API. We are async all the way)](#microservices-3-websockets-api-we-are-async-all-the-way)
- * [Development](#development)
-     * [Clone](#clone)
-     * [Build](#build)
-     * [Run monolith](#run-monolith)
-     * [Run monolith2](#run-monolith2)
- * [Continuous delivery](#continuous-delivery)
- * [Technology](#technology)
-     * [Language](#language)
-     * [Frameworks and Platforms](#frameworks-and-platforms)
-     * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
-     * [Infrastructure and Platform (As A Service)](#infrastructure-and-platform-as-a-service)
- * [References and further reading](#references-and-further-reading)
+   * [Domain](#domain)
+      * [Core subdomains](#core-subdomains)
+      * [Generic subdomains](#generic-subdomains)
+      * [Organisation vs encapsulation](#organisation-vs-encapsulation)
+   * [Application/s](#applications)
+      * [Monolith (HTTP and WebSockets API by segregating Command and Query)](#monolith-http-and-websockets-api-by-segregating-command-and-query)
+         * ['Command' HTTP API](#command-http-api)
+            * [Create new Restaurant](#create-new-restaurant)
+            * [Create/Register new Customer](#createregister-new-customer)
+            * [Create/Hire new Courier](#createhire-new-courier)
+            * [Create/Place the Order](#createplace-the-order)
+            * [Restaurant marks the Order as prepared](#restaurant-marks-the-order-as-prepared)
+            * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared)
+            * [Courier marks the Order as delivered](#courier-marks-the-order-as-delivered)
+         * ['Query' HTTP API](#query-http-api)
+         * [WebSocket (STOMP) API](#websocket-stomp-api)
+      * [Monolith 2 (REST API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
+         * [Restaurant management](#restaurant-management)
+            * [Read all restaurants](#read-all-restaurants)
+            * [Create new restaurant](#create-new-restaurant-1)
+            * [Mark restaurant order as prepared](#mark-restaurant-order-as-prepared)
+         * [Customer management](#customer-management)
+            * [Read all customers](#read-all-customers)
+            * [Create/Register new Customer](#createregister-new-customer-1)
+         * [Courier management](#courier-management)
+            * [Read all couriers](#read-all-couriers)
+            * [Create/Hire new Courier](#createhire-new-courier-1)
+            * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared-1)
+            * [Courier marks the order as delivered](#courier-marks-the-order-as-delivered-1)
+         * [Order management](#order-management)
+            * [Read all orders](#read-all-orders)
+            * [Create/Place the Order](#createplace-the-order-1)
+      * [Monolith 3 (STOMP over WebSockets API. We are async all the way)](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
+         * [STOMP over WebSockets API](#stomp-over-websockets-api)
+            * [Topics:](#topics)
+            * [Message endpoints:](#message-endpoints)
+      * [Microservices](#microservices)
+         * [Microservices 1 (HTTP and WebSockets API by segregating Command and Query)](#microservices-1-http-and-websockets-api-by-segregating-command-and-query)
+         * [Microservices 2 (REST API by not segregating Command and Query)](#microservices-2-rest-api-by-not-segregating-command-and-query)
+         * [Microservices 3 (WebSockets API. We are async all the way)](#microservices-3-websockets-api-we-are-async-all-the-way)
+   * [Development](#development)
+      * [Clone](#clone)
+      * [Build](#build)
+      * [Run monolith (HTTP and WebSockets API by segregating Command and Query)](#run-monolith-http-and-websockets-api-by-segregating-command-and-query)
+      * [Run monolith 2 (REST API by not segregating Command and Query)](#run-monolith-2-rest-api-by-not-segregating-command-and-query)
+      * [Run monolith 3 (STOMP over WebSockets API. We are async all the way)](#run-monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
+   * [Continuous delivery](#continuous-delivery)
+   * [Technology](#technology)
+      * [Language](#language)
+      * [Frameworks and Platforms](#frameworks-and-platforms)
+      * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
+      * [Infrastructure and Platform (As A Service)](#infrastructure-and-platform-as-a-service)
+   * [References and further reading](#references-and-further-reading)
+
 
 ## Domain
 
@@ -473,17 +475,24 @@ $ git clone https://gitlab.com/d-restaurant/d-restaurant-backend.git
 $ cd d-restaurant-backend
 $ ./mvnw clean install
 ```
-### Run monolith
+### Run monolith (HTTP and WebSockets API by segregating Command and Query)
 
 ```bash
 $ cd d-restaurant-backend/drestaurant-apps/drestaurant-monolith
 $ ../../mvnw spring-boot:run
 ```
 
-### Run monolith2
+### Run monolith 2 (REST API by not segregating Command and Query)
 
 ```bash
-$ cd d-restaurant-backend/drestaurant-apps/drestaurant-monolith2
+$ cd d-restaurant-backend/drestaurant-apps/drestaurant-monolith-rest
+$ ../../mvnw spring-boot:run
+```
+
+### Run monolith 3 (STOMP over WebSockets API. We are async all the way)
+
+```bash
+$ cd d-restaurant-backend/drestaurant-apps/drestaurant-monolith-websockets
 $ ../../mvnw spring-boot:run
 ```
 
