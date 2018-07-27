@@ -5,6 +5,7 @@ import org.axonframework.commandhandling.SimpleCommandBus
 import org.axonframework.common.transaction.TransactionManager
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor
 import org.axonframework.monitoring.NoOpMessageMonitor
+import org.axonframework.spring.eventsourcing.SpringAggregateSnapshotterFactoryBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -16,5 +17,10 @@ class AxonConfiguration {
         val commandBus = SimpleCommandBus(transactionManager, NoOpMessageMonitor.INSTANCE)
         commandBus.registerDispatchInterceptor(BeanValidationInterceptor())
         return commandBus
+    }
+
+    @Bean
+    fun snapshotterFactoryBean(): SpringAggregateSnapshotterFactoryBean {
+        return SpringAggregateSnapshotterFactoryBean()
     }
 }

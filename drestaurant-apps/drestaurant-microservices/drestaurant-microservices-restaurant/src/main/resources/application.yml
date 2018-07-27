@@ -13,3 +13,13 @@ spring:
     console:
       enabled: true
       path: /h2-console
+axon:
+  eventhandling:
+    processors:
+      restaurant:
+        mode: tracking
+  snapshot:
+    trigger:
+      treshold:
+        restaurant: 100
+        restaurantorder: 100

@@ -6,7 +6,6 @@ import com.drestaurant.common.domain.model.PersonName
 import com.drestaurant.customer.domain.api.CreateCustomerCommand
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
@@ -20,7 +19,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @RestController
 @RequestMapping(value = "/api/command/customer")
-class CommandController @Autowired constructor(private val commandGateway: CommandGateway) {
+class CommandController(private val commandGateway: CommandGateway) {
 
     private val currentUser: String
         get() = if (SecurityContextHolder.getContext().authentication != null) {

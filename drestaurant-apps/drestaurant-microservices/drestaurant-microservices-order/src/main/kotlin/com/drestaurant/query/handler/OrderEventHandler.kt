@@ -11,14 +11,13 @@ import com.drestaurant.query.repository.RestaurantRepository
 import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.eventsourcing.SequenceNumber
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Component
 import java.util.*
 
-@ProcessingGroup("default")
+@ProcessingGroup("order")
 @Component
-internal class OrderEventHandler @Autowired constructor(private val orderRepository: OrderRepository, private val customerRepository: CustomerRepository, private val restaurantRepository: RestaurantRepository, private val courierRepository: CourierRepository, private val messagingTemplate: SimpMessageSendingOperations) {
+internal class OrderEventHandler(private val orderRepository: OrderRepository, private val customerRepository: CustomerRepository, private val restaurantRepository: RestaurantRepository, private val courierRepository: CourierRepository, private val messagingTemplate: SimpMessageSendingOperations) {
 
     @EventHandler
     fun handle(event: OrderCreationInitiatedEvent, @SequenceNumber aggregateVersion: Long) {

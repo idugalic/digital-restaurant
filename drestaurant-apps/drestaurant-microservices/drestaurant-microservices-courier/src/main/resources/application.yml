@@ -13,3 +13,13 @@ spring:
     console:
       enabled: true
       path: /h2-console
+axon:
+  eventhandling:
+    processors:
+      courier:
+        mode: tracking
+  snapshot:
+    trigger:
+      treshold:
+        courier: 100
+        courierorder: 100
