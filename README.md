@@ -447,18 +447,13 @@ WebSocket SockJS endpoint: `ws://localhost:8080/drestaurant/websocket`
 
 ### Microservices
 
-#### Microservices 1 (HTTP and WebSockets API by segregating Command and Query)
+We designed and structured our loosely coupled components in a modular way, 
+and that enables us to choose different deployment strategy and take first step towards Microservices architectural style.
 
- ---TODO---
- 
-#### Microservices 2 (REST API by not segregating Command and Query)
+Microservices are followed with the team/s cultural change, and with complicated continuous delivery process.
+The general plan would be for each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices) to live in its own bounded context, and to distribute events between them via Kafka or RabbitMQ (by NOT sharing the Event Store).
 
- ---TODO---
- 
-#### Microservices 3 (WebSockets API. We are async all the way)
-
- ---TODO---
- 
+This is out of the scope for this project. There is a regularly maintained [lab project](http://lab.idugalic.pro/) that is covering this topic in more details.
 
 ## Development
 
