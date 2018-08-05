@@ -17,7 +17,7 @@ import org.axonframework.spring.stereotype.Aggregate
  *
  * Courier - aggregate root
  */
-@Aggregate(repository="courierAggregateRepository")
+@Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")
 internal class Courier {
 
     /**

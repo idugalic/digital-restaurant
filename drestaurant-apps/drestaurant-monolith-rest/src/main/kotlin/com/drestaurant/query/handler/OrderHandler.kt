@@ -2,8 +2,11 @@ package com.drestaurant.query.handler
 
 import com.drestaurant.order.domain.api.*
 import com.drestaurant.order.domain.model.OrderState
+import com.drestaurant.query.FindAllCustomersQuery
 import com.drestaurant.query.FindAllOrdersQuery
+import com.drestaurant.query.FindCustomerQuery
 import com.drestaurant.query.FindOrderQuery
+import com.drestaurant.query.model.CustomerEntity
 import com.drestaurant.query.model.OrderEntity
 import com.drestaurant.query.model.OrderItemEmbedable
 import com.drestaurant.query.repository.CourierRepository
@@ -13,6 +16,7 @@ import com.drestaurant.query.repository.RestaurantRepository
 import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.eventsourcing.SequenceNumber
+import org.axonframework.queryhandling.QueryHandler
 import org.axonframework.queryhandling.QueryUpdateEmitter
 import org.springframework.stereotype.Component
 import java.util.*
@@ -181,6 +185,16 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
                 { query -> true },
                 orderEntity
         )
+    }
+
+    @QueryHandler
+    fun handle(query: FindOrderQuery): OrderEntity {
+        return orderRepository.findById(query.orderId).get()
+    }
+
+    @QueryHandler
+    fun handle(query: FindAllOrdersQuery): MutableIterable<OrderEntity> {
+        return orderRepository.findAll()
     }
 
 }

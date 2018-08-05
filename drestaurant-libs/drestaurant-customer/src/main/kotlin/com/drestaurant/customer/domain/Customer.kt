@@ -23,7 +23,7 @@ import java.math.BigDecimal
  *
  */
 
-@Aggregate(repository="customerAggregateRepository")
+@Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")
 internal class Customer {
     /**
      * Aggregates that are managed by Axon must have a unique identifier. The

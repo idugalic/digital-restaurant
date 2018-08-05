@@ -23,7 +23,7 @@ import java.util.stream.Collectors
  * @author: idugalic
  */
 
-@Aggregate(repository="restaurantAggregateRepository")
+@Aggregate(snapshotTriggerDefinition = "restaurantSnapshotTriggerDefinition")
 internal class Restaurant {
 
     /**

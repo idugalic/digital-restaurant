@@ -1,8 +1,10 @@
 package com.drestaurant.customer.domain
 
+import org.axonframework.boot.autoconfig.AxonAutoConfiguration
 import org.axonframework.eventhandling.EventBus
 import org.axonframework.eventsourcing.EventCountSnapshotTriggerDefinition
 import org.axonframework.eventsourcing.EventSourcingRepository
+import org.axonframework.eventsourcing.SnapshotTriggerDefinition
 import org.axonframework.eventsourcing.Snapshotter
 import org.axonframework.eventsourcing.eventstore.EventStore
 import org.axonframework.spring.config.AxonConfiguration
@@ -25,20 +27,14 @@ internal class SpringCustomerConfiguration {
     @Value("\${axon.snapshot.trigger.treshold.customerorder}")
     private val snapshotTriggerTresholdCustomerOrder: Int = 100
 
-    @Bean("customerAggregateRepository")
-    fun orderRepository(eventStore: EventStore, snapshotter: Snapshotter): EventSourcingRepository<Customer> {
-        return EventSourcingRepository<Customer>(
-                Customer::class.java,
-                eventStore,
-                EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCustomer))
+    @Bean("customerSnapshotTriggerDefinition")
+    fun customerSnapshotTriggerDefinition(snapshotter: Snapshotter): SnapshotTriggerDefinition {
+        return EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCustomer)
     }
 
-    @Bean("customerOrderAggregateRepository")
-    fun customerOrderRepository(eventStore: EventStore, snapshotter: Snapshotter): EventSourcingRepository<CustomerOrder> {
-        return EventSourcingRepository<CustomerOrder>(
-                CustomerOrder::class.java,
-                eventStore,
-                EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCustomerOrder))
+    @Bean("customerOrderSnapshotTriggerDefinition")
+    fun customerOrderSnapshotTriggerDefinition(snapshotter: Snapshotter): SnapshotTriggerDefinition {
+        return EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCustomerOrder)
     }
 
 }

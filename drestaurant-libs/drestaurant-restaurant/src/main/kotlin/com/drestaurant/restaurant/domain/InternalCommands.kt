@@ -14,5 +14,5 @@ internal class MarkRestaurantOrderAsCreatedCommand(@TargetAggregateIdentifier va
 
 internal class MarkRestaurantOrderAsRejectedCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
 
-internal class ValidateOrderByRestaurantCommand(val orderId: String, val restaurantId: String, val lineItems: List<RestaurantOrderLineItem>, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
+internal class ValidateOrderByRestaurantCommand(@TargetAggregateIdentifier val orderId: String, val restaurantId: String, val lineItems: List<RestaurantOrderLineItem>, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
 

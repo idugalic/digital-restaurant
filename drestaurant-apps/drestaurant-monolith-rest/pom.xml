@@ -88,5 +88,9 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.axoniq</groupId>
+            <artifactId>axonhub-spring-boot-autoconfigure</artifactId>
+        </dependency>
     </dependencies>
 </project>

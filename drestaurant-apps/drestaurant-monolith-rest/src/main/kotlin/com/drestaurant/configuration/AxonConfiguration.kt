@@ -1,10 +1,11 @@
 package com.drestaurant.configuration
 
-import org.axonframework.commandhandling.CommandBus
-import org.axonframework.commandhandling.SimpleCommandBus
-import org.axonframework.common.transaction.TransactionManager
-import org.axonframework.messaging.interceptors.BeanValidationInterceptor
-import org.axonframework.monitoring.NoOpMessageMonitor
+import io.axoniq.axonhub.client.AxonHubConfiguration
+import io.axoniq.axonhub.client.PlatformConnectionManager
+import io.axoniq.axonhub.client.event.axon.AxonHubEventStore
+import org.axonframework.serialization.Serializer
+import org.axonframework.serialization.upcasting.event.EventUpcaster
+import org.axonframework.serialization.upcasting.event.NoOpEventUpcaster
 import org.axonframework.spring.eventsourcing.SpringAggregateSnapshotterFactoryBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -13,14 +14,13 @@ import org.springframework.context.annotation.Configuration
 class AxonConfiguration {
 
     @Bean
-    fun commandBus(transactionManager: TransactionManager): CommandBus {
-        val commandBus = SimpleCommandBus(transactionManager, NoOpMessageMonitor.INSTANCE)
-        commandBus.registerDispatchInterceptor(BeanValidationInterceptor())
-        return commandBus
-    }
-
-    @Bean
     fun snapshotterFactoryBean(): SpringAggregateSnapshotterFactoryBean {
         return SpringAggregateSnapshotterFactoryBean()
     }
+
+    @Bean
+    fun axonHubEventStore(configuration: AxonHubConfiguration, platformConnectionManager: PlatformConnectionManager, serializer: Serializer): AxonHubEventStore {
+        return AxonHubEventStore(configuration, platformConnectionManager, serializer, NoOpEventUpcaster.INSTANCE)
+    }
+
 }

@@ -2,9 +2,8 @@ package com.drestaurant.courier.domain
 
 import org.axonframework.eventhandling.EventBus
 import org.axonframework.eventsourcing.EventCountSnapshotTriggerDefinition
-import org.axonframework.eventsourcing.EventSourcingRepository
+import org.axonframework.eventsourcing.SnapshotTriggerDefinition
 import org.axonframework.eventsourcing.Snapshotter
-import org.axonframework.eventsourcing.eventstore.EventStore
 import org.axonframework.spring.config.AxonConfiguration
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -25,20 +24,15 @@ internal class SpringCourierConfiguration {
     @Value("\${axon.snapshot.trigger.treshold.courierorder}")
     private val snapshotTriggerTresholdCourierOrder: Int = 100
 
-    @Bean("courierAggregateRepository")
-    fun courierRepository(eventStore: EventStore, snapshotter: Snapshotter): EventSourcingRepository<Courier> {
-        return EventSourcingRepository<Courier>(
-                Courier::class.java,
-                eventStore,
-                EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCourier))
+
+    @Bean("courierSnapshotTriggerDefinition")
+    fun courierSnapshotTriggerDefinition(snapshotter: Snapshotter): SnapshotTriggerDefinition {
+        return EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCourier)
     }
 
-    @Bean("courierOrderAggregateRepository")
-    fun courierOrderRepository(eventStore: EventStore, snapshotter: Snapshotter): EventSourcingRepository<CourierOrder> {
-        return EventSourcingRepository<CourierOrder>(
-                CourierOrder::class.java,
-                eventStore,
-                EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCourierOrder))
+    @Bean("courierOrderSnapshotTriggerDefinition")
+    fun courierOrderSnapshotTriggerDefinition(snapshotter: Snapshotter): SnapshotTriggerDefinition {
+        return EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCourierOrder)
     }
 
 }

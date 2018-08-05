@@ -476,6 +476,24 @@ $ ../../mvnw spring-boot:run
 
 ### Run monolith 2 (REST API by not segregating Command and Query)
 
+This application is using [AxonDB](https://axoniq.io/product-overview/axondb#modal-download-developer-edition) and [AxonHub](https://axoniq.io/product-overview/axonhub#0).
+Once you download the artifacts, please follow the instructions on how to run them.
+
+Run AxonDB (http://localhost:8023):
+
+```bash
+$ cd axondb
+$ ./axondb-server.jar
+```
+Run AxonHub (http://localhost:8024):
+Make sure that you have `axonhub/axonhub.properties` configured with AxonDB server location: `axoniq.axondb.servers=localhost:8123`
+
+```bash
+$ cd axonhub
+$ ./axonhub-server.jar 
+```
+Run application (http://localhost:8080):
+
 ```bash
 $ cd d-restaurant-backend/drestaurant-apps/drestaurant-monolith-rest
 $ ../../mvnw spring-boot:run

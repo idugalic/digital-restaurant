@@ -13,7 +13,7 @@ import org.axonframework.commandhandling.model.AggregateLifecycle.apply
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.spring.stereotype.Aggregate
 
-@Aggregate(repository="restaurantOrderAggregateRepository")
+@Aggregate(snapshotTriggerDefinition = "restaurantOrderSnapshotTriggerDefinition")
 internal class RestaurantOrder {
 
     @AggregateIdentifier

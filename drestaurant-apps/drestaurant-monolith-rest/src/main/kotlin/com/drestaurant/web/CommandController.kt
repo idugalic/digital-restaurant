@@ -136,9 +136,11 @@ class CommandController(private val commandGateway: CommandGateway, private val 
 
         try {
             val commandResult: String = commandGateway.sendAndWait(command)
-            val orderEntity = queryResult.updates().blockFirst()
+            val orderEntity: OrderEntity? = queryResult.updates().filter({OrderState.VERIFIED_BY_RESTAURANT.equals(it.state) || OrderState.REJECTED.equals(it.state)}).blockFirst()
 
-            return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(OrderRepository::class.java, orderEntity?.id).href)).build()
+            if (OrderState.VERIFIED_BY_RESTAURANT.equals(orderEntity?.state)) return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(OrderRepository::class.java, orderEntity?.id).href)).build()
+            else return ResponseEntity.badRequest().build()
+
         } finally {
             queryResult.close();
         }

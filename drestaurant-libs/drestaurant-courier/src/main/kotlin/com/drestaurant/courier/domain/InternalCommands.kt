@@ -13,4 +13,4 @@ internal class MarkCourierOrderAsAssignedCommand(@TargetAggregateIdentifier val 
 
 internal class MarkCourierOrderAsNotAssignedCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
 
-internal class ValidateOrderByCourierCommand(val orderId: String, val courierId: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
+internal class ValidateOrderByCourierCommand(@TargetAggregateIdentifier val orderId: String, val courierId: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)

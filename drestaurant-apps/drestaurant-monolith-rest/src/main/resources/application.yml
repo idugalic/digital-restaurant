@@ -26,10 +26,16 @@ axon:
   snapshot:
     trigger:
       treshold:
-        order: 100
-        restaurant: 100
-        customer: 100
-        courier: 100
-        customerorder: 100
-        courierorder: 100
-        restaurantorder: 100
+        order: 200
+        restaurant: 200
+        customer: 200
+        courier: 200
+        customerorder: 200
+        courierorder: 200
+        restaurantorder: 200
+
+axoniq:
+  axonhub:
+    servers: localhost
+server:
+  port: 8080

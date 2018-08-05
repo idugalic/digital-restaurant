@@ -23,7 +23,7 @@ import java.math.BigDecimal
  * @author: idugalic
  */
 
-@Aggregate(repository="orderAggregateRepository")
+@Aggregate(snapshotTriggerDefinition = "orderSnapshotTriggerDefinition")
 internal class Order {
 
     /**
