@@ -15,6 +15,7 @@ import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
 import org.axonframework.queryhandling.QueryUpdateEmitter
 import org.springframework.stereotype.Component
+import java.lang.UnsupportedOperationException
 
 @Component
 @ProcessingGroup("restaurantorder")
@@ -27,14 +28,14 @@ internal class RestaurantOrderHandler(private val repository: RestaurantOrderRep
             val restaurantOrderItem = RestaurantOrderItemEmbedable(item.menuItemId, item.name, item.quantity)
             restaurantOrderItems.add(restaurantOrderItem)
         }
-        val restaurantEntity = restaurantRepository.findById(event.restaurantId).get()
+        val restaurantEntity = restaurantRepository.findById(event.restaurantId).orElseThrow { UnsupportedOperationException("Restaurant with id '" + event.restaurantId + "' not found") }
         val record = RestaurantOrderEntity(event.aggregateIdentifier, aggregateVersion, restaurantOrderItems, restaurantEntity, RestaurantOrderState.CREATED)
         repository.save(record)
     }
 
     @EventHandler
     fun handle(event: RestaurantOrderPreparedEvent, @SequenceNumber aggregateVersion: Long) {
-        val record = repository.findById(event.aggregateIdentifier).get()
+        val record = repository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Restaurant order with id '" + event.aggregateIdentifier + "' not found") }
         record.state = RestaurantOrderState.PREPARED
         repository.save(record)
 
@@ -55,7 +56,7 @@ internal class RestaurantOrderHandler(private val repository: RestaurantOrderRep
 
     @QueryHandler
     fun handle(query: FindRestaurantOrderQuery): RestaurantOrderEntity {
-        return repository.findById(query.restaurantOrderId).get()
+        return repository.findById(query.restaurantOrderId).orElseThrow { UnsupportedOperationException("Restaurant order with id '" + query.restaurantOrderId + "' not found") }
     }
 
     @QueryHandler

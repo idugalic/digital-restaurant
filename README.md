@@ -154,7 +154,7 @@ Public classes are placed in `com.drestaurant.customer.domain.api` and they are 
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
-We are going to create more 'web' applications with different architectural styles, API designs and deployment strategies by utilizing components from the domain layer in different way:
+We have created more 'web' applications with different architectural styles, API designs and deployment strategies by utilizing components from the domain layer in different way:
 
 **Monolithic**
 
@@ -165,12 +165,10 @@ We are going to create more 'web' applications with different architectural styl
 **Microservices**
 
  - Microservices 1 (HTTP and WebSockets API **by segregating Command and Query**. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
- - Microservices 2 (REST / HATEOAS API **by not segregating Command and Query**. We synchronize on the backend side)
- - Microservices 3 (WebSockets API. We are async all the way ;))
  
 ### Monolith (HTTP and WebSockets API by segregating Command and Query)
 
-Sometimes, you are simply being required to deliver HTTP API :(
+Source code: [https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith)
 
 A recurring question with CQRS and EventSourcing is how to put a synchronous HTTP front-end on top of an asynchronous CQRS back-end.
 
@@ -283,6 +281,8 @@ WebSocket API (ws://localhost:8080/drestaurant/websocket) topics:
 Frontend part of the solution is available here [http://idugalic.github.io/digital-restaurant-angular](http://idugalic.github.io/digital-restaurant-angular/)
 
 ### Monolith 2 (REST API by not segregating Command and Query)
+
+Source code: [https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest)
 
 Sometimes, you are simply being required to deliver REST API.
 
@@ -397,6 +397,9 @@ curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*'
 
  
 ### Monolith 3 (STOMP over WebSockets API. We are async all the way)
+
+Source code: [https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-websockets](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-websockets)
+
 
 The WebSocket protocol (RFC 6455) defines an important new capability for web applications: full-duplex, two-way communication between client and server. It is an exciting new capability on the heels of a long history of techniques to make the web more interactive including Java Applets, XMLHttpRequest, Adobe Flash, ActiveXObject, various Comet techniques, server-sent events, and others.
 

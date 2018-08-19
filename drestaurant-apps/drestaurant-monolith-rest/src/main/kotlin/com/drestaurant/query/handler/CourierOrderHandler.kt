@@ -16,6 +16,7 @@ import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
 import org.axonframework.queryhandling.QueryUpdateEmitter
 import org.springframework.stereotype.Component
+import java.lang.UnsupportedOperationException
 
 @Component
 @ProcessingGroup("courierorder")
@@ -29,8 +30,8 @@ internal class CourierOrderHandler(private val repository: CourierOrderRepositor
 
     @EventHandler
     fun handle(event: CourierOrderAssignedEvent, @SequenceNumber aggregateVersion: Long) {
-        val courierEntity = courierRepository.findById(event.courierId).get()
-        val record = repository.findById(event.aggregateIdentifier).get()
+        val courierEntity = courierRepository.findById(event.courierId).orElseThrow { UnsupportedOperationException("Courier with id '" + event.courierId + "' not found") }
+        val record = repository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Courier order with id '" + event.aggregateIdentifier + "' not found") }
         record.state = CourierOrderState.ASSIGNED
         record.courier = courierEntity
         repository.save(record)
@@ -52,7 +53,7 @@ internal class CourierOrderHandler(private val repository: CourierOrderRepositor
 
     @EventHandler
     fun handle(event: CourierOrderNotAssignedEvent, @SequenceNumber aggregateVersion: Long) {
-        val record = repository.findById(event.aggregateIdentifier).get()
+        val record = repository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Courier order with id '" + event.aggregateIdentifier + "' not found") }
         //record.state = CourierOrderState.CREATED
         //repository.save(record)
 
@@ -73,7 +74,7 @@ internal class CourierOrderHandler(private val repository: CourierOrderRepositor
 
     @EventHandler
     fun handle(event: CourierOrderDeliveredEvent, @SequenceNumber aggregateVersion: Long) {
-        val record = repository.findById(event.aggregateIdentifier).get()
+        val record = repository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Courier order with id '" + event.aggregateIdentifier + "' not found") }
         record.state = CourierOrderState.DELIVERED
         repository.save(record)
 
@@ -94,7 +95,7 @@ internal class CourierOrderHandler(private val repository: CourierOrderRepositor
 
     @QueryHandler
     fun handle(query: FindCourierOrderQuery): CourierOrderEntity {
-        return repository.findById(query.courierOrderId).get()
+        return repository.findById(query.courierOrderId).orElseThrow { UnsupportedOperationException("Courier order with id '" + query.courierOrderId + "' not found") }
     }
 
     @QueryHandler

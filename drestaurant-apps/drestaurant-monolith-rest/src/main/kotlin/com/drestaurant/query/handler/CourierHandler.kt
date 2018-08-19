@@ -11,6 +11,7 @@ import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
 import org.axonframework.queryhandling.QueryUpdateEmitter
 import org.springframework.stereotype.Component
+import java.lang.UnsupportedOperationException
 import java.util.*
 
 
@@ -41,7 +42,7 @@ internal class CourierHandler(private val repository: CourierRepository, private
 
     @QueryHandler
     fun handle(query: FindCourierQuery): CourierEntity {
-        return repository.findById(query.courierId).get()
+        return repository.findById(query.courierId).orElseThrow { UnsupportedOperationException("Courier with id '" + query.courierId + "' not found") }
     }
 
     @QueryHandler

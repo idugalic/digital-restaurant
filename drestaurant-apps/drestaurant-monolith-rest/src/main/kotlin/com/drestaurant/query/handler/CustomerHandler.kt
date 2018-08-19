@@ -11,6 +11,7 @@ import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
 import org.axonframework.queryhandling.QueryUpdateEmitter
 import org.springframework.stereotype.Component
+import java.lang.UnsupportedOperationException
 
 @Component
 @ProcessingGroup("customer")
@@ -39,7 +40,7 @@ internal class CustomerHandler(private val repository: CustomerRepository, priva
 
     @QueryHandler
     fun handle(query: FindCustomerQuery): CustomerEntity {
-        return repository.findById(query.customerId).get()
+        return repository.findById(query.customerId).orElseThrow { UnsupportedOperationException("Customer with id '" + query.customerId + "' not found") }
     }
 
     @QueryHandler

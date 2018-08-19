@@ -13,6 +13,7 @@ import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
 import org.axonframework.queryhandling.QueryUpdateEmitter
 import org.springframework.stereotype.Component
+import java.lang.UnsupportedOperationException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -50,7 +51,7 @@ internal class RestaurantHandler(private val repository: RestaurantRepository, p
 
     @QueryHandler
     fun handle(query: FindRestaurantQuery): RestaurantEntity {
-        return repository.findById(query.restaurantId).get()
+        return repository.findById(query.restaurantId).orElseThrow { UnsupportedOperationException("Restaurant with id '" + query.restaurantId + "' not found") }
     }
 
     @QueryHandler
