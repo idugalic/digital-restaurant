@@ -10,7 +10,9 @@ import com.drestaurant.restaurant.domain.api.RestaurantOrderCreatedEvent
 import com.drestaurant.restaurant.domain.api.RestaurantOrderPreparedEvent
 import com.drestaurant.restaurant.domain.model.RestaurantOrderState
 import org.axonframework.config.ProcessingGroup
+import org.axonframework.eventhandling.AllowReplay
 import org.axonframework.eventhandling.EventHandler
+import org.axonframework.eventhandling.ResetHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
 import org.axonframework.queryhandling.QueryUpdateEmitter
@@ -22,6 +24,7 @@ import java.lang.UnsupportedOperationException
 internal class RestaurantOrderHandler(private val repository: RestaurantOrderRepository, private val restaurantRepository: RestaurantRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
     @EventHandler
+    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
     fun handle(event: RestaurantOrderCreatedEvent, @SequenceNumber aggregateVersion: Long) {
         val restaurantOrderItems = java.util.ArrayList<RestaurantOrderItemEmbedable>()
         for (item in event.lineItems) {
@@ -34,6 +37,7 @@ internal class RestaurantOrderHandler(private val repository: RestaurantOrderRep
     }
 
     @EventHandler
+    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
     fun handle(event: RestaurantOrderPreparedEvent, @SequenceNumber aggregateVersion: Long) {
         val record = repository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Restaurant order with id '" + event.aggregateIdentifier + "' not found") }
         record.state = RestaurantOrderState.PREPARED
@@ -52,6 +56,11 @@ internal class RestaurantOrderHandler(private val repository: RestaurantOrderRep
                 { query -> true },
                 record
         )
+    }
+
+    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
+    fun onReset() {
+        repository.deleteAll()
     }
 
     @QueryHandler

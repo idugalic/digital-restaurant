@@ -9,7 +9,9 @@ import com.drestaurant.query.repository.CustomerRepository
 import com.drestaurant.query.repository.OrderRepository
 import com.drestaurant.query.repository.RestaurantRepository
 import org.axonframework.config.ProcessingGroup
+import org.axonframework.eventhandling.AllowReplay
 import org.axonframework.eventhandling.EventHandler
+import org.axonframework.eventhandling.ResetHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Component
@@ -20,6 +22,7 @@ import java.util.*
 internal class OrderEventHandler(private val orderRepository: OrderRepository, private val customerRepository: CustomerRepository, private val restaurantRepository: RestaurantRepository, private val courierRepository: CourierRepository, private val messagingTemplate: SimpMessageSendingOperations) {
 
     @EventHandler
+    @AllowReplay(true)
     fun handle(event: OrderCreationInitiatedEvent, @SequenceNumber aggregateVersion: Long) {
         val orderItems = ArrayList<OrderItemEmbedable>()
         for (item in event.orderDetails.lineItems) {
@@ -81,6 +84,11 @@ internal class OrderEventHandler(private val orderRepository: OrderRepository, p
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.REJECTED
         orderRepository.save(orderEntity)
+    }
+
+    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
+    fun onReset() {
+        orderRepository.deleteAll()
     }
 
 }

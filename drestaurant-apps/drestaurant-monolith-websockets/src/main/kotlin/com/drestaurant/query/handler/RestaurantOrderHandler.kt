@@ -8,7 +8,9 @@ import com.drestaurant.restaurant.domain.api.RestaurantOrderCreatedEvent
 import com.drestaurant.restaurant.domain.api.RestaurantOrderPreparedEvent
 import com.drestaurant.restaurant.domain.model.RestaurantOrderState
 import org.axonframework.config.ProcessingGroup
+import org.axonframework.eventhandling.AllowReplay
 import org.axonframework.eventhandling.EventHandler
+import org.axonframework.eventhandling.ResetHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Component
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component
 internal class RestaurantOrderHandler(private val repository: RestaurantOrderRepository, private val restaurantRepository: RestaurantRepository, private val messagingTemplate: SimpMessageSendingOperations) {
 
     @EventHandler
+    @AllowReplay(true)
     fun handle(event: RestaurantOrderCreatedEvent, @SequenceNumber aggregateVersion: Long) {
         val restaurantOrderItems = java.util.ArrayList<RestaurantOrderItemEmbedable>()
         for (item in event.lineItems) {
@@ -31,11 +34,17 @@ internal class RestaurantOrderHandler(private val repository: RestaurantOrderRep
     }
 
     @EventHandler
+    @AllowReplay(true)
     fun handle(event: RestaurantOrderPreparedEvent, @SequenceNumber aggregateVersion: Long) {
         val record = repository.findById(event.aggregateIdentifier).get()
         record.state = RestaurantOrderState.PREPARED
         repository.save(record)
         broadcastUpdates()
+    }
+
+    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
+    fun onReset() {
+        repository.deleteAll()
     }
 
     private fun broadcastUpdates() {

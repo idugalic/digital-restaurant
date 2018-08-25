@@ -6,7 +6,9 @@ import com.drestaurant.query.FindCourierQuery
 import com.drestaurant.query.model.CourierEntity
 import com.drestaurant.query.repository.CourierRepository
 import org.axonframework.config.ProcessingGroup
+import org.axonframework.eventhandling.AllowReplay
 import org.axonframework.eventhandling.EventHandler
+import org.axonframework.eventhandling.ResetHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
 import org.axonframework.queryhandling.QueryUpdateEmitter
@@ -20,6 +22,7 @@ import java.util.*
 internal class CourierHandler(private val repository: CourierRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
     @EventHandler
+    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
     fun handle(event: CourierCreatedEvent, @SequenceNumber aggregateVersion: Long) {
         /* saving the record in our read/query model. */
         val record = CourierEntity(event.aggregateIdentifier, aggregateVersion, event.name.firstName, event.name.lastName, event.maxNumberOfActiveOrders, Collections.emptyList())
@@ -38,6 +41,11 @@ internal class CourierHandler(private val repository: CourierRepository, private
                 { query -> true },
                 record
         )
+    }
+
+    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
+    fun onReset() {
+        repository.deleteAll()
     }
 
     @QueryHandler

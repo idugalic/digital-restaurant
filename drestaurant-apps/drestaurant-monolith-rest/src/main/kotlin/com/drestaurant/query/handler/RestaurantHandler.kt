@@ -8,7 +8,10 @@ import com.drestaurant.query.model.RestaurantMenuEmbedable
 import com.drestaurant.query.repository.RestaurantRepository
 import com.drestaurant.restaurant.domain.api.RestaurantCreatedEvent
 import org.axonframework.config.ProcessingGroup
+import org.axonframework.eventhandling.AllowReplay
 import org.axonframework.eventhandling.EventHandler
+import org.axonframework.eventhandling.ReplayStatus
+import org.axonframework.eventhandling.ResetHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
 import org.axonframework.queryhandling.QueryUpdateEmitter
@@ -21,8 +24,10 @@ import kotlin.collections.ArrayList
 @ProcessingGroup("restaurant")
 internal class RestaurantHandler(private val repository: RestaurantRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
+
     @EventHandler
-    fun handle(event: RestaurantCreatedEvent, @SequenceNumber aggregateVersion: Long) {
+    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    fun handle(event: RestaurantCreatedEvent, @SequenceNumber aggregateVersion: Long, replayStatus: ReplayStatus) {
 
         val menuItems = ArrayList<MenuItemEmbedable>()
         for (item in event.menu.menuItems) {
@@ -47,6 +52,12 @@ internal class RestaurantHandler(private val repository: RestaurantRepository, p
                 { query -> true },
                 record
         )
+    }
+
+
+    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
+    fun onReset() {
+        repository.deleteAll()
     }
 
     @QueryHandler

@@ -268,6 +268,20 @@ HTTP/REST API for browsing the materialized data:
 curl http://localhost:8080/api/query
 ```
 
+#### Admininstration
+
+##### Read all event processors
+```
+curl http://localhost:8080/api/administration/eventprocessors
+```
+##### Event processors reply/reset
+
+In cases when you want to rebuild projections (read models), replaying past events comes in handy. The idea is to start from the beginning of time and invoke all event handlers. 
+
+```
+curl -i -X POST 'http://localhost:8080/api/administration/eventprocessors/{EVENT PROCESSOR NAME}/reply'
+```
+
 #### WebSocket (STOMP) API
 
 WebSocket API (ws://localhost:8080/drestaurant/websocket) topics:
@@ -394,7 +408,19 @@ curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*'
 ```
  Note: Replace CUSTOMER_ID and RESTAURANT_ID with concrete values.
  
+#### Admininstration
 
+##### Read all event processors
+```
+curl http://localhost:8080/administration/eventprocessors
+```
+##### Event processors reply/reset
+
+In cases when you want to rebuild projections (read models), replaying past events comes in handy. The idea is to start from the beginning of time and invoke all event handlers. 
+
+```
+curl -i -X POST 'http://localhost:8080/administration/eventprocessors/{EVENT PROCESSOR NAME}/reply'
+```
  
 ### Monolith 3 (STOMP over WebSockets API. We are async all the way)
 
@@ -443,6 +469,9 @@ WebSocket SockJS endpoint: `ws://localhost:8080/drestaurant/websocket`
  - `/restaurants/orders/markpreparedcommand`, messageType=[MESSAGE]
  - `/restaurants/orders`, messageType=[SUBSCRIBE]
  - `/restaurants/orders/{id}`, messageType=[SUBSCRIBE]
+ - `/eventprocessors/{groupName}/reply`, messageType=[MESSAGE]
+ - `/eventprocessors/{groupName}`, messageType=[SUBSCRIBE]
+ - `/eventprocessors`, messageType=[SUBSCRIBE]
 
 
 ### Microservices
@@ -478,24 +507,6 @@ $ ../../mvnw spring-boot:run
 ```
 
 ### Run monolith 2 (REST API by not segregating Command and Query)
-
-This application is using [AxonDB](https://axoniq.io/product-overview/axondb#modal-download-developer-edition) and [AxonHub](https://axoniq.io/product-overview/axonhub#0).
-Once you download the artifacts, please follow the instructions on how to run them.
-
-Run AxonDB (http://localhost:8023):
-
-```bash
-$ cd axondb
-$ ./axondb-server.jar
-```
-Run AxonHub (http://localhost:8024):
-Make sure that you have `axonhub/axonhub.properties` configured with AxonDB server location: `axoniq.axondb.servers=localhost:8123`
-
-```bash
-$ cd axonhub
-$ ./axonhub-server.jar 
-```
-Run application (http://localhost:8080):
 
 ```bash
 $ cd d-restaurant-backend/drestaurant-apps/drestaurant-monolith-rest

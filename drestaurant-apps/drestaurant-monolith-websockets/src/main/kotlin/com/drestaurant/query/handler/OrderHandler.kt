@@ -9,7 +9,9 @@ import com.drestaurant.query.repository.CustomerRepository
 import com.drestaurant.query.repository.OrderRepository
 import com.drestaurant.query.repository.RestaurantRepository
 import org.axonframework.config.ProcessingGroup
+import org.axonframework.eventhandling.AllowReplay
 import org.axonframework.eventhandling.EventHandler
+import org.axonframework.eventhandling.ResetHandler
 import org.axonframework.eventsourcing.SequenceNumber
 import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Component
@@ -20,6 +22,7 @@ import java.util.*
 internal class OrderHandler(private val orderRepository: OrderRepository, private val customerRepository: CustomerRepository, private val restaurantRepository: RestaurantRepository, private val courierRepository: CourierRepository, private val messagingTemplate: SimpMessageSendingOperations) {
 
     @EventHandler
+    @AllowReplay(true)
     fun handle(event: OrderCreationInitiatedEvent, @SequenceNumber aggregateVersion: Long) {
         val orderItems = ArrayList<OrderItemEmbedable>()
         for (item in event.orderDetails.lineItems) {
@@ -32,6 +35,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     }
 
     @EventHandler
+    @AllowReplay(true)
     fun handle(event: OrderVerifiedByCustomerEvent, @SequenceNumber aggregateVersion: Long) {
         val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
         val customerEntity = customerRepository.findById(event.customerId).get()
@@ -43,6 +47,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     }
 
     @EventHandler
+    @AllowReplay(true)
     fun handle(event: OrderVerifiedByRestaurantEvent, @SequenceNumber aggregateVersion: Long) {
         val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
         val restaurantEntity = restaurantRepository.findById(event.restaurantId).get()
@@ -54,6 +59,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     }
 
     @EventHandler
+    @AllowReplay(true)
     fun handle(event: OrderPreparedEvent, @SequenceNumber aggregateVersion: Long) {
         val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
         orderEntity.aggregateVersion = aggregateVersion
@@ -63,6 +69,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     }
 
     @EventHandler
+    @AllowReplay(true)
     fun handle(event: OrderReadyForDeliveryEvent, @SequenceNumber aggregateVersion: Long) {
         val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
         orderEntity.aggregateVersion = aggregateVersion
@@ -72,6 +79,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     }
 
     @EventHandler
+    @AllowReplay(true)
     fun handle(event: OrderDeliveredEvent, @SequenceNumber aggregateVersion: Long) {
         val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
         orderEntity.aggregateVersion = aggregateVersion
@@ -81,12 +89,18 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     }
 
     @EventHandler
+    @AllowReplay(true)
     fun handle(event: OrderRejectedEvent, @SequenceNumber aggregateVersion: Long) {
         val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.REJECTED
         orderRepository.save(orderEntity)
         broadcastUpdates()
+    }
+
+    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
+    fun onReset() {
+        orderRepository.deleteAll()
     }
 
     private fun broadcastUpdates() {
