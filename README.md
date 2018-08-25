@@ -7,56 +7,64 @@ Customers use the website application to place food orders at local restaurants.
 
 ## Table of Contents
 
-   * [Domain](#domain)
-      * [Core subdomains](#core-subdomains)
-      * [Generic subdomains](#generic-subdomains)
-      * [Organisation vs encapsulation](#organisation-vs-encapsulation)
-   * [Application/s](#applications)
-      * [Monolith (HTTP and WebSockets API by segregating Command and Query)](#monolith-http-and-websockets-api-by-segregating-command-and-query)
-         * ['Command' HTTP API](#command-http-api)
-            * [Create new Restaurant](#create-new-restaurant)
-            * [Create/Register new Customer](#createregister-new-customer)
-            * [Create/Hire new Courier](#createhire-new-courier)
-            * [Create/Place the Order](#createplace-the-order)
-            * [Restaurant marks the Order as prepared](#restaurant-marks-the-order-as-prepared)
-            * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared)
-            * [Courier marks the Order as delivered](#courier-marks-the-order-as-delivered)
-         * ['Query' HTTP API](#query-http-api)
-         * [WebSocket (STOMP) API](#websocket-stomp-api)
-      * [Monolith 2 (REST API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
-         * [Restaurant management](#restaurant-management)
-            * [Read all restaurants](#read-all-restaurants)
-            * [Create new restaurant](#create-new-restaurant-1)
-            * [Mark restaurant order as prepared](#mark-restaurant-order-as-prepared)
-         * [Customer management](#customer-management)
-            * [Read all customers](#read-all-customers)
-            * [Create/Register new Customer](#createregister-new-customer-1)
-         * [Courier management](#courier-management)
-            * [Read all couriers](#read-all-couriers)
-            * [Create/Hire new Courier](#createhire-new-courier-1)
-            * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared-1)
-            * [Courier marks the order as delivered](#courier-marks-the-order-as-delivered-1)
-         * [Order management](#order-management)
-            * [Read all orders](#read-all-orders)
-            * [Create/Place the Order](#createplace-the-order-1)
-      * [Monolith 3 (STOMP over WebSockets API. We are async all the way)](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
-         * [STOMP over WebSockets API](#stomp-over-websockets-api)
-            * [Topics:](#topics)
-            * [Message endpoints:](#message-endpoints)
-      * [Microservices](#microservices)
-   * [Development](#development)
-      * [Clone](#clone)
-      * [Build](#build)
-      * [Run monolith (HTTP and WebSockets API by segregating Command and Query)](#run-monolith-http-and-websockets-api-by-segregating-command-and-query)
-      * [Run monolith 2 (REST API by not segregating Command and Query)](#run-monolith-2-rest-api-by-not-segregating-command-and-query)
-      * [Run monolith 3 (STOMP over WebSockets API. We are async all the way)](#run-monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
-   * [Continuous delivery](#continuous-delivery)
-   * [Technology](#technology)
-      * [Language](#language)
-      * [Frameworks and Platforms](#frameworks-and-platforms)
-      * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
-      * [Infrastructure and Platform (As A Service)](#infrastructure-and-platform-as-a-service)
-   * [References and further reading](#references-and-further-reading)
+  * [Domain](#domain)
+     * [Core subdomains](#core-subdomains)
+     * [Generic subdomains](#generic-subdomains)
+     * [Organisation vs encapsulation](#organisation-vs-encapsulation)
+  * [Application/s](#applications)
+     * [Monolith (HTTP and WebSockets API by segregating Command and Query)](#monolith-http-and-websockets-api-by-segregating-command-and-query)
+        * ['Command' HTTP API](#command-http-api)
+           * [Create new Restaurant](#create-new-restaurant)
+           * [Create/Register new Customer](#createregister-new-customer)
+           * [Create/Hire new Courier](#createhire-new-courier)
+           * [Create/Place the Order](#createplace-the-order)
+           * [Restaurant marks the Order as prepared](#restaurant-marks-the-order-as-prepared)
+           * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared)
+           * [Courier marks the Order as delivered](#courier-marks-the-order-as-delivered)
+        * ['Query' HTTP API](#query-http-api)
+        * [Administration](#administration)
+           * [Read all event processors](#read-all-event-processors)
+           * [Event processors reset](#event-processors-reset)
+           * [Event processor status](#event-processor-status)
+        * [WebSocket (STOMP) API](#websocket-stomp-api)
+     * [Monolith 2 (REST API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
+        * [Restaurant management](#restaurant-management)
+           * [Read all restaurants](#read-all-restaurants)
+           * [Create new restaurant](#create-new-restaurant-1)
+           * [Mark restaurant order as prepared](#mark-restaurant-order-as-prepared)
+        * [Customer management](#customer-management)
+           * [Read all customers](#read-all-customers)
+           * [Create/Register new Customer](#createregister-new-customer-1)
+        * [Courier management](#courier-management)
+           * [Read all couriers](#read-all-couriers)
+           * [Create/Hire new Courier](#createhire-new-courier-1)
+           * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared-1)
+           * [Courier marks the order as delivered](#courier-marks-the-order-as-delivered-1)
+        * [Order management](#order-management)
+           * [Read all orders](#read-all-orders)
+           * [Create/Place the Order](#createplace-the-order-1)
+        * [Administration](#administration-1)
+           * [Read all event processors](#read-all-event-processors-1)
+           * [Event processors reset](#event-processors-reset-1)
+           * [Event processor status](#event-processor-status-1)
+     * [Monolith 3 (STOMP over WebSockets API. We are async all the way)](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
+        * [STOMP over WebSockets API](#stomp-over-websockets-api)
+           * [Topics:](#topics)
+           * [Message endpoints:](#message-endpoints)
+     * [Microservices](#microservices)
+  * [Development](#development)
+     * [Clone](#clone)
+     * [Build](#build)
+     * [Run monolith (HTTP and WebSockets API by segregating Command and Query)](#run-monolith-http-and-websockets-api-by-segregating-command-and-query)
+     * [Run monolith 2 (REST API by not segregating Command and Query)](#run-monolith-2-rest-api-by-not-segregating-command-and-query)
+     * [Run monolith 3 (STOMP over WebSockets API. We are async all the way)](#run-monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
+  * [Continuous delivery](#continuous-delivery)
+  * [Technology](#technology)
+     * [Language](#language)
+     * [Frameworks and Platforms](#frameworks-and-platforms)
+     * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
+     * [Infrastructure and Platform (As A Service)](#infrastructure-and-platform-as-a-service)
+  * [References and further reading](#references-and-further-reading)
 
 
 ## Domain
@@ -276,7 +284,7 @@ curl http://localhost:8080/api/administration/eventprocessors
 ```
 ##### Event processors reset
 
-In cases when you want to rebuild projections (read models), replaying past events comes in handy. The idea is to start from the beginning of time and invoke all event handlers. 
+In cases when you want to rebuild projections (query models), replaying past events comes in handy. The idea is to start from the beginning of time and invoke all event handlers. 
 
 ```
 curl -i -X POST 'http://localhost:8080/api/administration/eventprocessors/{EVENT PROCESSOR NAME}/reply'
@@ -285,7 +293,7 @@ curl -i -X POST 'http://localhost:8080/api/administration/eventprocessors/{EVENT
 
 Returns a map where the key is the segment identifier, and the value is the event processing status.
 Based on this status we can determine whether the Processor is caught up and/or is replaying.
-This can be used for Blue-Green deployment. You don't want to send queries to 'view model' if processor is not caught up and/or is replaying.
+This can be used for Blue-Green deployment. You don't want to send queries to 'query model' if processor is not caught up and/or is replaying.
 
 ```
 curl http://localhost:8080/api/administration/eventprocessors/{EVENT PROCESSOR NAME}/status
@@ -425,7 +433,7 @@ curl http://localhost:8080/administration/eventprocessors
 ```
 ##### Event processors reset
 
-In cases when you want to rebuild projections (read models), replaying past events comes in handy. The idea is to start from the beginning of time and invoke all event handlers. 
+In cases when you want to rebuild projections (query models), replaying past events comes in handy. The idea is to start from the beginning of time and invoke all event handlers. 
 
 ```
 curl -i -X POST 'http://localhost:8080/administration/eventprocessors/{EVENT PROCESSOR NAME}/reply'
@@ -434,7 +442,7 @@ curl -i -X POST 'http://localhost:8080/administration/eventprocessors/{EVENT PRO
 
 Returns a map where the key is the segment identifier, and the value is the event processing status.
 Based on this status we can determine whether the Processor is caught up and/or is replaying.
-This can be used for Blue-Green deployment. You don't want to send queries to 'view model' if processor is not caught up and/or is replaying.
+This can be used for Blue-Green deployment. You don't want to send queries to 'query model' if processor is not caught up and/or is replaying.
 
 ```
 curl http://localhost:8080/administration/eventprocessors/{EVENT PROCESSOR NAME}/status
