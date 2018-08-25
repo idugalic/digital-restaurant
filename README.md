@@ -187,8 +187,8 @@ In general there are two approaches:
 [Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates 'query models' (materialized views) of aggregates.
 This makes querying of event-sourced aggregates easy.
 
-Aditonally, our event listener is publishing a WebSocket events on every update of a query model. 
-This can be usefull on the front-end to re-fetch the data via HTTP/REST endpoints. 
+Event listener is publishing a WebSocket events on every update of a query model. 
+This can be useful on the front-end to re-fetch the data via HTTP/REST endpoints. 
 
 #### 'Command' HTTP API
 
@@ -268,20 +268,29 @@ HTTP/REST API for browsing the materialized data:
 curl http://localhost:8080/api/query
 ```
 
-#### Admininstration
+#### Administration
 
 ##### Read all event processors
 ```
 curl http://localhost:8080/api/administration/eventprocessors
 ```
-##### Event processors reply/reset
+##### Event processors reset
 
 In cases when you want to rebuild projections (read models), replaying past events comes in handy. The idea is to start from the beginning of time and invoke all event handlers. 
 
 ```
 curl -i -X POST 'http://localhost:8080/api/administration/eventprocessors/{EVENT PROCESSOR NAME}/reply'
 ```
+##### Event processor status
 
+Returns a map where the key is the segment identifier, and the value is the event processing status.
+Based on this status we can determine whether the Processor is caught up and/or is replaying.
+This can be used for Blue-Green deployment. You don't want to send queries to 'view model' if processor is not caught up and/or is replaying.
+
+```
+curl http://localhost:8080/api/administration/eventprocessors/{EVENT PROCESSOR NAME}/status
+
+```
 #### WebSocket (STOMP) API
 
 WebSocket API (ws://localhost:8080/drestaurant/websocket) topics:
@@ -408,20 +417,29 @@ curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*'
 ```
  Note: Replace CUSTOMER_ID and RESTAURANT_ID with concrete values.
  
-#### Admininstration
+#### Administration
 
 ##### Read all event processors
 ```
 curl http://localhost:8080/administration/eventprocessors
 ```
-##### Event processors reply/reset
+##### Event processors reset
 
 In cases when you want to rebuild projections (read models), replaying past events comes in handy. The idea is to start from the beginning of time and invoke all event handlers. 
 
 ```
 curl -i -X POST 'http://localhost:8080/administration/eventprocessors/{EVENT PROCESSOR NAME}/reply'
 ```
- 
+##### Event processor status
+
+Returns a map where the key is the segment identifier, and the value is the event processing status.
+Based on this status we can determine whether the Processor is caught up and/or is replaying.
+This can be used for Blue-Green deployment. You don't want to send queries to 'view model' if processor is not caught up and/or is replaying.
+
+```
+curl http://localhost:8080/administration/eventprocessors/{EVENT PROCESSOR NAME}/status
+
+```
 ### Monolith 3 (STOMP over WebSockets API. We are async all the way)
 
 Source code: [https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-websockets](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-websockets)
