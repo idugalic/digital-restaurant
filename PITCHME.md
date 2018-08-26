@@ -186,9 +186,34 @@ Consider using event sourcing within 'core subdomain' only!
 
  - [Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component
  - It consumes events, and creates 'query models'
+ - Query models are exposed over [HTTP endpoints by Spring Data Rest](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository/OrderRepository.kt)
  - There is one-to-many relation between a command resource and query model resource
- - Event listener is publishing a WebSocket events
- - This can be useful on the front-end to re-fetch the data via HTTP endpoints
+ - Event listener is publishing a WebSocket events to notify FE on update of a query model
+ 
++++
+
+### Applications
+
+<span style="color:gray">Monolith 2 (REST)</span>
+
+ - [Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/handler) is a central component
+ - It consumes events, and creates 'query models'
+ - Query models are exposed over [REST endpoints by Spring Data Rest](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/repository/OrderRepository.kt)
+ - There is one-to-one relation between a command resource and query model resource
+ - We emit 'any change on Query Model' to Axon subscription queries, 
+ - and we subscribe on them within [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt)
+
++++
+
+### Applications
+
+<span style="color:gray">Monolith 3 (Websockets)</span>
+ 
+ - [Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/query/handler) is a central component
+ - It consumes domain events, and creates 'query models' (materialized views)
+ - Event listener is publishing a WebSocket messages to topics on every update of a query model
+ - [WebController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/web/WebController.kt) exposes message endpoints
+
 
 +++
 
