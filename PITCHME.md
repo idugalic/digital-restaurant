@@ -2,6 +2,8 @@
 
 <span style="color:gray">by example</span>
 
+[https://github.com/idugalic/digital-restaurant](https://github.com/idugalic/digital-restaurant)
+
 ---
 
 ### Sample application
@@ -143,7 +145,6 @@ and that enable us to choose different deployment strategy and take first step t
 
  - Microservices 1 - HTTP and WebSockets API **resources representing Commands and resources representing Query Models are decoupled**
 
----
 
 
 
