@@ -218,7 +218,7 @@ Consider using event sourcing within 'core subdomain' only!
 
 ### Applications
 
-<span style="color:gray">drestaurant-apps/drestaurant-microservices/</span>
+<span style="color:gray">Microservices 1/</span>
 
 We designed and structured our loosely coupled components in a modular way, 
 and that enable us to choose different deployment strategy and take first step towards Microservices architectural style.
@@ -226,6 +226,13 @@ and that enable us to choose different deployment strategy and take first step t
 
  - Microservices 1 - HTTP and WebSockets API **resources representing Commands and resources representing Query Models are decoupled**
 
+---
+### Thank you
+
+ - Ivan Dugalic
+ - [http://idugalic.pro/](http://idugalic.pro/)
+ - [https://twitter.com/idugalic](https://twitter.com/idugalic)
+ - [https://github.com/idugalic](https://github.com/idugalic)
 
 
 
