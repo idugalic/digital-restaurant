@@ -97,11 +97,21 @@ Generic subdomains facilitate the business, but are not core to the business. In
  
 <span style="color:gray">Eventsourcing drawbacks</span>
  
- - There is a learning curve because its a different way to write your business logic. 
- - Events will change shape over time.
- - Querying the event store is often difficult, which forces you to use the Command Query Responsibility Segragation (CQRS) pattern.
+ - There is a learning curve because its a different way to write your business logic
+ - Events will change shape over time
+ - Querying the event store is often difficult, which forces you to use the Command Query Responsibility Segragation (CQRS) pattern
 
 Consider using event sourcing within 'core subdomain' only!
+
++++
+
+### Domain
+ 
+<span style="color:gray">Eventsourcing & snapshotting</span>
+ 
+ - A Rolling Snapshot is a denormalization of the current state of an aggregate at a given point in time. It represents the state when all events to that point in time have been replayed
+ - They are used as a heuristic to prevent the need to load all events for the entire history of an aggregate
+ - `@Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")`
 
 ---
 
@@ -120,6 +130,17 @@ Consider using event sourcing within 'core subdomain' only!
  - Monolith 1 - HTTP and WebSockets API **resources representing Commands and resources representing Query Models are decoupled**
  - Monolith 2 - HTTP/REST API **one-to-one relation between a Command Model resource and a Query Model resource**
  - Monolith 3 - WebSockets API. We are async all the way
+
++++
+
+### Applications
+
+<span style="color:gray">drestaurant-apps/drestaurant-microservices/</span>
+
+We designed and structured our loosely coupled components in a modular way, 
+and that enable us to choose different deployment strategy and take first step towards Microservices architectural style.
+
+
  - Microservices 1 - HTTP and WebSockets API **resources representing Commands and resources representing Query Models are decoupled**
 
 ---
