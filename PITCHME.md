@@ -35,9 +35,6 @@
 
 <span style="color:gray">Subdomains - The problem</span>
 
-As you try to model a larger domain, it gets progressively harder to build a single unified model for the entire enterprise.
-
-The problem with this kind of modeling is that:
   - getting different parts of an organization to agree on a single unified model is a monumental task. 
   - from the perspective of a given part of the organization, the model is overly complex for their needs. 
   - the domain model can be confusing since different parts of the organization might use either the same term for different concepts or different terms for the same concept. 
@@ -120,10 +117,8 @@ Consider using event sourcing within 'core subdomain' only!
 
 <span style="color:gray">drestaurant-apps/</span>
 
-Applications with different architectural styles, API designs and deployment strategies:
-
  - Monolith 1 - HTTP and WebSockets API **resources representing Commands and resources representing Query Models are decoupled**
- - Monolith 2 - REST/HATEOAS API **one-to-one relation between a Command Model resource and a Query Model resource**
+ - Monolith 2 - HTTP/REST API **one-to-one relation between a Command Model resource and a Query Model resource**
  - Monolith 3 - WebSockets API. We are async all the way
  - Microservices 1 - HTTP and WebSockets API **resources representing Commands and resources representing Query Models are decoupled**
 
