@@ -22,6 +22,52 @@
   - It is built using Event Sourcing and CQRS patterns
   - It is written in Kotlin, and uses Spring Boot
   - It is built using Axonframework, which is focused on making applications based on the DDD principles
+  - It is driven using Maven.
+  
++++
+
+### Sample application
+
+<span style="color:gray">Clone & Build</span>
+
+```bash
+$ git clone https://github.com/idugalic/digital-restaurant
+$ cd digital-restaurant
+$ ./mvnw clean install
+```
+
++++
+
+### Sample application
+
+<span style="color:gray">Run monolith 1 (HTTP & Websockets)</span>
+
+```bash
+$ cd digital-restaurant/drestaurant-apps/drestaurant-monolith
+$ ../../mvnw spring-boot:run
+```
+
++++
+
+### Sample application
+
+<span style="color:gray">Run monolith 2 (REST)</span>
+
+```bash
+$ cd digital-restaurant/drestaurant-apps/drestaurant-monolith-rest
+$ ../../mvnw spring-boot:run
+```
+
++++
+
+### Sample application
+
+<span style="color:gray">Run monolith 3 (Websockets)</span>
+
+```bash
+$ cd digital-restaurant/drestaurant-apps/drestaurant-monolith-websockets
+$ ../../mvnw spring-boot:run
+```
 
 ---
 

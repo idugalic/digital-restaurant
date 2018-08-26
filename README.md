@@ -516,33 +516,33 @@ This project is driven using [Maven][mvn].
 
 ### Clone
 ```bash
-$ git clone https://gitlab.com/d-restaurant/d-restaurant-backend.git
+$ git clone https://github.com/idugalic/digital-restaurant
 ```
 
 ### Build
 
 ```bash
-$ cd d-restaurant-backend
+$ cd digital-restaurant
 $ ./mvnw clean install
 ```
 ### Run monolith (HTTP and WebSockets API by segregating Command and Query)
 
 ```bash
-$ cd d-restaurant-backend/drestaurant-apps/drestaurant-monolith
+$ cd digital-restaurant/drestaurant-apps/drestaurant-monolith
 $ ../../mvnw spring-boot:run
 ```
 
 ### Run monolith 2 (REST API by not segregating Command and Query)
 
 ```bash
-$ cd d-restaurant-backend/drestaurant-apps/drestaurant-monolith-rest
+$ cd digital-restaurant/drestaurant-apps/drestaurant-monolith-rest
 $ ../../mvnw spring-boot:run
 ```
 
 ### Run monolith 3 (STOMP over WebSockets API. We are async all the way)
 
 ```bash
-$ cd d-restaurant-backend/drestaurant-apps/drestaurant-monolith-websockets
+$ cd digital-restaurant/drestaurant-apps/drestaurant-monolith-websockets
 $ ../../mvnw spring-boot:run
 ```
 
