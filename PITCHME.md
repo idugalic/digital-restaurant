@@ -32,8 +32,7 @@
 
 ```bash
 $ git clone https://github.com/idugalic/digital-restaurant
-$ cd digital-restaurant
-$ ./mvnw clean install
+$ mvn clean install
 ```
 
 +++
@@ -43,8 +42,8 @@ $ ./mvnw clean install
 <span style="color:gray">Run monolith 1 (HTTP & Websockets)</span>
 
 ```bash
-$ cd digital-restaurant/drestaurant-apps/drestaurant-monolith
-$ ../../mvnw spring-boot:run
+$ cd drestaurant-apps/drestaurant-monolith
+$ mvn spring-boot:run
 ```
 
 +++
@@ -54,8 +53,8 @@ $ ../../mvnw spring-boot:run
 <span style="color:gray">Run monolith 2 (REST)</span>
 
 ```bash
-$ cd digital-restaurant/drestaurant-apps/drestaurant-monolith-rest
-$ ../../mvnw spring-boot:run
+$ cd drestaurant-apps/drestaurant-monolith-rest
+$ mvn spring-boot:run
 ```
 
 +++
@@ -65,8 +64,8 @@ $ ../../mvnw spring-boot:run
 <span style="color:gray">Run monolith 3 (Websockets)</span>
 
 ```bash
-$ cd digital-restaurant/drestaurant-apps/drestaurant-monolith-websockets
-$ ../../mvnw spring-boot:run
+$ cd drestaurant-apps/drestaurant-monolith-websockets
+$ mvn spring-boot:run
 ```
 
 ---
@@ -178,6 +177,19 @@ Consider using event sourcing within 'core subdomain' only!
  - Monolith 1 - HTTP and WebSockets API **resources representing Commands and resources representing Query Models are decoupled**
  - Monolith 2 - HTTP/REST API **one-to-one relation between a Command Model resource and a Query Model resource**
  - Monolith 3 - WebSockets API. We are async all the way
+
++++
+
+### Applications
+
+<span style="color:gray">Monolith 1 (HTTP & Websockets)</span>
+
+ - [Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component
+ - It consumes events, and creates 'query models' (materialized views) of aggregates
+ - There is no one-to-one relation between a command http resource and a query model http resource
+ - `http://localhost:8080/api/command...` vs `http://localhost:8080/api/query...`
+ - Event listener is publishing a WebSocket events on every update of a query model
+ - This can be useful on the front-end to re-fetch the data via HTTP endpoints
 
 +++
 
