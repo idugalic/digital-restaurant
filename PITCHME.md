@@ -57,7 +57,7 @@ The problem with this kind of modeling is that:
 
 <span style="color:gray">Core subdomains</span>
 
-Core subdomains are more important to the business then others:
+Core subdomains are more important to the business
 
  - [Courier subdomain - drestaurant-libs/drestaurant-courier/](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier) 
  - [Restaurant subdomain - drestaurant-libs/drestaurant-restaurant/](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant)
@@ -94,11 +94,11 @@ Generic subdomains facilitate the business, but are not core to the business. In
  - It reliably publishes domain events, which is particularly useful in a microservice architecture
  - You can use any database technology to store the state
 
- +++
++++
  
- ### Domain
+### Domain
  
- <span style="color:gray">Eventsourcing drawbacks</span>
+<span style="color:gray">Eventsourcing drawbacks</span>
  
  - There is a learning curve because its a different way to write your business logic. 
  - Events will change shape over time.
