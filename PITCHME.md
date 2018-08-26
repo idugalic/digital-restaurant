@@ -185,10 +185,9 @@ Consider using event sourcing within 'core subdomain' only!
 <span style="color:gray">Monolith 1 (HTTP & Websockets)</span>
 
  - [Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component
- - It consumes events, and creates 'query models' (materialized views) of aggregates
- - There is no one-to-one relation between a command http resource and a query model http resource
- - `http://localhost:8080/api/command...` vs `http://localhost:8080/api/query...`
- - Event listener is publishing a WebSocket events on every update of a query model
+ - It consumes events, and creates 'query models'
+ - There is one-to-many relation between a command resource and query model resource
+ - Event listener is publishing a WebSocket events
  - This can be useful on the front-end to re-fetch the data via HTTP endpoints
 
 +++
