@@ -189,7 +189,7 @@ Consider using event sourcing within 'core subdomain' only!
  - It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
  - It is publishing a WebSocket events to notify on update of a query model
  - Query models are exposed via [Spring Data Rest](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository/OrderRepository.kt)
- - One-to-many relation between a command resource and query model resource
+ - One-to-many relation between a [command resource](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/web/CommandController.kt) and [query resource](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository/OrderRepository.kt)
  
  
 +++
@@ -201,7 +201,7 @@ Consider using event sourcing within 'core subdomain' only!
  - [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/handler) consumes events, and creates query models
  - It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
  - We emit 'any change on Query Model' to Axon subscription queries, and we subscribe on them within [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt)
- - One-to-one relation between a command resource and query model resource [(Spring Data Rest)](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/repository/OrderRepository.kt)
+ - One-to-one relation between a [command resource](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt) and [query resource (Spring Data Rest)](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/repository/OrderRepository.kt)
 
 
 +++
