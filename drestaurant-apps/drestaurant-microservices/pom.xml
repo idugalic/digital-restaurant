@@ -16,10 +16,11 @@
     </parent>
 
     <modules>
-        <module>drestaurant-microservices-customer</module>
-        <module>drestaurant-microservices-restaurant</module>
-        <module>drestaurant-microservices-courier</module>
-        <module>drestaurant-microservices-order</module>
+        <module>drestaurant-microservices-command-customer</module>
+        <module>drestaurant-microservices-command-restaurant</module>
+        <module>drestaurant-microservices-command-courier</module>
+        <module>drestaurant-microservices-command-order</module>
+        <module>drestaurant-microservices-query</module>
     </modules>
 
 </project>

@@ -10,6 +10,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 
 @Configuration
 class RestConfiguration : RepositoryRestConfigurerAdapter() {
+
     override fun configureRepositoryRestConfiguration(config: RepositoryRestConfiguration) {
         config.exposeIdsFor(CustomerEntity::class.java, CourierEntity::class.java, RestaurantEntity::class.java, OrderEntity::class.java)
     }

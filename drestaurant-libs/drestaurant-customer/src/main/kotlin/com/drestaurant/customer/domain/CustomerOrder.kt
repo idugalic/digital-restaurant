@@ -13,7 +13,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.spring.stereotype.Aggregate
 import java.math.BigDecimal
 
-@Aggregate(snapshotTriggerDefinition = "customerSnapshotTriggerDefinition")
+@Aggregate(snapshotTriggerDefinition = "customerOrderSnapshotTriggerDefinition")
 internal class CustomerOrder {
 
     @AggregateIdentifier
