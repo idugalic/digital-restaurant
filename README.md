@@ -192,11 +192,15 @@ In general there are two approaches:
 **There is no one-to-one relation between a Command resource and a Query Model resource. This makes easier to implement multiple representations of the same underlying domain entity as separate resources.**
 
 
-[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates 'query models' (materialized views) of aggregates.
+[Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component.
+It consumes events, and creates 'query models' (materialized views) of aggregates.
 This makes querying of event-sourced aggregates easy.
 
-Event listener is publishing a WebSocket events on every update of a query model. 
+Event handler is publishing a WebSocket events on every update of a query model. 
 This can be useful on the front-end to re-fetch the data via HTTP/REST endpoints. 
+
+Each event handler allows 'reply' of events. Please note that 'reset handler' will be called before replay/reset starts to clear out the query model tables.
+[AdminController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/web/AdminController.kt) expose endpoints for reseting tracking event processors/handlers.
 
 #### 'Command' HTTP API
 
@@ -333,8 +337,11 @@ This application is using the second approach ('NOT segregating Command and Quer
 **We create one-to-one relation between a Command Model resource and a Query Model (materialized view) resource.**
 Note that we are utilizing Spring Rest Data project to implement REST API, and that will position us on the third level of [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html)
 
-[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates Query Model / materialized views of aggregates.
+[Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates Query Model / materialized views of aggregates.
 Additionally, it will emit 'any change on Query Model' to Axon subscription queries, and let us subscribe on them within our [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt) keeping our architecture clean.
+
+Each event handler allows 'reply' of events. Please note that 'reset handler' will be called before replay/reset starts to clear out the query model tables.
+[AdminController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/AdminController.kt) expose endpoints for reseting tracking event processors/handlers.
 
 Although fully asynchronous designs may be preferable for a number of reasons, it is a common scenario that back-end teams are forced to provide a synchronous REST API on top of asynchronous CQRS+ES back-ends.
 
@@ -458,7 +465,10 @@ The WebSocket protocol (RFC 6455) defines an important new capability for web ap
 This application is utilizing STOMP over Websockets protocol to expose capabilities of our 'domain' via components:
  
  - [WebController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/web/WebController.kt)
- - [Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes domain events, and creates 'query models' (materialized views) of aggregates. Aditonally, our event listener is publishing a WebSocket messages to topics on every update of a query model. 
+ - [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes domain events, and creates 'query models' (materialized views) of aggregates. Aditonally, our event listener is publishing a WebSocket messages to topics on every update of a query model.
+ - [AdminController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/web/AdminController.kt) expose endpoints for reseting/replying tracking event processors/handlers.  Each event handler allows 'reply' of events. Please note that 'reset handler' will be called before replay/reset starts to clear out the query model tables.
+
+
 
 #### STOMP over WebSockets API
 
