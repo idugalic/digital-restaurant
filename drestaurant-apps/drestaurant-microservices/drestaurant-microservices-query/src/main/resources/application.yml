@@ -16,16 +16,12 @@ spring:
 axon:
   eventhandling:
     processors:
-      customer:
+      query:
         mode: tracking
-      restaurant:
-        mode: tracking
-      order:
-        mode: tracking
-      courier:
-        mode: tracking
-  snapshot:
-    trigger:
-      treshold:
-        restaurant: 100
-        restaurantorder: 100
+        source: kafkaMessageSource
+  kafka:
+    default-topic: axon-events
+    consumer:
+
+      group-id: query-group
+      bootstrap-servers: localhost:9092

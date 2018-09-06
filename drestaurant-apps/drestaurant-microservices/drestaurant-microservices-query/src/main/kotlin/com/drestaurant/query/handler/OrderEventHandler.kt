@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-@ProcessingGroup("order")
+@ProcessingGroup("query")
 internal class OrderEventHandler(private val orderRepository: OrderRepository, private val customerRepository: CustomerRepository, private val restaurantRepository: RestaurantRepository, private val courierRepository: CourierRepository, private val messagingTemplate: SimpMessageSendingOperations) {
 
     @EventHandler

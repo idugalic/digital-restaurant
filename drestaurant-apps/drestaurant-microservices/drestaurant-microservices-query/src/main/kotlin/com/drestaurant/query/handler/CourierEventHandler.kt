@@ -12,7 +12,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Component
 
 @Component
-@ProcessingGroup("courier")
+@ProcessingGroup("query")
 internal class CourierEventHandler(private val repository: CourierRepository, private val messagingTemplate: SimpMessageSendingOperations) {
 
     @EventHandler

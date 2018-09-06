@@ -1,6 +1,8 @@
 package com.drestaurant.courier.domain
 
 import com.drestaurant.common.domain.model.AuditEntry
+import com.drestaurant.courier.domain.api.CreateCourierOrderCommand
+import com.drestaurant.order.domain.api.CourierOrderCreationRequestedEvent
 import org.axonframework.test.saga.FixtureConfiguration
 import org.axonframework.test.saga.SagaTestFixture
 import org.junit.Before
@@ -24,11 +26,21 @@ class CourierOrderSagaTest {
     }
 
     @Test
-    fun courierOrderAssigningInitiatedTest() {
+    fun courierOrderCreationRequestedTest() {
 
         testFixture.givenNoPriorActivity()
                 .whenAggregate(orderId)
-                .publishes(CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry))
+                .publishes(CourierOrderCreationRequestedEvent(orderId, auditEntry))
+                .expectActiveSagas(1)
+                .expectDispatchedCommands(CreateCourierOrderCommand(orderId, auditEntry))
+    }
+
+    @Test
+    fun courierOrderAssigningInitiatedTest() {
+
+        testFixture.givenAggregate(orderId)
+                .published(CourierOrderCreationRequestedEvent(orderId, auditEntry))
+                .whenPublishingA(CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry))
                 .expectActiveSagas(1)
                 .expectDispatchedCommands(ValidateOrderByCourierCommand(orderId, courierId, auditEntry))
     }
@@ -37,7 +49,7 @@ class CourierOrderSagaTest {
     fun courierNotFoundTest() {
 
         testFixture.givenAggregate(orderId)
-                .published(CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry))
+                .published(CourierOrderCreationRequestedEvent(orderId, auditEntry), CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry))
                 .whenPublishingA(CourierNotFoundForOrderEvent(courierId, orderId, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkCourierOrderAsNotAssignedCommand(orderId, auditEntry))
@@ -47,7 +59,7 @@ class CourierOrderSagaTest {
     fun orderValidatedWithErrorByCourierTest() {
 
         testFixture.givenAggregate(orderId)
-                .published(CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry))
+                .published(CourierOrderCreationRequestedEvent(orderId, auditEntry), CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry))
                 .whenPublishingA(OrderValidatedWithErrorByCourierEvent(courierId, orderId, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkCourierOrderAsNotAssignedCommand(orderId, auditEntry))
@@ -57,7 +69,7 @@ class CourierOrderSagaTest {
     fun orderValidatedWithSuccessByCourierTest() {
 
         testFixture.givenAggregate(orderId)
-                .published(CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry))
+                .published(CourierOrderCreationRequestedEvent(orderId, auditEntry), CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry))
                 .whenPublishingA(OrderValidatedWithSuccessByCourierEvent(courierId, orderId, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkCourierOrderAsAssignedCommand(orderId, courierId, auditEntry))

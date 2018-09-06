@@ -16,3 +16,13 @@ axon:
       treshold:
         customer: 100
         customerorder: 100
+  kafka:
+#    client-id: customer-command
+    default-topic: axon-events
+    producer:
+      retries: 5
+      bootstrap-servers: localhost:9092
+      transaction-id-prefix: customertx
+    consumer:
+      group-id: customer-command-group
+      bootstrap-servers: localhost:9092

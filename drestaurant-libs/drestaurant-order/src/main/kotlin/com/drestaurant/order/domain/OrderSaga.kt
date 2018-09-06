@@ -24,7 +24,7 @@ import org.axonframework.spring.stereotype.Saga
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.*
 
-@Saga
+@Saga(configurationBean = "orderSagaConfiguration")
 class OrderSaga {
 
     @Autowired

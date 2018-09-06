@@ -16,3 +16,14 @@ axon:
       treshold:
         courier: 100
         courierorder: 100
+  kafka:
+#    client-id: courier-command
+    default-topic: axon-events
+    producer:
+      retries: 5
+      bootstrap-servers: localhost:9092
+      transaction-id-prefix: couriertx
+    consumer:
+      group-id: courier-command-group
+      bootstrap-servers: localhost:9092
+

@@ -33,7 +33,7 @@ class CommandController(private val commandGateway: CommandGateway) {
     @ResponseStatus(value = HttpStatus.CREATED)
     fun createCustomer(@RequestBody request: CreateCustomerRequest, response: HttpServletResponse) {
         val orderLimit = Money(request.orderLimit)
-        val command = CreateCustomerCommand(request.name, orderLimit, auditEntry)
+        val command = CreateCustomerCommand(PersonName(request.firstName, request.lastName), orderLimit, auditEntry)
         commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 }
@@ -41,4 +41,4 @@ class CommandController(private val commandGateway: CommandGateway) {
 /**
  * A request for creating a Customer/Consumer
  */
-data class CreateCustomerRequest(val name: PersonName, val orderLimit: BigDecimal)
+data class CreateCustomerRequest(val firstName: String, val lastName: String, val orderLimit: BigDecimal)

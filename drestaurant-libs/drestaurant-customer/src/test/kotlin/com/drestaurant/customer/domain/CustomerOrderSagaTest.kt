@@ -2,6 +2,8 @@ package com.drestaurant.customer.domain
 
 import com.drestaurant.common.domain.model.AuditEntry
 import com.drestaurant.common.domain.model.Money
+import com.drestaurant.customer.domain.api.CreateCustomerOrderCommand
+import com.drestaurant.order.domain.api.CustomerOrderCreationRequestedEvent
 import org.axonframework.test.saga.FixtureConfiguration
 import org.axonframework.test.saga.SagaTestFixture
 import org.junit.Before
@@ -24,11 +26,21 @@ class CustomerOrderSagaTest {
     }
 
     @Test
-    fun customerOrderCreationInitiatedTest() {
+    fun customerOrderCreationRequestedTest() {
 
         testFixture.givenNoPriorActivity()
                 .whenAggregate(orderId)
-                .publishes(CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry))
+                .publishes(CustomerOrderCreationRequestedEvent(orderId, orderTotal, customerId, auditEntry))
+                .expectActiveSagas(1)
+                .expectDispatchedCommands(CreateCustomerOrderCommand(orderId, orderTotal, customerId, auditEntry))
+    }
+
+    @Test
+    fun customerOrderCreationInitiatedTest() {
+
+        testFixture.givenAggregate(orderId)
+                .published(CustomerOrderCreationRequestedEvent(orderId, orderTotal, customerId, auditEntry))
+                .whenPublishingA(CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry))
                 .expectActiveSagas(1)
                 .expectDispatchedCommands(ValidateOrderByCustomerCommand(orderId, customerId, orderTotal, auditEntry))
     }
@@ -37,7 +49,7 @@ class CustomerOrderSagaTest {
     fun customerNotFoundTest() {
 
         testFixture.givenAggregate(orderId)
-                .published(CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry))
+                .published(CustomerOrderCreationRequestedEvent(orderId, orderTotal, customerId, auditEntry), CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry))
                 .whenPublishingA(CustomerNotFoundForOrderEvent(customerId, orderId, orderTotal, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkCustomerOrderAsRejectedCommand(orderId, auditEntry))
@@ -47,7 +59,7 @@ class CustomerOrderSagaTest {
     fun customerOrderNotValidAndRejected() {
 
         testFixture.givenAggregate(orderId)
-                .published(CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry))
+                .published(CustomerOrderCreationRequestedEvent(orderId, orderTotal, customerId, auditEntry), CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry))
                 .whenPublishingA(OrderValidatedWithErrorByCustomerEvent(customerId, orderId, orderTotal, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkCustomerOrderAsRejectedCommand(orderId, auditEntry))
@@ -57,7 +69,7 @@ class CustomerOrderSagaTest {
     fun customerOrderValidAndCreated() {
 
         testFixture.givenAggregate(orderId)
-                .published(CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry))
+                .published(CustomerOrderCreationRequestedEvent(orderId, orderTotal, customerId, auditEntry), CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry))
                 .whenPublishingA(OrderValidatedWithSuccessByCustomerEvent(customerId, orderId, orderTotal, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkCustomerOrderAsCreatedCommand(orderId, auditEntry))

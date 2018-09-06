@@ -64,4 +64,3 @@ data class CreateRestaurantRequest(val name: String, val menuItems: List<MenuIte
  * A Menu item request
  */
 data class MenuItemRequest(val id: String, val name: String, val price: BigDecimal)
-

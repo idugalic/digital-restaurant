@@ -15,3 +15,13 @@ axon:
     trigger:
       treshold:
         order: 100
+  kafka:
+#    client-id: order-command
+    default-topic: axon-events
+    producer:
+      retries: 5
+      bootstrap-servers: localhost:9092
+      transaction-id-prefix: ordertx
+    consumer:
+      group-id: order-command-group
+      bootstrap-servers: localhost:9092

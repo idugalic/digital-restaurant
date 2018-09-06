@@ -33,7 +33,7 @@ class CommandController(private val commandGateway: CommandGateway) {
     @RequestMapping(value = "/createcommand", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(value = HttpStatus.CREATED)
     fun createCourier(@RequestBody request: CreateCourierRequest, response: HttpServletResponse) {
-        val command = CreateCourierCommand(request.name, request.maxNumberOfActiveOrders, auditEntry)
+        val command = CreateCourierCommand(PersonName(request.firstName, request.lastName), request.maxNumberOfActiveOrders, auditEntry)
         commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
@@ -56,4 +56,4 @@ class CommandController(private val commandGateway: CommandGateway) {
 /**
  * A request for creating a Courier
  */
-data class CreateCourierRequest(val name: PersonName, val maxNumberOfActiveOrders: Int)
+data class CreateCourierRequest(val firstName: String, val lastName: String, val maxNumberOfActiveOrders: Int)

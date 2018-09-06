@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-@ProcessingGroup("restaurant")
+@ProcessingGroup("query")
 internal class RestaurantEventHandler(private val repository: RestaurantRepository, private val messagingTemplate: SimpMessageSendingOperations) {
 
     @EventHandler
