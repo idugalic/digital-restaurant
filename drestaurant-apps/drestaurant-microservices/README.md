@@ -146,17 +146,10 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 ### Continuous Integration and Delivery 
 - Travis
 
-### Infrastructure and Platform (As A Service)
+### Infrastructure
 - [H2, MySQL (event store, materialized views)][mysql]
 - [Apache Kafka][kafka]
 
-## References and further reading
-**Inspired by the book "Microservices Patterns" - Chris Richardson**
-
-  - https://github.com/microservice-patterns/ftgo-application
-  - https://spring.io/blog/2018/04/11/event-storming-and-spring-with-a-splash-of-ddd
-  - http://www.codingthearchitecture.com/2016/04/25/layers_hexagons_features_and_components.html
-  
  
 
 [mvn]: https://maven.apache.org/
