@@ -10,8 +10,34 @@ and that enables us to choose different deployment strategy and take first step 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices):
 
  - has its own bounded context,
- - has a specific JPA event store (we are not sharing the JPA Event Store)
- - and we distribute events between them via Apache Kafka
+ - has its own JPA event(sourcing) store (we are not sharing the JPA Event Store)
+ - and we distribute events between them via Apache Kafka (we do not use Kafka as event(sourcing) store)
+ 
+#### Apache Kafka
+
+Apache Kafka is a distributed streaming platform.
+
+##### Order of events (kafka topics & partitions)
+
+The order of events matters in our scenario (eventsourcing).
+For example, we might expect that a customer is created before anything else can happen to a customer.
+When using Kafka, you can preserve the order of those events by putting them all in the same Kafka **partition**.
+They must be in the same Kafka **topic** because different topics mean different partitions.
+
+We [configured our Kafka instance](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-microservices/docker-compose.yml) to crate only one topic (**axon-events**) with one partition initially.
+ 
+##### Queue vs publish-subscribe (kafka groups)
+
+If all consumers are from the same group, the Kafka model functions as a traditional **message queue** would.
+All the records and processing is then load balanced.
+**Each message would be consumed by one consumer of the group only.**
+Each partition is connected to at most one consumer from a group.
+ 
+When multiple consumer groups exist, the flow of the data consumption model aligns with the traditional **publish-subscribe** model.
+**The messages are broadcast to all consumer groups.**
+
+We [configured our (micro)services](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-microservices/drestaurant-microservices-command-customer/src/main/resources/application.yml) to use publish-subscribe model, by setting unique consumer group id for each (micro)service.
+
  
 #### 'Command' HTTP API
 
