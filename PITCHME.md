@@ -173,12 +173,10 @@ Consider using event sourcing within 'core subdomain' only!
 
 ### Applications layer
 
-<span style="color:gray">Four different applications utilizing the same domain layer</span>
-
- - Monolith 1 - HTTP and WebSockets API. **Resources representing Commands and resources representing Query Models are decoupled**
- - Monolith 2 - HTTP/REST API. **One-to-one relation between a Command Model resource and a Query Model resource**
+ - Monolith 1 - HTTP and WebSockets API - **One-to-many relation between a Command Model resource and a Query Model resource**
+ - Monolith 2 - HTTP/REST API - **One-to-one relation between a Command Model resource and a Query Model resource**
  - Monolith 3 - WebSockets API. We are async all the way
- - Microservices 1 - HTTP and WebSockets API. **Resources representing Commands and resources representing Query Models are decoupled**
+ - Microservices 1 - HTTP and WebSockets API - **One-to-many relation between a Command Model resource and a Query Model resource**
 
 +++
 
