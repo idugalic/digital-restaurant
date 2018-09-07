@@ -9,8 +9,8 @@ Customers use the website application to place food orders at local restaurants.
 
   * [Domain layer](#domain-layer)
      * [Core subdomains](#core-subdomains)
-        *[Event sourcing](#event-sourcing)
-        *[Snapshoting](#snapshoting)
+        * [Event sourcing](#event-sourcing)
+        * [Snapshoting](#snapshoting)
      * [Generic subdomains](#generic-subdomains)
      * [Organisation vs encapsulation](#organisation-vs-encapsulation)
   * [Application/s layer](#applications-layer)
