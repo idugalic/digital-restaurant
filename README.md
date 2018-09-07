@@ -174,17 +174,29 @@ Public classes are placed in `com.drestaurant.customer.domain.api` and they are 
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
-We have created more 'web' applications with different architectural styles, API designs and deployment strategies by utilizing components from the domain layer in different way:
+We have created more 'web' applications (standalone Spring Boot applications) to demonstrate the use of different architectural styles, API designs and deployment strategies by utilizing components from the domain layer in different way:
 
 **Monolithic**
 
- - Monolith 1 (HTTP and WebSockets API **by segregating Command and Query**. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
- - Monolith 2 (REST API **by not segregating Command and Query**. We synchronize on the backend side)
- - Monolith 3 (WebSockets API. We are async all the way ;))
+ - [Monolith 1](#monolith-http-and-websockets-api-by-segregating-command-and-query) 
+    - **HTTP and WebSockets API** by segregating Command and Query
+    - we don't synchronize on the backend
+    - we provide WebSockets for the frontend to handle async nature of the backend
+ - [Monolith 2](#monolith-2-rest-api-by-not-segregating-command-and-query)
+    - **REST API** by not segregating Command and Query
+    - we synchronize on the backend side
+ - [Monolith 3](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
+    - **WebSockets API**
+    - we are async all the way
 
 **Microservices**
 
- - Microservices 1 (HTTP and WebSockets API **by segregating Command and Query**. We don't synchronize on the backend, but we provide WebSockets for the frontend to handle async nature of the backend)
+ - [Microservices 1](#microservices)
+    - **HTTP and WebSockets API** by segregating Command and Query
+    - we don't synchronize on the backend
+    - we provide WebSockets for the frontend to handle async nature of the backend
+    - we use Apache Kafka to distribute events between services (bounded contexts)
+     
  
 ### Monolith (HTTP and WebSockets API by segregating Command and Query)
 
