@@ -70,7 +70,7 @@ $ mvn spring-boot:run
 
 ---
 
-### Domain
+### Domain layer
 
   - This layer contains information about the domain
   - This is the heart of the business software
@@ -78,7 +78,7 @@ $ mvn spring-boot:run
   
 +++
 
-### Domain
+### Domain layer
 
 <span style="color:gray">Subdomains - The problem</span>
 
@@ -88,7 +88,7 @@ $ mvn spring-boot:run
 
 +++
 
-### Domain
+### Domain layer
 
 <span style="color:gray">Subdomains - Analyze</span>
 
@@ -97,7 +97,7 @@ $ mvn spring-boot:run
 
 +++
 
-### Domain
+### Domain layer
 
 <span style="color:gray">Core subdomains</span>
 
@@ -110,7 +110,7 @@ Core subdomains are more important to the business
 
 +++
 
-### Domain
+### Domain layer
 
 <span style="color:gray">Generic subdomains</span>
 
@@ -120,7 +120,7 @@ Generic subdomains facilitate the business, but are not core to the business. In
 
 +++
 
-### Domain
+### Domain layer
 
 <span style="color:gray">Eventsourcing</span>
 
@@ -130,7 +130,7 @@ Generic subdomains facilitate the business, but are not core to the business. In
 
 +++
 
-### Domain
+### Domain layer
 
 <span style="color:gray">Eventsourcing benefits</span>
 
@@ -140,7 +140,7 @@ Generic subdomains facilitate the business, but are not core to the business. In
 
 +++
  
-### Domain
+### Domain layer
  
 <span style="color:gray">Eventsourcing drawbacks</span>
  
@@ -152,7 +152,7 @@ Consider using event sourcing within 'core subdomain' only!
 
 +++
 
-### Domain
+### Domain layer
  
 <span style="color:gray">Eventsourcing & snapshotting</span>
  
@@ -163,7 +163,7 @@ Consider using event sourcing within 'core subdomain' only!
 
 ---
 
-### Applications
+### Applications layer
 
  - This is a thin layer which coordinates the application activity
  - It does not contain business logic
@@ -171,19 +171,20 @@ Consider using event sourcing within 'core subdomain' only!
 
 +++
 
-### Applications
+### Applications layer
 
-<span style="color:gray">drestaurant-apps/</span>
+<span style="color:gray">Four different applications utilizing the same domain layer</span>
 
- - Monolith 1 - HTTP and WebSockets API **resources representing Commands and resources representing Query Models are decoupled**
- - Monolith 2 - HTTP/REST API **one-to-one relation between a Command Model resource and a Query Model resource**
+ - Monolith 1 - HTTP and WebSockets API. **Resources representing Commands and resources representing Query Models are decoupled**
+ - Monolith 2 - HTTP/REST API. **One-to-one relation between a Command Model resource and a Query Model resource**
  - Monolith 3 - WebSockets API. We are async all the way
+ - Microservices 1 - HTTP and WebSockets API. **Resources representing Commands and resources representing Query Models are decoupled**
 
 +++
 
-### Applications
+### Applications layer
 
-<span style="color:gray">Monolith 1 (HTTP & Websockets)</span>
+<span style="color:gray">Monolith 1 (HTTP and WebSockets API)</span>
 
  - [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) consumes events, and creates query models
  - It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
@@ -194,9 +195,9 @@ Consider using event sourcing within 'core subdomain' only!
  
 +++
 
-### Applications
+### Applications layer
 
-<span style="color:gray">Monolith 2 (REST)</span>
+<span style="color:gray">Monolith 2 (HTTP/REST API)</span>
 
  - [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/handler) consumes events, and creates query models
  - It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
@@ -206,9 +207,9 @@ Consider using event sourcing within 'core subdomain' only!
 
 +++
 
-### Applications
+### Applications layer
 
-<span style="color:gray">Monolith 3 (Websockets)</span>
+<span style="color:gray">Monolith 3 (WebSockets API)</span>
  
  - [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/query/handler) consumes domain events, and creates query models
  - It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
@@ -218,16 +219,18 @@ Consider using event sourcing within 'core subdomain' only!
 
 +++
 
-### Applications
+### Applications layer
 
-<span style="color:gray">Microservices 1/</span>
+<span style="color:gray">Microservices 1 (HTTP and WebSockets API)/</span>
 
-We designed and structured our loosely coupled components in a modular way, 
-and that enable us to choose different deployment strategy and take first step towards Microservices architectural style.
+First step towards Microservices architectural style: 'We designed and structured our loosely coupled components in a modular way'.
 
+Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices):
 
- - Microservices 1 - HTTP and WebSockets API **resources representing Commands and resources representing Query Models are decoupled**
-
+ - has its own bounded context,
+ - has its own JPA event store (we are not sharing the JPA Event Store)
+ - and we distribute events between them via **Apache Kafka**
+ 
 ---
 ### Thank you
 
