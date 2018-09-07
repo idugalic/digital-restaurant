@@ -9,6 +9,8 @@ Customers use the website application to place food orders at local restaurants.
 
   * [Domain layer](#domain-layer)
      * [Core subdomains](#core-subdomains)
+        *[Event sourcing](#event-sourcing)
+        *[Snapshoting](#snapshoting)
      * [Generic subdomains](#generic-subdomains)
      * [Organisation vs encapsulation](#organisation-vs-encapsulation)
   * [Application/s layer](#applications-layer)
@@ -135,6 +137,8 @@ The [Order](https://github.com/idugalic/digital-restaurant/tree/master/drestaura
 
 ![](digital-restaurant-state-machine.png)
 
+#### Event sourcing
+
 We use [event sourcing](http://microservices.io/patterns/data/event-sourcing.html) to persist our [event sourced aggregates](https://docs.axonframework.org/part-ii-domain-logic/command-model#event-sourced-aggregates) as a sequence of events. Each event represents a state change of the aggregate. An application rebuild the current state of an aggregate by replaying the events.
 
 Event sourcing has several important benefits:
@@ -149,6 +153,19 @@ Event sourcing also has drawbacks:
 
 Consider using event sourcing within 'core subdomain' only!
 
+#### Snapshoting
+
+By use of evensourcing pattern the application rebuild the current state of an aggregate by replaying the events.
+This can be bad for performances if you have a long living aggregate that is replayed by big amount of events.  
+
+ - A Snapshot is a denormalization of the current state of an aggregate at a given point in time
+ - It represents the state when all events to that point in time have been replayed
+ - They are used as a heuristic to prevent the need to load all events for the entire history of an aggregate
+ 
+Each aggregate defines a snapshot trigger:
+ 
+ - [`@Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")`](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-libs/drestaurant-courier/src/main/kotlin/com/drestaurant/courier/domain/SpringCourierConfiguration.kt)
+ - Feel free to configure a treshold (number of events) that should trigger the snapshot creation. This treshold is externalized as a property `axon.snapshot.trigger.treshold.courier`
 
 
 ### Generic subdomains
