@@ -1,17 +1,17 @@
 # [projects](http://idugalic.github.io/projects)/digital-restaurant [![Build Status](https://travis-ci.org/idugalic/digital-restaurant.svg?branch=kotlin)](https://travis-ci.org/idugalic/digital-restaurant) [![GitPitch](https://gitpitch.com/assets/badge.svg)](https://gitpitch.com/idugalic/digital-restaurant/master?grs=github&t=white)
 
-*'d-restaurant' is an example of an application that is built using Event Sourcing and CQRS. The application is written in Kotlin, and uses Spring Boot. It is built using Axonframework, which is an application framework based on event sourcing and CQRS.*
+'d-restaurant' is an example of an application that is built using Event Sourcing and CQRS. The application is written in Kotlin, and uses Spring Boot. It is built using Axonframework, which is an application framework based on event sourcing and CQRS.
 
 Customers use the website application to place food orders at local restaurants. Application coordinates a network of couriers who deliver the orders.
 
 
 ## Table of Contents
 
-  * [Domain](#domain)
+  * [Domain layer](#domain-layer)
      * [Core subdomains](#core-subdomains)
      * [Generic subdomains](#generic-subdomains)
      * [Organisation vs encapsulation](#organisation-vs-encapsulation)
-  * [Application/s](#applications)
+  * [Application/s layer](#applications-layer)
      * [Monolith (HTTP and WebSockets API by segregating Command and Query)](#monolith-http-and-websockets-api-by-segregating-command-and-query)
         * ['Command' HTTP API](#command-http-api)
            * [Create new Restaurant](#create-new-restaurant)
@@ -79,9 +79,9 @@ Customers use the website application to place food orders at local restaurants.
      * [Infrastructure and Platform (As A Service)](#infrastructure-and-platform-as-a-service)
   * [References and further reading](#references-and-further-reading)
  
-## Domain
+## Domain layer
 
-*This layer contains information about the domain. This is the heart of the business software. The state of business objects is held here. Persistence of the business objects and possibly their state is delegated to the infrastructure layer*
+This layer contains information about the domain. This is the heart of the business software. The state of business objects is held here. Persistence of the business objects and possibly their state is delegated to the infrastructure layer
 
 Business capabilities of 'Digital Restaurant' include:
 - [Courier component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier) 
@@ -170,9 +170,9 @@ Kotlin language doesn't have 'package' modifer as Java has. It has 'internal' mo
 For example, our [Customer component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer) classes are placed in one `com.drestaurant.customer.domain` package, with all classes marked as 'internal'.
 Public classes are placed in `com.drestaurant.customer.domain.api` and they are forming an API for this component. This API consist of [commands](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer/src/main/kotlin/com/drestaurant/customer/domain/api) and [events](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-common/src/main/kotlin/com/drestaurant/customer/domain/api) only.
 
-## Application/s
+## Application/s layer
 
-*This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
+This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects
 
 We have created more 'web' applications (standalone Spring Boot applications) to demonstrate the use of different architectural styles, API designs and deployment strategies by utilizing components from the domain layer in different way:
 
