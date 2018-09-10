@@ -53,7 +53,7 @@ Customers use the website application to place food orders at local restaurants.
         * [STOMP over WebSockets API](#stomp-over-websockets-api)
            * [Topics:](#topics)
            * [Message endpoints:](#message-endpoints)
-     * [Microservices](#microservices)
+     * [Microservices (HTTP, Websockets, Apache Kafka)](#microservices-http-websockets-apache-kafka)
         * [Apache Kafka](#apache-kafka)
            * [Order of events (kafka topics &amp; partitions)](#order-of-events-kafka-topics--partitions)
            * [Queue vs publish-subscribe (kafka groups)](#queue-vs-publish-subscribe-kafka-groups)
@@ -66,13 +66,30 @@ Customers use the website application to place food orders at local restaurants.
            * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared-2)
            * [Courier marks the Order as delivered](#courier-marks-the-order-as-delivered-2)
         * ['Query' HTTP API](#query-http-api-1)
+     * [Microservices 2 (REST, RabbitMQ)](#microservices-2-rest-rabbitmq)
+        * [Restaurant management](#restaurant-management-1)
+           * [Read all restaurants](#read-all-restaurants-1)
+           * [Create new restaurant](#create-new-restaurant-3)
+           * [Mark restaurant order as prepared](#mark-restaurant-order-as-prepared-1)
+        * [Customer management](#customer-management-1)
+           * [Read all customers](#read-all-customers-1)
+           * [Create/Register new Customer](#createregister-new-customer-3)
+        * [Courier management](#courier-management-1)
+           * [Read all couriers](#read-all-couriers-1)
+           * [Create/Hire new Courier](#createhire-new-courier-3)
+           * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared-3)
+           * [Courier marks the order as delivered](#courier-marks-the-order-as-delivered-3)
+        * [Order management](#order-management-1)
+           * [Read all orders](#read-all-orders-1)
+           * [Create/Place the Order](#createplace-the-order-3)
   * [Development](#development)
      * [Clone](#clone)
      * [Build](#build)
      * [Run monolith (HTTP and WebSockets API by segregating Command and Query)](#run-monolith-http-and-websockets-api-by-segregating-command-and-query)
      * [Run monolith 2 (REST API by not segregating Command and Query)](#run-monolith-2-rest-api-by-not-segregating-command-and-query)
      * [Run monolith 3 (STOMP over WebSockets API. We are async all the way)](#run-monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
-     * [Run microservices](#run-microservices)
+     * [Run microservices (HTTP, Websockets, Apache Kafka)](#run-microservices-http-websockets-apache-kafka)
+     * [Run microservices 2 (REST, RabbitMQ)](#run-microservices-2-rest-rabbitmq)
   * [Continuous delivery](#continuous-delivery)
   * [Technology](#technology)
      * [Language](#language)
@@ -80,7 +97,7 @@ Customers use the website application to place food orders at local restaurants.
      * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
      * [Infrastructure and Platform (As A Service)](#infrastructure-and-platform-as-a-service)
   * [References and further reading](#references-and-further-reading)
- 
+
 ## Domain layer
 
 This layer contains information about the domain. This is the heart of the business software. The state of business objects is held here. Persistence of the business objects and possibly their state is delegated to the infrastructure layer
@@ -208,13 +225,16 @@ We have created more 'web' applications (standalone Spring Boot applications) to
 
 **Microservices**
 
- - [Microservices 1](#microservices)
+ - [Microservices 1](#microservices-http-websockets-apache-kafka)
     - **HTTP and WebSockets API** by segregating Command and Query
     - we don't synchronize on the backend
     - we provide WebSockets for the frontend to handle async nature of the backend
     - we use Apache Kafka to distribute events between services (bounded contexts)
-     
- 
+ - [Microservices 2](#microservices-2-rest-rabbitmq)
+    - **REST API** by not segregating Command and Query
+    - we synchronize on the backend side
+    - we use RabbitMQ to distribute events between services (bounded contexts)
+      
 ### Monolith (HTTP and WebSockets API by segregating Command and Query)
 
 Source code: [https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith)
@@ -551,7 +571,7 @@ WebSocket SockJS endpoint: `ws://localhost:8080/drestaurant/websocket`
  - `/eventprocessors`, messageType=[SUBSCRIBE]
 
 
-### Microservices
+### Microservices (HTTP, Websockets, Apache Kafka)
 
 We designed and structured our loosely coupled components in a modular way, 
 and that enables us to choose different deployment strategy and take first step towards Microservices architectural style.
@@ -665,6 +685,106 @@ HTTP/REST API for browsing the materialized data:
 curl http://localhost:8085/api/query
 ```
 
+### Microservices 2 (REST, RabbitMQ)
+
+We designed and structured our [loosely coupled components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
+and that enable us to choose different deployment strategy and take first step towards Microservices architectural style.
+
+Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
+
+ - has its own bounded context,
+ - has its own JPA event(sourcing) store (we are not sharing the JPA Event Store)
+ - and we distribute events between them via RabbitMQ
+ 
+
+#### Restaurant management
+
+##### Read all restaurants
+```
+curl http://localhost:8084/restaurants
+```
+##### Create new restaurant
+```
+curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
+"menuItems": [
+ {
+   "id": "id1",
+   "name": "name1",
+   "price": 100
+ }
+],
+"name": "Fancy"
+}' 'http://localhost:8084/restaurants'
+```
+##### Mark restaurant order as prepared
+```
+curl -i -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8084/restaurants/RESTAURANT_ID/orders/RESTAURANT_ORDER_ID/markprepared'
+
+```
+#### Customer management
+
+##### Read all customers
+```
+curl http://localhost:8082/customers
+```
+##### Create/Register new Customer
+```
+curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
+"firstName": "Ivan",
+"lastName": "Dugalic",
+"orderLimit": 1000
+}' 'http://localhost:8082/customers'
+```
+
+#### Courier management
+
+##### Read all couriers
+```
+curl http://localhost:8081/couriers
+```
+##### Create/Hire new Courier
+```
+curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
+"firstName": "John",
+"lastName": "Doe",
+"maxNumberOfActiveOrders": 20
+}' 'http://localhost:8081/couriers'
+```
+##### Courier takes/claims the Order that is ready for delivery (prepared)
+```
+curl -i -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8081/couriers/COURIER_ID/orders/COURIER_ORDER_ID/assign'
+```
+
+##### Courier marks the order as delivered
+```
+curl -i -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8081/couriers/COURIER_ID/orders/COURIER_ORDER_ID/markdelivered'
+```
+
+#### Order management
+
+##### Read all orders
+```
+ curl http://localhost:8083/orders
+```
+
+##### Create/Place the Order
+```
+curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
+"customerId": "CUSTOMER_ID",
+"orderItems": [
+ {
+   "id": "id1",
+   "name": "name1",
+   "price": 100,
+   "quantity": 0
+ }
+],
+"restaurantId": "RESTAURANT_ID"
+}' 'http://localhost:8083/orders'
+```
+ Note: Replace CUSTOMER_ID and RESTAURANT_ID with concrete values.
+ 
+
 
 ## Development
 
@@ -702,7 +822,7 @@ $ cd digital-restaurant/drestaurant-apps/drestaurant-monolith-websockets
 $ mvn spring-boot:run
 ```
 
-### Run microservices
+### Run microservices (HTTP, Websockets, Apache Kafka)
 
 NOTE: Docker is required. We use it to start Apache Kafka with Zookeeper
 
@@ -721,6 +841,21 @@ $ cd digital-restaurant/drestaurant-apps/drestaurant-microservices/drestaurant-m
 $ mvn spring-boot:run
 ```
 
+### Run microservices 2 (REST, RabbitMQ)
+
+NOTE: Docker is required. We use it to start RabbitMQ
+
+```bash
+$ docker run -d --hostname my-rabbit --name some-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-courier
+$ mvn spring-boot:run
+$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-customer
+$ mvn spring-boot:run
+$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-restaurant
+$ mvn spring-boot:run
+$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-order
+$ mvn spring-boot:run
+```
 
 ## Continuous delivery
 

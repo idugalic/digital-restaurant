@@ -2,10 +2,10 @@
 
 Customers use the website application to place food orders at local restaurants. Application coordinates a network of couriers who deliver the orders.
 
-### Microservices
+### Microservices / HTTP & Websockets / Apache Kafka
 
 We designed and structured our [loosely coupled components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
-and that enables us to choose different deployment strategy and take first step towards Microservices architectural style.
+and that enable us to choose different deployment strategy and take first step towards Microservices architectural style.
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices):
 

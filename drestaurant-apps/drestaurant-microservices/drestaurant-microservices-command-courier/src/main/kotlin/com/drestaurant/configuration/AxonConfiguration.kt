@@ -30,7 +30,7 @@ class AxonConfiguration {
     fun kafkaMessageConverter(eventSerializer: Serializer) = DefaultKafkaMessageConverter(eventSerializer)
 
     @Bean
-    fun courierOrderSagaConfiguration(kafkaMessageSource: KafkaMessageSource<String, ByteArray>) = SagaConfiguration.trackingSagaManager<CourierOrderSaga>(CourierOrderSaga::class.java, { it -> kafkaMessageSource }).configureTrackingProcessor({it -> TrackingEventProcessorConfiguration.forParallelProcessing(1)})
+    fun courierOrderSagaConfiguration(kafkaMessageSource: KafkaMessageSource) = SagaConfiguration.trackingSagaManager<CourierOrderSaga>(CourierOrderSaga::class.java, { it -> kafkaMessageSource }).configureTrackingProcessor({it -> TrackingEventProcessorConfiguration.forParallelProcessing(1)})
 
 
 }
