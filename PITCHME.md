@@ -67,6 +67,25 @@ $ mvn spring-boot:run
 $ cd drestaurant-apps/drestaurant-monolith-websockets
 $ mvn spring-boot:run
 ```
++++
+
+### Sample application
+
+<span style="color:gray">Run microservices 1 (HTTP & Websockets & Apache Kafka)</span>
+
+```bash
+https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices
+```
+
++++
+
+### Sample application
+
+<span style="color:gray">Run microservices 2 (REST & RabbitMQ)</span>
+
+```bash
+https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest
+```
 
 ---
 
@@ -173,10 +192,11 @@ Consider using event sourcing within 'core subdomain' only!
 
 ### Applications layer
 
- - Monolith 1 - HTTP and WebSockets API - **One-to-many relation between a Command Model resource and a Query Model resource**
- - Monolith 2 - HTTP/REST API - **One-to-one relation between a Command Model resource and a Query Model resource**
- - Monolith 3 - WebSockets API. We are async all the way
- - Microservices 1 - HTTP and WebSockets API - **One-to-many relation between a Command Model resource and a Query Model resource**
+ - Monolith 1 - HTTP and WebSockets API
+ - Monolith 2 - HTTP/REST API
+ - Monolith 3 - WebSockets API
+ - Microservices 1 - HTTP, WebSockets API and Apache Kafka
+ - Microservices 2 - REST and RabbitMQ
 
 +++
 
@@ -219,15 +239,25 @@ Consider using event sourcing within 'core subdomain' only!
 
 ### Applications layer
 
-<span style="color:gray">Microservices 1 (HTTP and WebSockets API)/</span>
-
-First step towards Microservices architectural style: 'We designed and structured our loosely coupled components in a modular way'.
+<span style="color:gray">Microservices 1 (HTTP, WebSockets API and Apache Kafka)</span>
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices):
 
  - has its own bounded context,
  - has its own JPA event store (we are not sharing the JPA Event Store)
  - and we distribute events between them via **Apache Kafka**
+ 
++++
+
+### Applications layer
+
+<span style="color:gray">Microservices 2 (REST and RabbitMQ)</span>
+
+Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
+
+ - has its own bounded context,
+ - has its own JPA event store (we are not sharing the JPA Event Store)
+ - and we distribute events between them via **RabbitMQ**
  
 ---
 ### Thank you

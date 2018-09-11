@@ -15,6 +15,25 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
  - has its own JPA event(sourcing) store (we are not sharing the JPA Event Store)
  - and we distribute events between them via RabbitMQ
  
+#### RabbitMQ
+
+RabbitMQ is the most popular open source message broker.
+It supports several messaging protocols, directly and through the use of plugins:
+
+ - AMQP
+ - STOMP
+ - MQTT
+ - HTTP ...
+ 
+##### Publish-subscribe
+
+This messaging pattern supports delivering a message to multiple consumers.
+
+We [configured our (micro)services](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-customer/src/main/resources/application.yml) to use publish-subscribe model, by setting unique queue for each (micro)service.
+This queues are bind to one common exchange (`events.fanout.exchange`).
+
+RabbitMQ allows more sophisticated message routing then Apache Kafka can offer.
+Having one exchange bind to every service queue covered our scenario, but you can do more if you like.
 
 #### Restaurant management
 

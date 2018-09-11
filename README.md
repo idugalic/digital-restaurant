@@ -67,6 +67,8 @@ Customers use the website application to place food orders at local restaurants.
            * [Courier marks the Order as delivered](#courier-marks-the-order-as-delivered-2)
         * ['Query' HTTP API](#query-http-api-1)
      * [Microservices 2 (REST, RabbitMQ)](#microservices-2-rest-rabbitmq)
+        * [RabbitMQ](#rabbitmq)
+           * [Publish-subscribe](#publish-subscribe)
         * [Restaurant management](#restaurant-management-1)
            * [Read all restaurants](#read-all-restaurants-1)
            * [Create new restaurant](#create-new-restaurant-3)
@@ -97,6 +99,7 @@ Customers use the website application to place food orders at local restaurants.
      * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
      * [Infrastructure and Platform (As A Service)](#infrastructure-and-platform-as-a-service)
   * [References and further reading](#references-and-further-reading)
+
 
 ## Domain layer
 
@@ -696,6 +699,26 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
  - has its own JPA event(sourcing) store (we are not sharing the JPA Event Store)
  - and we distribute events between them via RabbitMQ
  
+#### RabbitMQ
+
+RabbitMQ is the most popular open source message broker.
+It supports several messaging protocols, directly and through the use of plugins:
+
+ - AMQP
+ - STOMP
+ - MQTT
+ - HTTP ...
+ 
+##### Publish-subscribe
+
+This messaging pattern supports delivering a message to multiple consumers.
+
+We [configured our (micro)services](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-customer/src/main/resources/application.yml) to use publish-subscribe model, by setting unique queue for each (micro)service.
+This queues are bind to one common exchange (`events.fanout.exchange`).
+
+RabbitMQ allows more sophisticated message routing then Apache Kafka can offer.
+Having one exchange bind to every service queue covered our scenario, but you can do more if you like.
+
 
 #### Restaurant management
 
@@ -877,11 +900,13 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 ### Infrastructure and Platform (As A Service)
 - [H2, MySQL (event store, materialized views)][mysql]
 - [Apache Kafka][kafka]
+- [RabbitMQ][rabbitMQ]
 
 ## References and further reading
 **Inspired by the book "Microservices Patterns" - Chris Richardson**
 
   - https://github.com/microservice-patterns/ftgo-application
+  - https://docs.axonframework.org/
   - https://spring.io/blog/2018/04/11/event-storming-and-spring-with-a-splash-of-ddd
   - http://www.codingthearchitecture.com/2016/04/25/layers_hexagons_features_and_components.html
   
