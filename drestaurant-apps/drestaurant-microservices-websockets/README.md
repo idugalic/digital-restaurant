@@ -146,8 +146,8 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 - Travis
 
 ### Infrastructure
-- [H2, MySQL (event store, materialized views)][mysql]
-- [RabbitMQ][rabbitMQ]
+- [AxonDB](https://axoniq.io/product-overview/axondb)
+- [AxonHub](https://axoniq.io/product-overview/axonhub)
 
  
 
