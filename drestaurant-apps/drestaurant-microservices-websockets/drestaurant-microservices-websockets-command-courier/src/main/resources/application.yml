@@ -1,0 +1,16 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: courier (command side)
+axon:
+  snapshot:
+    trigger:
+      treshold:
+        courier: 100
+        courierorder: 100
+
+axoniq:
+  axonhub:
+    servers: localhost
+

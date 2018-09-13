@@ -1,0 +1,14 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: order (command side)
+axon:
+  snapshot:
+    trigger:
+      treshold:
+        order: 100
+
+axoniq:
+  axonhub:
+    servers: localhost

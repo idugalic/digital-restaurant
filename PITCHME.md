@@ -87,6 +87,15 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest
 ```
 
++++
+
+### Sample application
+
+<span style="color:gray">Run microservices 3 (Websockets, AxonHub & AxonDB)</span>
+
+```bash
+https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets
+```
 ---
 
 ### Domain layer
@@ -258,6 +267,18 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
  - has its own bounded context,
  - has its own JPA event store (we are not sharing the JPA Event Store)
  - and we distribute events between them via **RabbitMQ**
+ 
++++
+
+### Applications layer
+
+<span style="color:gray">Microservices 3 (Websockets, AxonHub & AxonDB)</span>
+
+Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets):
+
+ - has its own bounded context,
+ - has shared event(sourcing) storage (AxonDB)
+ - and we distribute messages between them via AxonHub
  
 ---
 ### Thank you

@@ -1,0 +1,16 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: customer (command side)
+axon:
+  snapshot:
+    trigger:
+      treshold:
+        customer: 100
+        customerorder: 100
+
+axoniq:
+  axonhub:
+    servers: localhost
+
