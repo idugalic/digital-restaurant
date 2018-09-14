@@ -204,8 +204,9 @@ Consider using event sourcing within 'core subdomain' only!
  - Monolith 1 - HTTP and WebSockets API
  - Monolith 2 - HTTP/REST API
  - Monolith 3 - WebSockets API
- - Microservices 1 - HTTP, WebSockets API and Apache Kafka
+ - Microservices 1 - HTTP, WebSockets API and Kafka
  - Microservices 2 - REST and RabbitMQ
+ - Microservices 3 - Websockets, AxonHub & AxonDB
 
 +++
 
