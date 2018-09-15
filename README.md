@@ -14,7 +14,7 @@ Customers use the website application to place food orders at local restaurants.
    * [Generic subdomains](#generic-subdomains)
    * [Organisation vs encapsulation](#organisation-vs-encapsulation)
 * [Application/s layer](#applications-layer)
-   * [Monolith (HTTP and WebSockets API by segregating Command and Query)](#monolith-http-and-websockets-api-by-segregating-command-and-query)
+   * [Monolith 1 (HTTP and WebSockets API by segregating Command and Query)](#monolith-1-http-and-websockets-api-by-segregating-command-and-query)
       * ['Command' HTTP API](#command-http-api)
          * [Create new Restaurant](#create-new-restaurant)
          * [Create/Register new Customer](#createregister-new-customer)
@@ -53,7 +53,7 @@ Customers use the website application to place food orders at local restaurants.
       * [STOMP over WebSockets API](#stomp-over-websockets-api)
          * [Topics:](#topics)
          * [Message endpoints:](#message-endpoints)
-   * [Microservices (HTTP, Websockets, Apache Kafka)](#microservices-http-websockets-apache-kafka)
+   * [Microservices 1 (HTTP, Websockets, Apache Kafka)](#microservices-1-http-websockets-apache-kafka)
       * [Apache Kafka](#apache-kafka)
          * [Order of events (kafka topics &amp; partitions)](#order-of-events-kafka-topics--partitions)
          * [Queue vs publish-subscribe (kafka groups)](#queue-vs-publish-subscribe-kafka-groups)
@@ -226,7 +226,7 @@ We have created more 'web' applications (standalone Spring Boot applications) to
 
 **Monolithic**
 
- - [Monolith 1](#monolith-http-and-websockets-api-by-segregating-command-and-query) 
+ - [Monolith 1](#monolith-1-http-and-websockets-api-by-segregating-command-and-query) 
     - **HTTP and WebSockets API** by segregating Command and Query
     - we don't synchronize on the backend
     - we provide WebSockets for the frontend to handle async nature of the backend
@@ -239,17 +239,21 @@ We have created more 'web' applications (standalone Spring Boot applications) to
 
 **Microservices**
 
- - [Microservices 1](#microservices-http-websockets-apache-kafka)
+ - [Microservices 1](#microservices-1-http-websockets-apache-kafka)
     - **HTTP and WebSockets API** by segregating Command and Query
     - we don't synchronize on the backend
     - we provide WebSockets for the frontend to handle async nature of the backend
-    - we use Apache Kafka to distribute events between services (bounded contexts)
+    - we use Apache Kafka to distribute events between services
  - [Microservices 2](#microservices-2-rest-rabbitmq)
     - **REST API** by not segregating Command and Query
     - we synchronize on the backend side
     - we use RabbitMQ to distribute events between services (bounded contexts)
+ - [Microservices 3](#microservices-3-websockets-axondb-and-axonhub)
+    - **WebSockets API**
+    - we are async all the way
+    - we use [AxonHub](https://axoniq.io/product-overview/axonhub) to distribute events/messages between services
       
-### Monolith (HTTP and WebSockets API by segregating Command and Query)
+### Monolith 1 (HTTP and WebSockets API by segregating Command and Query)
 
 Source code: [https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith)
 
@@ -585,7 +589,7 @@ WebSocket SockJS endpoint: `ws://localhost:8080/drestaurant/websocket`
  - `/eventprocessors`, messageType=[SUBSCRIBE]
 
 
-### Microservices (HTTP, Websockets, Apache Kafka)
+### Microservices 1 (HTTP, Websockets, Apache Kafka)
 
 We designed and structured our loosely coupled components in a modular way, 
 and that enables us to choose different deployment strategy and take first step towards Microservices architectural style.
