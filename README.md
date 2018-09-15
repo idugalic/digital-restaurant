@@ -96,10 +96,10 @@ Customers use the website application to place food orders at local restaurants.
 * [Development](#development)
    * [Clone](#clone)
    * [Build](#build)
-   * [Run monolith (HTTP and WebSockets API by segregating Command and Query)](#run-monolith-http-and-websockets-api-by-segregating-command-and-query)
+   * [Run monolith 1 (HTTP and WebSockets API by segregating Command and Query)](#run-monolith-1-http-and-websockets-api-by-segregating-command-and-query)
    * [Run monolith 2 (REST API by not segregating Command and Query)](#run-monolith-2-rest-api-by-not-segregating-command-and-query)
    * [Run monolith 3 (STOMP over WebSockets API. We are async all the way)](#run-monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
-   * [Run microservices (HTTP, Websockets, Apache Kafka)](#run-microservices-http-websockets-apache-kafka)
+   * [Run microservices 1 (HTTP, Websockets, Apache Kafka)](#run-microservices-1-http-websockets-apache-kafka)
    * [Run microservices 2 (REST, RabbitMQ)](#run-microservices-2-rest-rabbitmq)
    * [Run microservices 3 (Websockets, AxonDB and AxonHub)](#run-microservices-3-websockets-axondb-and-axonhub)
 * [Continuous delivery](#continuous-delivery)
@@ -925,7 +925,7 @@ $ git clone https://github.com/idugalic/digital-restaurant
 $ cd digital-restaurant
 $ mvn clean install
 ```
-### Run monolith (HTTP and WebSockets API by segregating Command and Query)
+### Run monolith 1 (HTTP and WebSockets API by segregating Command and Query)
 
 ```bash
 $ cd digital-restaurant/drestaurant-apps/drestaurant-monolith
@@ -946,7 +946,7 @@ $ cd digital-restaurant/drestaurant-apps/drestaurant-monolith-websockets
 $ mvn spring-boot:run
 ```
 
-### Run microservices (HTTP, Websockets, Apache Kafka)
+### Run microservices 1 (HTTP, Websockets, Apache Kafka)
 
 NOTE: Docker is required. We use it to start Apache Kafka with Zookeeper
 
