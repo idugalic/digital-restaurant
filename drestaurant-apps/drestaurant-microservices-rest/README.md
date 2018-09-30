@@ -1,9 +1,3 @@
-
-
-['d-restaurant'](https://github.com/idugalic/digital-restaurant) is an example of an application that is built using Event Sourcing and CQRS. The application is written in Kotlin, and uses Spring Boot. It is built using Axonframework, which is an application framework based on event sourcing and CQRS.
-
-Customers use the website application to place food orders at local restaurants. Application coordinates a network of couriers who deliver the orders.
-
 ### Microservices / REST / RabbitMQ
 
 We designed and structured our [loosely coupled components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
