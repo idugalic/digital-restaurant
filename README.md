@@ -241,15 +241,18 @@ We have created more 'web' applications (standalone Spring Boot applications) to
 
  - [Microservices 1](#microservices-1-http-websockets-apache-kafka)
     - **HTTP and WebSockets API** by segregating Command and Query
+    - [Monolith 1](#monolith-1-http-and-websockets-api-by-segregating-command-and-query) as monolithic version
     - we don't synchronize on the backend
     - we provide WebSockets for the frontend to handle async nature of the backend
     - we use Apache Kafka to distribute events between services
  - [Microservices 2](#microservices-2-rest-rabbitmq)
     - **REST API** by not segregating Command and Query
+    - [Monolith 2](#monolith-2-rest-api-by-not-segregating-command-and-query) as monolithic version
     - we synchronize on the backend side
     - we use RabbitMQ to distribute events between services (bounded contexts)
  - [Microservices 3](#microservices-3-websockets-axondb-and-axonhub)
     - **WebSockets API**
+    - [Monolith 3](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way) as monolithic version
     - we are async all the way
     - we use [AxonHub](https://axoniq.io/product-overview/axonhub) to distribute events/messages between services
       
@@ -398,15 +401,6 @@ Frontend part of the solution is available here [http://idugalic.github.io/digit
 
 Source code: [https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest)
 
-Sometimes, you are simply being required to deliver REST API.
-
-A recurring question with CQRS and EventSourcing is how to put a synchronous REST front-end on top of an asynchronous CQRS back-end.
-
-In general there are two approaches:
-
- - **segregating Command and Query** - resources representing Commands (request for changes) and resources representing Query Models (the state of the domain) are decoupled
- - **not segregating Command and Query** - one-to-one relation between a Command Model resource and a Query Model resource
- 
 This application is using the second approach ('NOT segregating Command and Query') by exposing capabilities of our 'domain' via the REST API components that are responsible for
  
  - dispatching commands - [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt)
@@ -414,7 +408,7 @@ This application is using the second approach ('NOT segregating Command and Quer
 
 
 **We create one-to-one relation between a Command Model resource and a Query Model (materialized view) resource.**
-Note that we are utilizing Spring Rest Data project to implement REST API, and that will position us on the third level of [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html)
+We are using Spring Rest Data project to implement REST API, which will position us on the third level of [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html)
 
 [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates Query Model / materialized views of aggregates.
 Additionally, it will emit 'any change on Query Model' to Axon subscription queries, and let us subscribe on them within our [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt) keeping our architecture clean.
@@ -591,8 +585,8 @@ WebSocket SockJS endpoint: `ws://localhost:8080/drestaurant/websocket`
 
 ### Microservices 1 (HTTP, Websockets, Apache Kafka)
 
-We designed and structured our loosely coupled components in a modular way, 
-and that enables us to choose different deployment strategy and take first step towards Microservices architectural style.
+We designed and structured our [domain components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
+and that enable us to choose different deployment strategy and decompose [Monolith 1](#monolith-1-http-and-websockets-api-by-segregating-command-and-query) to microservices. 
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices):
 
@@ -705,8 +699,9 @@ curl http://localhost:8085/api/query
 
 ### Microservices 2 (REST, RabbitMQ)
 
-We designed and structured our [loosely coupled components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
-and that enable us to choose different deployment strategy and take first step towards Microservices architectural style.
+We designed and structured our [domain components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
+and that enable us to choose different deployment strategy and decompose [Monolith 2](#monolith-2-rest-api-by-not-segregating-command-and-query) to microservices. 
+
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
 
@@ -824,8 +819,8 @@ curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*'
  
 ### Microservices 3 (Websockets, AxonDB and AxonHub)
 
-We designed and structured our [loosely coupled components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
-and that enable us to choose different deployment strategy and take first step towards Microservices architectural style.
+We designed and structured our [domain components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
+and that enable us to choose different deployment strategy and decompose [Monolith 3](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way) to microservices. 
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
 
@@ -1038,3 +1033,8 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 [rabbitMQ]: https://www.rabbitmq.com/
 [kafka]: https://kafka.apache.org/
 [pivotalCF]: https://run.pivotal.io/
+
+---
+Created by [Ivan Dugalic][idugalic]
+
+[idugalic]: http://idugalic.pro

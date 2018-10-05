@@ -1,5 +1,7 @@
 ### Microservices / HTTP & Websockets / Apache Kafka
 
+*This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
+
 We designed and structured our [loosely coupled components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
 and that enable us to choose different deployment strategy and take first step towards Microservices architectural style.
 
