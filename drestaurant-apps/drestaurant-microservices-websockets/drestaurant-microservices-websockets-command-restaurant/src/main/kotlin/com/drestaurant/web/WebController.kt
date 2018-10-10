@@ -26,7 +26,7 @@ class WebController(private val commandGateway: CommandGateway) {
     private val auditEntry: AuditEntry
         get() = AuditEntry(currentUser, Calendar.getInstance().time)
 
-    @MessageMapping(value = "/restaurants/createcommand")
+    @MessageMapping(value = ["/restaurants/createcommand"])
     fun createRestaurant(request: CreateRestaurantDTO) {
         val menuItems = ArrayList<MenuItem>()
         for ((id, name, price) in request.menuItems) {
@@ -38,12 +38,8 @@ class WebController(private val commandGateway: CommandGateway) {
         commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
-    @MessageMapping(value = "/restaurants/orders/markpreparedcommand")
-    fun markRestaurantOrderAsPrepared(id: String) {
-        val command = MarkRestaurantOrderAsPreparedCommand(id, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
-
+    @MessageMapping(value = ["/restaurants/orders/markpreparedcommand"])
+    fun markRestaurantOrderAsPrepared(id: String) = commandGateway.send(MarkRestaurantOrderAsPreparedCommand(id, auditEntry), LoggingCallback.INSTANCE)
 }
 
 /**

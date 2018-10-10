@@ -10,4 +10,3 @@ class DrestaurantMonolithApplication
 fun main(args: Array<String>) {
     runApplication<DrestaurantMonolithApplication>(*args)
 }
-

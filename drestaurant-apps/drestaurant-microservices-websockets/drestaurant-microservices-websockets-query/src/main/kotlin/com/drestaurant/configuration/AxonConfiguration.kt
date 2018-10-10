@@ -4,6 +4,4 @@ import org.springframework.context.annotation.Configuration
 
 
 @Configuration
-class AxonConfiguration {
-
-}
+class AxonConfiguration

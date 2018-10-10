@@ -43,7 +43,7 @@ class CommandController(private val commandGateway: CommandGateway, private val 
         get() = AuditEntry(currentUser, Calendar.getInstance().time)
 
 
-    @RequestMapping(value = "/orders", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @RequestMapping(value = ["/orders"], method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun createOrder(@RequestBody request: CreateOrderRequest, response: HttpServletResponse): ResponseEntity<Any> {
         val lineItems = ArrayList<OrderLineItem>()
         for ((id, name, price, quantity) in request.orderItems) {
@@ -52,21 +52,12 @@ class CommandController(private val commandGateway: CommandGateway, private val 
         }
         val orderInfo = OrderInfo(request.customerId, request.restaurantId, lineItems)
         val command = CreateOrderCommand(orderInfo, auditEntry)
-        val queryResult = queryGateway.subscriptionQuery(
-                FindOrderQuery(command.targetAggregateIdentifier),
-                ResponseTypes.instanceOf<OrderEntity>(OrderEntity::class.java),
-                ResponseTypes.instanceOf<OrderEntity>(OrderEntity::class.java))
-
-        try {
-            val commandResult: String = commandGateway.sendAndWait(command)
-            val orderEntity: OrderEntity? = queryResult.updates().filter({ OrderState.VERIFIED_BY_RESTAURANT.equals(it.state) || OrderState.REJECTED.equals(it.state) }).blockFirst()
-
-            if (OrderState.VERIFIED_BY_RESTAURANT.equals(orderEntity?.state)) return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(OrderRepository::class.java, orderEntity?.id).href)).build()
-            else return ResponseEntity.badRequest().build()
-
-        } finally {
-            queryResult.close();
-        }
+        queryGateway.subscriptionQuery(FindOrderQuery(command.targetAggregateIdentifier), ResponseTypes.instanceOf<OrderEntity>(OrderEntity::class.java), ResponseTypes.instanceOf<OrderEntity>(OrderEntity::class.java))
+                .use {
+                    val commandResult: String = commandGateway.sendAndWait(command)
+                    val orderEntity: OrderEntity? = it.updates().filter { OrderState.VERIFIED_BY_RESTAURANT.equals(it.state) || OrderState.REJECTED.equals(it.state) }.blockFirst()
+                    return if (OrderState.VERIFIED_BY_RESTAURANT.equals(orderEntity?.state)) ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(OrderRepository::class.java, orderEntity?.id).href)).build() else ResponseEntity.badRequest().build()
+                }
     }
 }
 

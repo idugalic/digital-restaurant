@@ -38,7 +38,7 @@ internal class Order {
     private lateinit var consumerId: String
     private lateinit var state: OrderState
 
-    val orderTotal: Money get() = this.calculateOrderTotal(this.lineItems)
+    val orderTotal: Money get() = calculateOrderTotal(lineItems)
 
     /**
      * This default constructor is used by the Repository to construct a prototype
@@ -60,7 +60,7 @@ internal class Order {
      */
     @CommandHandler
     constructor(command: CreateOrderCommand) {
-        apply(OrderCreationInitiatedEvent(OrderDetails(command.orderInfo, this.calculateOrderTotal(command.orderInfo.lineItems)), command.targetAggregateIdentifier, command.auditEntry))
+        apply(OrderCreationInitiatedEvent(OrderDetails(command.orderInfo, calculateOrderTotal(command.orderInfo.lineItems)), command.targetAggregateIdentifier, command.auditEntry))
     }
 
     /**
@@ -73,11 +73,11 @@ internal class Order {
      */
     @EventSourcingHandler
     fun on(event: OrderCreationInitiatedEvent) {
-        this.id = event.aggregateIdentifier
-        this.consumerId = event.orderDetails.consumerId
-        this.restaurantId = event.orderDetails.restaurantId
-        this.lineItems = event.orderDetails.lineItems
-        this.state = OrderState.CREATE_PENDING
+        id = event.aggregateIdentifier
+        consumerId = event.orderDetails.consumerId
+        restaurantId = event.orderDetails.restaurantId
+        lineItems = event.orderDetails.lineItems
+        state = OrderState.CREATE_PENDING
     }
 
     @CommandHandler
@@ -91,7 +91,7 @@ internal class Order {
 
     @EventSourcingHandler
     fun on(event: OrderVerifiedByCustomerEvent) {
-        this.state = OrderState.VERIFIED_BY_CUSTOMER
+        state = OrderState.VERIFIED_BY_CUSTOMER
     }
 
     @CommandHandler
@@ -105,7 +105,7 @@ internal class Order {
 
     @EventSourcingHandler
     fun on(event: OrderVerifiedByRestaurantEvent) {
-        this.state = OrderState.VERIFIED_BY_RESTAURANT
+        state = OrderState.VERIFIED_BY_RESTAURANT
     }
 
     @CommandHandler
@@ -119,7 +119,7 @@ internal class Order {
 
     @EventSourcingHandler
     fun on(event: OrderPreparedEvent) {
-        this.state = OrderState.PREPARED
+        state = OrderState.PREPARED
     }
 
     @CommandHandler
@@ -133,7 +133,7 @@ internal class Order {
 
     @EventSourcingHandler
     fun on(event: OrderReadyForDeliveryEvent) {
-        this.state = OrderState.READY_FOR_DELIVERY
+        state = OrderState.READY_FOR_DELIVERY
     }
 
     @CommandHandler
@@ -147,7 +147,7 @@ internal class Order {
 
     @EventSourcingHandler
     fun on(event: OrderDeliveredEvent) {
-        this.state = OrderState.DELIVERED
+        state = OrderState.DELIVERED
     }
 
     @CommandHandler
@@ -161,23 +161,15 @@ internal class Order {
 
     @EventSourcingHandler
     fun on(event: OrderRejectedEvent) {
-        this.state = OrderState.REJECTED
+        state = OrderState.REJECTED
     }
 
-    private fun calculateOrderTotal(lineItems: List<OrderLineItem>): Money {
-        return lineItems.stream().map(OrderLineItem::total).reduce(Money(BigDecimal.ZERO), Money::add);
-    }
+    private fun calculateOrderTotal(lineItems: List<OrderLineItem>) = lineItems.stream().map(OrderLineItem::total).reduce(Money(BigDecimal.ZERO), Money::add)
 
-    override fun toString(): String {
-        return ToStringBuilder.reflectionToString(this)
-    }
+    override fun toString(): String = ToStringBuilder.reflectionToString(this)
 
-    override fun equals(other: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, other)
-    }
+    override fun equals(other: Any?): Boolean = EqualsBuilder.reflectionEquals(this, other)
 
-    override fun hashCode(): Int {
-        return HashCodeBuilder.reflectionHashCode(this)
-    }
+    override fun hashCode(): Int = HashCodeBuilder.reflectionHashCode(this)
 
 }

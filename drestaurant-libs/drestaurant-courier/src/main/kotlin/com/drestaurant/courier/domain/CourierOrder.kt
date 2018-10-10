@@ -28,8 +28,8 @@ internal class CourierOrder {
 
     @EventSourcingHandler
     fun on(event: CourierOrderCreatedEvent) {
-        this.id = event.aggregateIdentifier
-        this.state = CourierOrderState.CREATED
+        id = event.aggregateIdentifier
+        state = CourierOrderState.CREATED
     }
 
     @CommandHandler
@@ -43,7 +43,7 @@ internal class CourierOrder {
 
     @EventSourcingHandler
     fun on(event: CourierOrderAssigningInitiatedEvent) {
-        this.state = CourierOrderState.ASSIGN_PENDING
+        state = CourierOrderState.ASSIGN_PENDING
     }
 
     @CommandHandler
@@ -57,8 +57,8 @@ internal class CourierOrder {
 
     @EventSourcingHandler
     fun on(event: CourierOrderAssignedEvent) {
-        this.cuourierId = event.courierId
-        this.state = CourierOrderState.ASSIGNED
+        cuourierId = event.courierId
+        state = CourierOrderState.ASSIGNED
     }
 
     @CommandHandler
@@ -72,7 +72,7 @@ internal class CourierOrder {
 
     @EventSourcingHandler
     fun on(event: CourierOrderNotAssignedEvent) {
-        this.state = CourierOrderState.CREATED
+        state = CourierOrderState.CREATED
     }
 
     @CommandHandler
@@ -86,19 +86,12 @@ internal class CourierOrder {
 
     @EventSourcingHandler
     fun on(event: CourierOrderDeliveredEvent) {
-        this.state = CourierOrderState.DELIVERED
+        state = CourierOrderState.DELIVERED
     }
 
-    override fun toString(): String {
-        return ToStringBuilder.reflectionToString(this)
-    }
+    override fun toString(): String = ToStringBuilder.reflectionToString(this)
 
-    override fun equals(other: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, other)
-    }
+    override fun equals(other: Any?): Boolean = EqualsBuilder.reflectionEquals(this, other)
 
-    override fun hashCode(): Int {
-        return HashCodeBuilder.reflectionHashCode(this)
-    }
-
+    override fun hashCode(): Int = HashCodeBuilder.reflectionHashCode(this)
 }

@@ -35,19 +35,14 @@ internal class CustomerHandler(private val repository: CustomerRepository, priva
         /* sending it to subscription queries of type FindAllCustomers. */
         queryUpdateEmitter.emit(
                 FindAllCustomersQuery::class.java,
-                { query -> true },
+                { true },
                 record
         )
     }
 
     @QueryHandler
-    fun handle(query: FindCustomerQuery): CustomerEntity {
-        return repository.findById(query.customerId).orElseThrow { UnsupportedOperationException("Customer with id '" + query.customerId + "' not found") }
-    }
+    fun handle(query: FindCustomerQuery): CustomerEntity = repository.findById(query.customerId).orElseThrow { UnsupportedOperationException("Customer with id '${query.customerId}' not found") }
 
     @QueryHandler
-    fun handle(query: FindAllCustomersQuery): MutableIterable<CustomerEntity> {
-        return repository.findAll()
-    }
-
+    fun handle(query: FindAllCustomersQuery): MutableIterable<CustomerEntity> = repository.findAll()
 }

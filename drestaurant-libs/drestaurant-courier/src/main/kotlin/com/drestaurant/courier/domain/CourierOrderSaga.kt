@@ -22,38 +22,24 @@ class CourierOrderSaga {
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
     fun handle(event: CourierOrderCreationRequestedEvent) {
+        orderId = event.aggregateIdentifier
+        associateWith("orderId", orderId)
         val command = CreateCourierOrderCommand(event.aggregateIdentifier, event.auditEntry)
         commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: CourierOrderAssigningInitiatedEvent) {
-        this.orderId = event.aggregateIdentifier
-        associateWith("orderId", this.orderId)
-        val command = ValidateOrderByCourierCommand(this.orderId, event.courierId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    internal fun on(event: CourierOrderAssigningInitiatedEvent) = commandGateway.send(ValidateOrderByCourierCommand(orderId, event.courierId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: CourierNotFoundForOrderEvent) {
-        val command = MarkCourierOrderAsNotAssignedCommand(event.orderId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    internal fun on(event: CourierNotFoundForOrderEvent) = commandGateway.send(MarkCourierOrderAsNotAssignedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithSuccessByCourierEvent) {
-        val command = MarkCourierOrderAsAssignedCommand(event.orderId, event.courierId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    internal fun on(event: OrderValidatedWithSuccessByCourierEvent) = commandGateway.send(MarkCourierOrderAsAssignedCommand(event.orderId, event.courierId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithErrorByCourierEvent) {
-        val command = MarkCourierOrderAsNotAssignedCommand(event.orderId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
-
-
+    internal fun on(event: OrderValidatedWithErrorByCourierEvent) = commandGateway.send(MarkCourierOrderAsNotAssignedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 }

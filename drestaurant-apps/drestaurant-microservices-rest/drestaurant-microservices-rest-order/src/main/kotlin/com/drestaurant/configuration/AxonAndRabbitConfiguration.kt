@@ -68,18 +68,6 @@ class AxonAndRabbitConfiguration {
 
     // ######### Axon #########
 
-// Check the src/main/java/com/drestaurant/configuration/AMQPMessageSourceConfiguration.java
-//    @Bean
-//    fun amqpMessageSource(serializer: Serializer): SpringAMQPMessageSource {
-//        return object : SpringAMQPMessageSource(serializer) {
-//            @RabbitListener(queues = arrayOf("\${spring.application.sagaqueue}"))
-//            @Throws(Exception::class)
-//            override fun onMessage(message: Message, channel: Channel) {
-//                super.onMessage(message, channel)
-//            }
-//        }
-//    }
-
     @Autowired
     fun registerInterceptors(commandBus: CommandBus, transactionManager: TransactionManager) {
         commandBus.registerDispatchInterceptor(BeanValidationInterceptor())
@@ -90,6 +78,5 @@ class AxonAndRabbitConfiguration {
     fun snapshotterFactoryBean() = SpringAggregateSnapshotterFactoryBean()
 
     @Bean
-    fun orderSagaConfiguration(amqpMessageSource: SpringAMQPMessageSource) = SagaConfiguration.subscribingSagaManager<OrderSaga>(OrderSaga::class.java, { it -> amqpMessageSource })
-
+    fun orderSagaConfiguration(amqpMessageSource: SpringAMQPMessageSource) = SagaConfiguration.subscribingSagaManager<OrderSaga>(OrderSaga::class.java) { amqpMessageSource }
 }

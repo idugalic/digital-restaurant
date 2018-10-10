@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse
  * REST Controller for handling 'commands'
  */
 @RestController
-@RequestMapping(value = "/api/command/order")
+@RequestMapping(value = ["/api/command/order"])
 class CommandController(private val commandGateway: CommandGateway) {
 
     private val currentUser: String
@@ -31,7 +31,7 @@ class CommandController(private val commandGateway: CommandGateway) {
         get() = AuditEntry(currentUser, Calendar.getInstance().time)
 
 
-    @RequestMapping(value = "/createcommand", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @RequestMapping(value = ["/createcommand"], method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(value = HttpStatus.CREATED)
     fun createOrder(@RequestBody request: CreateOrderRequest, response: HttpServletResponse) {
         val lineItems = ArrayList<OrderLineItem>()
@@ -43,7 +43,6 @@ class CommandController(private val commandGateway: CommandGateway) {
         val command = CreateOrderCommand(orderInfo, auditEntry)
         commandGateway.send(command, LoggingCallback.INSTANCE)
     }
-
 }
 
 

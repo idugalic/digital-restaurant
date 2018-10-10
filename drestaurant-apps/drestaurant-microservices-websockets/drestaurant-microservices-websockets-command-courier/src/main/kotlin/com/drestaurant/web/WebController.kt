@@ -26,27 +26,15 @@ class WebController(private val commandGateway: CommandGateway) {
 
 
     // COURIERS
-
-    @MessageMapping(value = "/couriers/createcommand")
-    fun createCourier(request: CreateCourierDTO) {
-        val command = CreateCourierCommand(PersonName(request.firstName, request.lastName), request.maxNumberOfActiveOrders, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    @MessageMapping(value = ["/couriers/createcommand"])
+    fun createCourier(request: CreateCourierDTO) = commandGateway.send(CreateCourierCommand(PersonName(request.firstName, request.lastName), request.maxNumberOfActiveOrders, auditEntry), LoggingCallback.INSTANCE)
 
     // COURIER ORDERS
+    @MessageMapping(value = ["/couriers/orders/assigncommand"])
+    fun assignOrderToCourier(request: AssignOrderToCourierDTO) = commandGateway.send(AssignCourierOrderToCourierCommand(request.courierOrderId, request.courierId, auditEntry), LoggingCallback.INSTANCE)
 
-    @MessageMapping(value = "/couriers/orders/assigncommand")
-    fun assignOrderToCourier(request: AssignOrderToCourierDTO) {
-        val command = AssignCourierOrderToCourierCommand(request.courierOrderId, request.courierId, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
-
-    @MessageMapping(value = "/couriers/orders/markdeliveredcommand")
-    fun markCourierOrderAsDelivered(id: String) {
-        val command = MarkCourierOrderAsDeliveredCommand(id, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
-
+    @MessageMapping(value = ["/couriers/orders/markdeliveredcommand"])
+    fun markCourierOrderAsDelivered(id: String) = commandGateway.send(MarkCourierOrderAsDeliveredCommand(id, auditEntry), LoggingCallback.INSTANCE)
 }
 
 /**

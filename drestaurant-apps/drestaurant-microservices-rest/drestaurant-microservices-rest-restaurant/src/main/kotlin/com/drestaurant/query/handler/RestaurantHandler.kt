@@ -48,21 +48,17 @@ internal class RestaurantHandler(private val repository: RestaurantRepository, p
         /* sending it to subscription queries of type FindAllRestaurants. */
         queryUpdateEmitter.emit(
                 FindAllRestaurantsQuery::class.java,
-                { query -> true },
+                { true },
                 record
         )
     }
 
 
     @QueryHandler
-    fun handle(query: FindRestaurantQuery): RestaurantEntity {
-        return repository.findById(query.restaurantId).orElseThrow { UnsupportedOperationException("Restaurant with id '" + query.restaurantId + "' not found") }
-    }
+    fun handle(query: FindRestaurantQuery): RestaurantEntity = repository.findById(query.restaurantId).orElseThrow { UnsupportedOperationException("Restaurant with id '${query.restaurantId}' not found") }
 
     @QueryHandler
-    fun handle(query: FindAllRestaurantsQuery): MutableIterable<RestaurantEntity> {
-        return repository.findAll()
-    }
+    fun handle(query: FindAllRestaurantsQuery): MutableIterable<RestaurantEntity> = repository.findAll()
 
 
 }

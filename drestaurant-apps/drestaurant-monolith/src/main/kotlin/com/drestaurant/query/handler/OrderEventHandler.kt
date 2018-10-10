@@ -29,8 +29,8 @@ internal class OrderEventHandler(private val orderRepository: OrderRepository, p
             val orderItem = OrderItemEmbedable(item.menuItemId, item.name, item.price.amount, item.quantity)
             orderItems.add(orderItem)
         }
-        orderRepository.save(OrderEntity(event.aggregateIdentifier, aggregateVersion, orderItems, null, null, null, OrderState.CREATE_PENDING));
-        messagingTemplate.convertAndSend("/topic/orders.updates", event);
+        orderRepository.save(OrderEntity(event.aggregateIdentifier, aggregateVersion, orderItems, null, null, null, OrderState.CREATE_PENDING))
+        messagingTemplate.convertAndSend("/topic/orders.updates", event)
 
     }
 
@@ -86,9 +86,8 @@ internal class OrderEventHandler(private val orderRepository: OrderRepository, p
         orderRepository.save(orderEntity)
     }
 
-    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        orderRepository.deleteAll()
-    }
+    /* Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table */
+    @ResetHandler
+    fun onReset() = orderRepository.deleteAll()
 
 }

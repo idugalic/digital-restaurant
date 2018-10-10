@@ -19,6 +19,7 @@ import org.axonframework.eventhandling.GenericEventMessage
 import org.axonframework.eventhandling.saga.EndSaga
 import org.axonframework.eventhandling.saga.SagaEventHandler
 import org.axonframework.eventhandling.saga.SagaLifecycle
+import org.axonframework.eventhandling.saga.SagaLifecycle.*
 import org.axonframework.eventhandling.saga.StartSaga
 import org.axonframework.spring.stereotype.Saga
 import org.springframework.beans.factory.annotation.Autowired
@@ -41,84 +42,62 @@ class OrderSaga {
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
     fun on(event: OrderCreationInitiatedEvent) {
-        this.orderId = event.aggregateIdentifier
+        orderId = event.aggregateIdentifier
 
-        val customerOrderId = "customerOrder_" + this.orderId
-        SagaLifecycle.associateWith("customerOrderId", customerOrderId)
+        val customerOrderId = "customerOrder_$orderId"
+        associateWith("customerOrderId", customerOrderId)
 
-        this.restaurantId = event.orderDetails.restaurantId
-        this.customerId = event.orderDetails.consumerId
-        this.orderDetails = event.orderDetails
+        restaurantId = event.orderDetails.restaurantId
+        customerId = event.orderDetails.consumerId
+        orderDetails = event.orderDetails
 
-        eventBus.publish(GenericEventMessage.asEventMessage<Any>(CustomerOrderCreationRequestedEvent(customerOrderId, event.orderDetails.orderTotal, this.customerId.orEmpty(), event.auditEntry)))
+        eventBus.publish(GenericEventMessage.asEventMessage<Any>(CustomerOrderCreationRequestedEvent(customerOrderId, event.orderDetails.orderTotal, customerId, event.auditEntry)))
     }
 
     @SagaEventHandler(associationProperty = "aggregateIdentifier", keyName = "customerOrderId")
-    fun on(event: CustomerOrderCreatedEvent) {
-        val command = MarkOrderAsVerifiedByCustomerCommand(this.orderId, this.customerId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    fun on(event: CustomerOrderCreatedEvent) = commandGateway.send(MarkOrderAsVerifiedByCustomerCommand(orderId, customerId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
     fun on(event: OrderVerifiedByCustomerEvent) {
-        val restaurantOrderId = "restaurantOrder_" + this.orderId
-        SagaLifecycle.associateWith("restaurantOrderId", restaurantOrderId)
+        val restaurantOrderId = "restaurantOrder_$orderId"
+        associateWith("restaurantOrderId", restaurantOrderId)
 
         val restaurantLineItems = ArrayList<RestaurantOrderLineItem>()
-        for (oli in this.orderDetails.lineItems) {
+        for (oli in orderDetails.lineItems) {
             val roli = RestaurantOrderLineItem(oli.quantity, oli.menuItemId, oli.name)
             restaurantLineItems.add(roli)
         }
         val restaurantOrderDetails = RestaurantOrderDetails(restaurantLineItems)
 
-        eventBus.publish(GenericEventMessage.asEventMessage<Any>(RestaurantOrderCreationRequestedEvent(restaurantOrderId, restaurantOrderDetails, this.restaurantId.orEmpty(), event.auditEntry)))
+        eventBus.publish(GenericEventMessage.asEventMessage<Any>(RestaurantOrderCreationRequestedEvent(restaurantOrderId, restaurantOrderDetails, restaurantId, event.auditEntry)))
     }
 
     @SagaEventHandler(associationProperty = "aggregateIdentifier", keyName = "restaurantOrderId")
-    fun on(event: RestaurantOrderCreatedEvent) {
-        val command = MarkOrderAsVerifiedByRestaurantCommand(this.orderId, this.restaurantId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    fun on(event: RestaurantOrderCreatedEvent) = commandGateway.send(MarkOrderAsVerifiedByRestaurantCommand(orderId, restaurantId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @SagaEventHandler(associationProperty = "aggregateIdentifier", keyName = "restaurantOrderId")
-    fun on(event: RestaurantOrderPreparedEvent) {
-        val command = MarkOrderAsPreparedCommand(this.orderId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    fun on(event: RestaurantOrderPreparedEvent) = commandGateway.send(MarkOrderAsPreparedCommand(orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
     fun on(event: OrderPreparedEvent) {
-        val courierOrderId = "courierOrder_" + this.orderId
-        SagaLifecycle.associateWith("courierOrderId", courierOrderId)
-
+        val courierOrderId = "courierOrder_$orderId"
+        associateWith("courierOrderId", courierOrderId)
         eventBus.publish(GenericEventMessage.asEventMessage<Any>(CourierOrderCreationRequestedEvent(courierOrderId, event.auditEntry)))
     }
 
     @SagaEventHandler(associationProperty = "aggregateIdentifier", keyName = "courierOrderId")
-    fun on(event: CourierOrderCreatedEvent) {
-        val command = MarkOrderAsReadyForDeliveryCommand(this.orderId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    fun on(event: CourierOrderCreatedEvent) = commandGateway.send(MarkOrderAsReadyForDeliveryCommand(orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier", keyName = "courierOrderId")
-    fun on(event: CourierOrderDeliveredEvent) {
-        val command = MarkOrderAsDeliveredCommand(this.orderId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    fun on(event: CourierOrderDeliveredEvent) = commandGateway.send(MarkOrderAsDeliveredCommand(orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier", keyName = "customerOrderId")
-    fun on(event: CustomerOrderRejectedEvent) {
-        val command = MarkOrderAsRejectedCommand(this.orderId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    fun on(event: CustomerOrderRejectedEvent) = commandGateway.send(MarkOrderAsRejectedCommand(orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier", keyName = "restaurantOrderId")
-    fun on(event: RestaurantOrderRejectedEvent) {
-        val command = MarkOrderAsRejectedCommand(this.orderId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    fun on(event: RestaurantOrderRejectedEvent) = commandGateway.send(MarkOrderAsRejectedCommand(orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
 }

@@ -26,5 +26,4 @@ interface RestaurantRepository : PagingAndSortingRepository<RestaurantEntity, St
 
     @RestResource(exported = false)
     override fun deleteAll()
-
 }

@@ -76,5 +76,5 @@ class AxonAndRabbitConfiguration {
 
 
     @Bean
-    fun courierOrderSagaConfiguration(amqpMessageSource: SpringAMQPMessageSource) = SagaConfiguration.subscribingSagaManager<CourierOrderSaga>(CourierOrderSaga::class.java, { it -> amqpMessageSource })
+    fun courierOrderSagaConfiguration(amqpMessageSource: SpringAMQPMessageSource) = SagaConfiguration.subscribingSagaManager<CourierOrderSaga>(CourierOrderSaga::class.java) { amqpMessageSource }
 }

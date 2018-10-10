@@ -31,16 +31,16 @@ internal class RestaurantOrder {
 
     @EventSourcingHandler
     fun on(event: RestaurantOrderCreationInitiatedEvent) {
-        this.id = event.aggregateIdentifier
-        this.restaurantId = event.restaurantId
-        this.lineItems = event.orderDetails.lineItems
-        this.state = RestaurantOrderState.CREATE_PENDING
+        id = event.aggregateIdentifier
+        restaurantId = event.restaurantId
+        lineItems = event.orderDetails.lineItems
+        state = RestaurantOrderState.CREATE_PENDING
     }
 
     @CommandHandler
     fun markOrderAsCreated(command: MarkRestaurantOrderAsCreatedCommand) {
         if (RestaurantOrderState.CREATE_PENDING == state) {
-            apply(RestaurantOrderCreatedEvent(this.lineItems, this.restaurantId, command.targetAggregateIdentifier, command.auditEntry))
+            apply(RestaurantOrderCreatedEvent(lineItems, restaurantId, command.targetAggregateIdentifier, command.auditEntry))
         } else {
             throw UnsupportedOperationException("The current state is not CREATE_PENDING")
         }
@@ -49,7 +49,7 @@ internal class RestaurantOrder {
 
     @EventSourcingHandler
     fun on(event: RestaurantOrderCreatedEvent) {
-        this.state = RestaurantOrderState.CREATED
+        state = RestaurantOrderState.CREATED
     }
 
     @CommandHandler
@@ -63,7 +63,7 @@ internal class RestaurantOrder {
 
     @EventSourcingHandler
     fun on(event: RestaurantOrderRejectedEvent) {
-        this.state = RestaurantOrderState.REJECTED
+        state = RestaurantOrderState.REJECTED
     }
 
     @CommandHandler
@@ -77,18 +77,12 @@ internal class RestaurantOrder {
 
     @EventSourcingHandler
     fun on(event: RestaurantOrderPreparedEvent) {
-        this.state = RestaurantOrderState.PREPARED
+        state = RestaurantOrderState.PREPARED
     }
 
-    override fun toString(): String {
-        return ToStringBuilder.reflectionToString(this)
-    }
+    override fun toString(): String = ToStringBuilder.reflectionToString(this)
 
-    override fun equals(other: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, other)
-    }
+    override fun equals(other: Any?): Boolean = EqualsBuilder.reflectionEquals(this, other)
 
-    override fun hashCode(): Int {
-        return HashCodeBuilder.reflectionHashCode(this)
-    }
+    override fun hashCode(): Int = HashCodeBuilder.reflectionHashCode(this)
 }

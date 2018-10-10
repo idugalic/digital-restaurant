@@ -25,13 +25,8 @@ class WebController(private val commandGateway: CommandGateway) {
         get() = AuditEntry(currentUser, Calendar.getInstance().time)
 
     // CUSTOMERS
-
     @MessageMapping("/customers/createcommand")
-    fun createCustomer(request: CreateCustomerDTO) {
-        val orderLimit = Money(request.orderLimit)
-        val command = CreateCustomerCommand(PersonName(request.firstName, request.lastName), orderLimit, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    fun createCustomer(request: CreateCustomerDTO) = commandGateway.send(CreateCustomerCommand(PersonName(request.firstName, request.lastName), Money(request.orderLimit), auditEntry), LoggingCallback.INSTANCE)
 }
 
 

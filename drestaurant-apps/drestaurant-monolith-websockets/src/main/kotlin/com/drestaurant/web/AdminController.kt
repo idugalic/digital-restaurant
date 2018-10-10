@@ -14,16 +14,12 @@ import java.util.*
 class AdminController(private val axonAdministration: AxonAdministration) {
 
     @SubscribeMapping("/eventprocessors")
-    fun getEventProcessors(): Iterable<EventProcessor> {
-        return axonAdministration.getTrackingEventProcessors()
-    }
+    fun getEventProcessors(): Iterable<EventProcessor> = axonAdministration.getTrackingEventProcessors()
 
     @SubscribeMapping("/eventprocessors/{groupName}")
-    fun getEventProcessor(@DestinationVariable groupName: String): Optional<EventProcessor> {
-        return axonAdministration.getEventProcessor(groupName)
-    }
+    fun getEventProcessor(@DestinationVariable groupName: String): Optional<EventProcessor> = axonAdministration.getEventProcessor(groupName)
 
-    @MessageMapping(value = "/eventprocessors/{groupName}/reply")
+    @MessageMapping(value = ["/eventprocessors/{groupName}/reply"])
     fun replyEventProcessor(@DestinationVariable groupName: String): ResponseEntity<Any> {
         axonAdministration.resetTrackingEventProcessor(groupName)
         return ResponseEntity.accepted().build()

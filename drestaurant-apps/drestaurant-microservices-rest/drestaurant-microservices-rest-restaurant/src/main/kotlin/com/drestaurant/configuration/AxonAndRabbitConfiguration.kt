@@ -75,5 +75,5 @@ class AxonAndRabbitConfiguration {
 
 
     @Bean
-    fun restaurantOrderSagaConfiguration(amqpMessageSource: SpringAMQPMessageSource) = SagaConfiguration.subscribingSagaManager<RestaurantOrderSaga>(RestaurantOrderSaga::class.java, { it -> amqpMessageSource })
+    fun restaurantOrderSagaConfiguration(amqpMessageSource: SpringAMQPMessageSource) = SagaConfiguration.subscribingSagaManager<RestaurantOrderSaga>(RestaurantOrderSaga::class.java) { amqpMessageSource }
 }

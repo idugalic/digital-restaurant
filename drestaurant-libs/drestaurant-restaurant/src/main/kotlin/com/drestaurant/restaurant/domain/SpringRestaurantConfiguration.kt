@@ -2,7 +2,6 @@ package com.drestaurant.restaurant.domain
 
 import org.axonframework.eventhandling.EventBus
 import org.axonframework.eventsourcing.EventCountSnapshotTriggerDefinition
-import org.axonframework.eventsourcing.SnapshotTriggerDefinition
 import org.axonframework.eventsourcing.Snapshotter
 import org.axonframework.spring.config.AxonConfiguration
 import org.springframework.beans.factory.annotation.Value
@@ -14,9 +13,8 @@ import org.springframework.context.annotation.Configuration
 internal class SpringRestaurantConfiguration {
 
     @Bean
-    fun restaurantCommandHandler(axonConfiguration: AxonConfiguration, eventBus: EventBus): RestaurantCommandHandler {
-        return RestaurantCommandHandler(axonConfiguration.repository(Restaurant::class.java), eventBus)
-    }
+    fun restaurantCommandHandler(axonConfiguration: AxonConfiguration, eventBus: EventBus) = RestaurantCommandHandler(axonConfiguration.repository(Restaurant::class.java), eventBus)
+
     @Value("\${axon.snapshot.trigger.treshold.restaurant}")
     private val snapshotTriggerTresholdRestaurant: Int = 100
 
@@ -24,13 +22,9 @@ internal class SpringRestaurantConfiguration {
     private val snapshotTriggerTresholdRestaurantOrder: Int = 100
 
     @Bean("restaurantSnapshotTriggerDefinition")
-    fun restaurantSnapshotTriggerDefinition(snapshotter: Snapshotter): SnapshotTriggerDefinition {
-        return EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdRestaurant)
-    }
+    fun restaurantSnapshotTriggerDefinition(snapshotter: Snapshotter) = EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdRestaurant)
 
     @Bean("restaurantOrderSnapshotTriggerDefinition")
-    fun restaurantOrderSnapshotTriggerDefinition(snapshotter: Snapshotter): SnapshotTriggerDefinition {
-        return EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdRestaurantOrder)
-    }
+    fun restaurantOrderSnapshotTriggerDefinition(snapshotter: Snapshotter) = EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdRestaurantOrder)
 
 }

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse
  * REST Controller for handling 'commands'
  */
 @RestController
-@RequestMapping(value = "/api/command/customer")
+@RequestMapping(value = ["/api/command/customer"])
 class CommandController(private val commandGateway: CommandGateway) {
 
     private val currentUser: String
@@ -29,13 +29,9 @@ class CommandController(private val commandGateway: CommandGateway) {
     private val auditEntry: AuditEntry
         get() = AuditEntry(currentUser, Calendar.getInstance().time)
 
-    @RequestMapping(value = "/createcommand", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @RequestMapping(value = ["/createcommand"], method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(value = HttpStatus.CREATED)
-    fun createCustomer(@RequestBody request: CreateCustomerRequest, response: HttpServletResponse) {
-        val orderLimit = Money(request.orderLimit)
-        val command = CreateCustomerCommand(PersonName(request.firstName, request.lastName), orderLimit, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    fun createCustomer(@RequestBody request: CreateCustomerRequest, response: HttpServletResponse) = commandGateway.send(CreateCustomerCommand(PersonName(request.firstName, request.lastName), Money(request.orderLimit), auditEntry), LoggingCallback.INSTANCE)
 }
 
 /**

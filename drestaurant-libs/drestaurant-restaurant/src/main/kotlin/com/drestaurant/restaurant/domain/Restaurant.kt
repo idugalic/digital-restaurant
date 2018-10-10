@@ -69,10 +69,10 @@ internal class Restaurant {
      */
     @EventSourcingHandler
     fun on(event: RestaurantCreatedEvent) {
-        this.id = event.aggregateIdentifier
-        this.name = event.name
-        this.menu = event.menu
-        this.state = RestaurantState.OPEN
+        id = event.aggregateIdentifier
+        name = event.name
+        menu = event.menu
+        state = RestaurantState.OPEN
     }
 
     /**
@@ -85,22 +85,16 @@ internal class Restaurant {
      */
     fun validateOrder(orderId: String, lineItems: List<RestaurantOrderLineItem>, auditEntry: AuditEntry) {
         if (menu.menuItems.stream().map { mi -> mi.id }.collect(Collectors.toList()).containsAll(lineItems.stream().map { li -> li.menuItemId }.collect(Collectors.toList()))) {
-            apply(OrderValidatedWithSuccessByRestaurantEvent(this.id, orderId, auditEntry))
+            apply(OrderValidatedWithSuccessByRestaurantEvent(id, orderId, auditEntry))
 
         } else {
-            apply(OrderValidatedWithErrorByRestaurantEvent(this.id, orderId, auditEntry))
+            apply(OrderValidatedWithErrorByRestaurantEvent(id, orderId, auditEntry))
         }
     }
 
-    override fun toString(): String {
-        return ToStringBuilder.reflectionToString(this)
-    }
+    override fun toString(): String = ToStringBuilder.reflectionToString(this)
 
-    override fun equals(other: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, other)
-    }
+    override fun equals(other: Any?): Boolean = EqualsBuilder.reflectionEquals(this, other)
 
-    override fun hashCode(): Int {
-        return HashCodeBuilder.reflectionHashCode(this)
-    }
+    override fun hashCode(): Int = HashCodeBuilder.reflectionHashCode(this)
 }

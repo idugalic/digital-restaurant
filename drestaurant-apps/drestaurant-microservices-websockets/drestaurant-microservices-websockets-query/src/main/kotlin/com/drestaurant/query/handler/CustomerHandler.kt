@@ -23,11 +23,7 @@ internal class CustomerHandler(private val repository: CustomerRepository, priva
     }
 
     @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        repository.deleteAll()
-    }
+    fun onReset() = repository.deleteAll()
 
-    private fun broadcastUpdates() {
-        messagingTemplate.convertAndSend("/topic/customers.updates", repository.findAll())
-    }
+    private fun broadcastUpdates() = messagingTemplate.convertAndSend("/topic/customers.updates", repository.findAll())
 }

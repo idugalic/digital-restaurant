@@ -11,7 +11,6 @@ import org.axonframework.commandhandling.model.AggregateIdentifier
 import org.axonframework.commandhandling.model.AggregateLifecycle.apply
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.spring.stereotype.Aggregate
-import java.math.BigDecimal
 
 @Aggregate(snapshotTriggerDefinition = "customerOrderSnapshotTriggerDefinition")
 internal class CustomerOrder {
@@ -85,16 +84,10 @@ internal class CustomerOrder {
         this.state = CustomerOrderState.DELIVERED
     }
 
-    override fun toString(): String {
-        return ToStringBuilder.reflectionToString(this)
-    }
+    override fun toString(): String = ToStringBuilder.reflectionToString(this)
 
-    override fun equals(other: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, other)
-    }
+    override fun equals(other: Any?): Boolean = EqualsBuilder.reflectionEquals(this, other)
 
-    override fun hashCode(): Int {
-        return HashCodeBuilder.reflectionHashCode(this)
-    }
+    override fun hashCode(): Int = HashCodeBuilder.reflectionHashCode(this)
 
 }

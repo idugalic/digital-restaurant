@@ -28,7 +28,7 @@ class AxonConfiguration {
     fun kafkaMessageConverter(eventSerializer: Serializer) = DefaultKafkaMessageConverter(eventSerializer)
 
     @Bean
-    fun restaurantOrderSagaConfiguration(kafkaMessageSource: KafkaMessageSource) = SagaConfiguration.trackingSagaManager<RestaurantOrderSaga>(RestaurantOrderSaga::class.java, { it -> kafkaMessageSource })
+    fun restaurantOrderSagaConfiguration(kafkaMessageSource: KafkaMessageSource) = SagaConfiguration.trackingSagaManager<RestaurantOrderSaga>(RestaurantOrderSaga::class.java) { kafkaMessageSource }
 
 
 }

@@ -54,30 +54,24 @@ internal class Courier {
 
     @EventSourcingHandler
     fun on(event: CourierCreatedEvent) {
-        this.id = event.aggregateIdentifier
-        this.name = event.name
-        this.maxNumberOfActiveOrders = event.maxNumberOfActiveOrders
-        this.numberOfActiveOrders = this.numberOfActiveOrders + 1
+        id = event.aggregateIdentifier
+        name = event.name
+        maxNumberOfActiveOrders = event.maxNumberOfActiveOrders
+        numberOfActiveOrders = numberOfActiveOrders + 1
     }
 
     fun validateOrder(orderId: String, auditEntry: AuditEntry) {
         if (numberOfActiveOrders + 1 > maxNumberOfActiveOrders) {
-            apply(OrderValidatedWithErrorByCourierEvent(this.id, orderId, auditEntry))
+            apply(OrderValidatedWithErrorByCourierEvent(id, orderId, auditEntry))
 
         } else {
-            apply(OrderValidatedWithSuccessByCourierEvent(this.id, orderId, auditEntry))
+            apply(OrderValidatedWithSuccessByCourierEvent(id, orderId, auditEntry))
         }
     }
 
-    override fun toString(): String {
-        return ToStringBuilder.reflectionToString(this)
-    }
+    override fun toString(): String = ToStringBuilder.reflectionToString(this)
 
-    override fun equals(other: Any?): Boolean {
-        return EqualsBuilder.reflectionEquals(this, other)
-    }
+    override fun equals(other: Any?): Boolean = EqualsBuilder.reflectionEquals(this, other)
 
-    override fun hashCode(): Int {
-        return HashCodeBuilder.reflectionHashCode(this)
-    }
+    override fun hashCode(): Int = HashCodeBuilder.reflectionHashCode(this)
 }

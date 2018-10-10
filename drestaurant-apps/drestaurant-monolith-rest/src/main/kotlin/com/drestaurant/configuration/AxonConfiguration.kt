@@ -19,9 +19,8 @@ class AxonConfiguration {
 
     /* Register a command interceptor */
     @Autowired
-    fun registerInterceptors(commandBus: CommandBus) {
-        commandBus.registerDispatchInterceptor(BeanValidationInterceptor())
-    }
+    fun registerInterceptors(commandBus: CommandBus) = commandBus.registerDispatchInterceptor(BeanValidationInterceptor())
+
 
     /* Domain event snapshot configuration */
     @Bean
@@ -29,18 +28,15 @@ class AxonConfiguration {
 
     /* Saga configuration */
     @Bean
-    fun courierOrderSagaConfiguration() = SagaConfiguration.trackingSagaManager<CourierOrderSaga>(CourierOrderSaga::class.java).configureTrackingProcessor({ it -> TrackingEventProcessorConfiguration.forParallelProcessing(1)})
-    @Bean
-    fun customerOrderSagaConfiguration() = SagaConfiguration.trackingSagaManager<CustomerOrderSaga>(CustomerOrderSaga::class.java).configureTrackingProcessor({ it -> TrackingEventProcessorConfiguration.forParallelProcessing(1)})
-    @Bean
-    fun restaurantOrderSagaConfiguration() = SagaConfiguration.trackingSagaManager<RestaurantOrderSaga>(RestaurantOrderSaga::class.java).configureTrackingProcessor({ it -> TrackingEventProcessorConfiguration.forParallelProcessing(1)})
-    @Bean
-    fun orderSagaConfiguration() = SagaConfiguration.trackingSagaManager<OrderSaga>(OrderSaga::class.java).configureTrackingProcessor({ it -> TrackingEventProcessorConfiguration.forParallelProcessing(1)})
+    fun courierOrderSagaConfiguration() = SagaConfiguration.trackingSagaManager<CourierOrderSaga>(CourierOrderSaga::class.java).configureTrackingProcessor { TrackingEventProcessorConfiguration.forParallelProcessing(1) }
 
+    @Bean
+    fun customerOrderSagaConfiguration() = SagaConfiguration.trackingSagaManager<CustomerOrderSaga>(CustomerOrderSaga::class.java).configureTrackingProcessor { TrackingEventProcessorConfiguration.forParallelProcessing(1) }
 
-    /* Axon Hub configuration */
-//    @Bean
-//    fun axonHubEventStore(configuration: AxonHubConfiguration, platformConnectionManager: PlatformConnectionManager, serializer: Serializer): AxonHubEventStore {
-//        return AxonHubEventStore(configuration, platformConnectionManager, serializer, NoOpEventUpcaster.INSTANCE)
-//    }
+    @Bean
+    fun restaurantOrderSagaConfiguration() = SagaConfiguration.trackingSagaManager<RestaurantOrderSaga>(RestaurantOrderSaga::class.java).configureTrackingProcessor { TrackingEventProcessorConfiguration.forParallelProcessing(1) }
+
+    @Bean
+    fun orderSagaConfiguration() = SagaConfiguration.trackingSagaManager<OrderSaga>(OrderSaga::class.java).configureTrackingProcessor { TrackingEventProcessorConfiguration.forParallelProcessing(1) }
+
 }

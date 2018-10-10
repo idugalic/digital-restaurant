@@ -73,5 +73,5 @@ class AxonAndRabbitConfiguration {
     fun snapshotterFactoryBean() = SpringAggregateSnapshotterFactoryBean()
 
     @Bean
-    fun customerOrderSagaConfiguration(amqpMessageSource: SpringAMQPMessageSource) = SagaConfiguration.subscribingSagaManager<CustomerOrderSaga>(CustomerOrderSaga::class.java, { it -> amqpMessageSource })
+    fun customerOrderSagaConfiguration(amqpMessageSource: SpringAMQPMessageSource) = SagaConfiguration.subscribingSagaManager<CustomerOrderSaga>(CustomerOrderSaga::class.java) { amqpMessageSource }
 }

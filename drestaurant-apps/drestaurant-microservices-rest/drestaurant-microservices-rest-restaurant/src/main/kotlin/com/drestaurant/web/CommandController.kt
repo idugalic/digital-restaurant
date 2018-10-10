@@ -47,7 +47,7 @@ class CommandController(private val commandGateway: CommandGateway, private val 
         get() = AuditEntry(currentUser, Calendar.getInstance().time)
 
 
-    @RequestMapping(value = "/restaurants", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @RequestMapping(value = ["/restaurants"], method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun createRestaurant(@RequestBody request: CreateRestaurantRequest, response: HttpServletResponse): ResponseEntity<Any> {
         val menuItems = ArrayList<MenuItem>()
         for ((id, name, price) in request.menuItems) {
@@ -56,39 +56,23 @@ class CommandController(private val commandGateway: CommandGateway, private val 
         }
         val menu = RestaurantMenu(menuItems, "ver.0")
         val command = CreateRestaurantCommand(request.name, menu, auditEntry)
-        val queryResult = queryGateway.subscriptionQuery(
-                FindRestaurantQuery(command.targetAggregateIdentifier),
-                ResponseTypes.instanceOf<RestaurantEntity>(RestaurantEntity::class.java),
-                ResponseTypes.instanceOf<RestaurantEntity>(RestaurantEntity::class.java))
-
-        try {
-            val commandResult: String = commandGateway.sendAndWait(command)
-            val restaurantEntity = queryResult.updates().blockFirst()
-
-            return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(RestaurantRepository::class.java, restaurantEntity?.id).href)).build()
-        } finally {
-            queryResult.close();
-        }
+        queryGateway.subscriptionQuery(FindRestaurantQuery(command.targetAggregateIdentifier), ResponseTypes.instanceOf<RestaurantEntity>(RestaurantEntity::class.java), ResponseTypes.instanceOf<RestaurantEntity>(RestaurantEntity::class.java))
+                .use {
+                    val commandResult: String = commandGateway.sendAndWait(command)
+                    val restaurantEntity = it.updates().blockFirst()
+                    return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(RestaurantRepository::class.java, restaurantEntity?.id).href)).build()
+                }
     }
 
-
-    @RequestMapping(value = "/restaurants/{rid}/orders/{roid}/markprepared", method = [RequestMethod.PUT], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @RequestMapping(value = ["/restaurants/{rid}/orders/{roid}/markprepared"], method = [RequestMethod.PUT], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun markRestaurantOrderAsPrepared(@PathVariable rid: String, @PathVariable roid: String, response: HttpServletResponse): ResponseEntity<RestaurantOrderEntity> {
         val command = MarkRestaurantOrderAsPreparedCommand(roid, auditEntry)
-        val queryResult = queryGateway.subscriptionQuery(
-                FindRestaurantOrderQuery(command.targetAggregateIdentifier),
-                ResponseTypes.instanceOf<RestaurantOrderEntity>(RestaurantOrderEntity::class.java),
-                ResponseTypes.instanceOf<RestaurantOrderEntity>(RestaurantOrderEntity::class.java))
-
-        try {
-            val commandResult: String? = commandGateway.sendAndWait(command)
-            val restaurantOrderEntity = queryResult.updates().blockFirst()
-
-            if (RestaurantOrderState.PREPARED == restaurantOrderEntity?.state) return ResponseEntity.ok().build() else return ResponseEntity.badRequest().build()
-
-        } finally {
-            queryResult.close();
-        }
+        queryGateway.subscriptionQuery(FindRestaurantOrderQuery(command.targetAggregateIdentifier), ResponseTypes.instanceOf<RestaurantOrderEntity>(RestaurantOrderEntity::class.java), ResponseTypes.instanceOf<RestaurantOrderEntity>(RestaurantOrderEntity::class.java))
+                .use {
+                    val commandResult: String? = commandGateway.sendAndWait(command)
+                    val restaurantOrderEntity = it.updates().blockFirst()
+                    return if (RestaurantOrderState.PREPARED == restaurantOrderEntity?.state) ResponseEntity.ok().build() else ResponseEntity.badRequest().build()
+                }
     }
 }
 
@@ -101,8 +85,3 @@ data class CreateRestaurantRequest(val name: String, val menuItems: List<MenuIte
  * A Menu item request
  */
 data class MenuItemRequest(val id: String, val name: String, val price: BigDecimal)
-
-/**
- * An Order item request
- */
-data class OrderItemRequest(val id: String, val name: String, val price: BigDecimal, val quantity: Int)

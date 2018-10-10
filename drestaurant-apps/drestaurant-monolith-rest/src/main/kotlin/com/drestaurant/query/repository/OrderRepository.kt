@@ -25,5 +25,4 @@ interface OrderRepository : PagingAndSortingRepository<OrderEntity, String> {
 
     @RestResource(exported = false)
     override fun deleteAll()
-
 }

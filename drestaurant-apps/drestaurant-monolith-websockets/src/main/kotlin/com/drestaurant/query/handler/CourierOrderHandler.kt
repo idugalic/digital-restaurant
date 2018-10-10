@@ -42,9 +42,7 @@ internal class CourierOrderHandler(private val repository: CourierOrderRepositor
     @EventHandler
     @AllowReplay(true)
     fun handle(event: CourierOrderNotAssignedEvent, @SequenceNumber aggregateVersion: Long) {
-        val record = repository.findById(event.aggregateIdentifier).get()
-        //record.state = CourierOrderState.CREATED
-        //repository.save(record)
+        // Do nothing
         broadcastUpdates()
     }
 
@@ -57,13 +55,9 @@ internal class CourierOrderHandler(private val repository: CourierOrderRepositor
         broadcastUpdates()
     }
 
-    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        repository.deleteAll()
-    }
+    /* Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table */
+    @ResetHandler
+    fun onReset() = repository.deleteAll()
 
-    private fun broadcastUpdates() {
-        messagingTemplate.convertAndSend("/topic/couriers/orders.updates", repository.findAll())
-    }
-
+    private fun broadcastUpdates() = messagingTemplate.convertAndSend("/topic/couriers/orders.updates", repository.findAll())
 }

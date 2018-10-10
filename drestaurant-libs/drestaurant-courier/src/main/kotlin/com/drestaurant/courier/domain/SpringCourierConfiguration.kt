@@ -14,9 +14,7 @@ import org.springframework.context.annotation.Configuration
 internal class SpringCourierConfiguration {
 
     @Bean
-    fun courierCommandHandler(axonConfiguration: AxonConfiguration, eventBus: EventBus): CourierCommandHandler {
-        return CourierCommandHandler(axonConfiguration.repository(Courier::class.java), eventBus)
-    }
+    fun courierCommandHandler(axonConfiguration: AxonConfiguration, eventBus: EventBus) = CourierCommandHandler(axonConfiguration.repository(Courier::class.java), eventBus)
 
     @Value("\${axon.snapshot.trigger.treshold.courier}")
     private val snapshotTriggerTresholdCourier: Int = 100
@@ -26,13 +24,8 @@ internal class SpringCourierConfiguration {
 
 
     @Bean("courierSnapshotTriggerDefinition")
-    fun courierSnapshotTriggerDefinition(snapshotter: Snapshotter): SnapshotTriggerDefinition {
-        return EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCourier)
-    }
+    fun courierSnapshotTriggerDefinition(snapshotter: Snapshotter) = EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCourier)
 
     @Bean("courierOrderSnapshotTriggerDefinition")
-    fun courierOrderSnapshotTriggerDefinition(snapshotter: Snapshotter): SnapshotTriggerDefinition {
-        return EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCourierOrder)
-    }
-
+    fun courierOrderSnapshotTriggerDefinition(snapshotter: Snapshotter) = EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCourierOrder)
 }

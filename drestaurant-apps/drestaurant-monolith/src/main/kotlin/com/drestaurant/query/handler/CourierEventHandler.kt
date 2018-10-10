@@ -18,13 +18,12 @@ internal class CourierEventHandler(private val repository: CourierRepository, pr
     @EventHandler
     @AllowReplay(true)
     fun handle(event: CourierCreatedEvent, @SequenceNumber aggregateVersion: Long) {
-        repository.save(CourierEntity(event.aggregateIdentifier, aggregateVersion, event.name.firstName, event.name.lastName, event.maxNumberOfActiveOrders));
-        messagingTemplate.convertAndSend("/topic/couriers.updates", event);
+        repository.save(CourierEntity(event.aggregateIdentifier, aggregateVersion, event.name.firstName, event.name.lastName, event.maxNumberOfActiveOrders))
+        messagingTemplate.convertAndSend("/topic/couriers.updates", event)
     }
 
-    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        repository.deleteAll()
-    }
+    /* Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table */
+    @ResetHandler
+    fun onReset() = repository.deleteAll()
 
 }

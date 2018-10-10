@@ -25,5 +25,4 @@ interface CourierRepository : PagingAndSortingRepository<CourierEntity, String> 
 
     @RestResource(exported = false)
     override fun deleteAll()
-
 }

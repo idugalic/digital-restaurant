@@ -22,37 +22,25 @@ class RestaurantOrderSaga {
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
     fun handle(event: RestaurantOrderCreationRequestedEvent) {
+        orderId = event.aggregateIdentifier
+        associateWith("orderId", orderId)
         val command = CreateRestaurantOrderCommand(event.aggregateIdentifier, event.orderDetails, event.restaurantId, event.auditEntry)
         commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: RestaurantOrderCreationInitiatedEvent) {
-        this.orderId = event.aggregateIdentifier
-        associateWith("orderId", this.orderId)
-        val command = ValidateOrderByRestaurantCommand(this.orderId, event.restaurantId, event.orderDetails.lineItems, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    internal fun on(event: RestaurantOrderCreationInitiatedEvent) = commandGateway.send(ValidateOrderByRestaurantCommand(orderId, event.restaurantId, event.orderDetails.lineItems, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: RestaurantNotFoundForOrderEvent) {
-        val command = MarkRestaurantOrderAsRejectedCommand(event.orderId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    internal fun on(event: RestaurantNotFoundForOrderEvent) = commandGateway.send(MarkRestaurantOrderAsRejectedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithSuccessByRestaurantEvent) {
-        val command = MarkRestaurantOrderAsCreatedCommand(event.orderId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    internal fun on(event: OrderValidatedWithSuccessByRestaurantEvent) = commandGateway.send(MarkRestaurantOrderAsCreatedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithErrorByRestaurantEvent) {
-        val command = MarkRestaurantOrderAsRejectedCommand(event.orderId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    internal fun on(event: OrderValidatedWithErrorByRestaurantEvent) = commandGateway.send(MarkRestaurantOrderAsRejectedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
 }

@@ -18,13 +18,12 @@ internal class CustomerEventHandler(private val repository: CustomerRepository, 
     @EventHandler
     @AllowReplay(true)
     fun handle(event: CustomerCreatedEvent, @SequenceNumber aggregateVersion: Long) {
-        repository.save(CustomerEntity(event.aggregateIdentifier, aggregateVersion, event.name.firstName, event.name.lastName, event.orderLimit.amount));
-        messagingTemplate.convertAndSend("/topic/customers.updates", event);
+        repository.save(CustomerEntity(event.aggregateIdentifier, aggregateVersion, event.name.firstName, event.name.lastName, event.orderLimit.amount))
+        messagingTemplate.convertAndSend("/topic/customers.updates", event)
     }
 
-    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        repository.deleteAll()
-    }
+    /* Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table */
+    @ResetHandler
+    fun onReset() = repository.deleteAll()
 
 }

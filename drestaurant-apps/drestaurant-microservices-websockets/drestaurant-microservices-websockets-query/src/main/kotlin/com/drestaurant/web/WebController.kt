@@ -24,74 +24,44 @@ class WebController(private val commandGateway: CommandGateway, private val cust
         get() = AuditEntry(currentUser, Calendar.getInstance().time)
 
     // CUSTOMERS
-
     @SubscribeMapping("/customers")
-    fun allCustomers(): Iterable<CustomerEntity> {
-        return customerRepository.findAll()
-    }
+    fun allCustomers(): Iterable<CustomerEntity> = customerRepository.findAll()
 
     @SubscribeMapping("/customers/{id}")
-    fun getCustomer(@DestinationVariable id: String): CustomerEntity {
-        return customerRepository.findById(id).orElseThrow({ RequestRejectedException("id is null") })
-    }
+    fun getCustomer(@DestinationVariable id: String): CustomerEntity = customerRepository.findById(id).orElseThrow { RequestRejectedException("id is null") }
 
     // COURIERS
-
     @SubscribeMapping("/couriers")
-    fun allCouriers(): Iterable<CourierEntity> {
-        return courierRepository.findAll()
-    }
+    fun allCouriers(): Iterable<CourierEntity> = courierRepository.findAll()
 
     @SubscribeMapping("/couriers/{id}")
-    fun getCourier(@DestinationVariable id: String): CourierEntity {
-        return courierRepository.findById(id).orElseThrow({ RequestRejectedException("id is null") })
-    }
+    fun getCourier(@DestinationVariable id: String): CourierEntity = courierRepository.findById(id).orElseThrow { RequestRejectedException("id is null") }
 
     // RESTAURANTS
-
     @SubscribeMapping("/restaurants")
-    fun allRestaurants(): Iterable<RestaurantEntity> {
-        return restaurantRepository.findAll()
-    }
+    fun allRestaurants(): Iterable<RestaurantEntity> = restaurantRepository.findAll()
 
     @SubscribeMapping("/restaurants/{id}")
-    fun getRestaurant(@DestinationVariable id: String): RestaurantEntity {
-        return restaurantRepository.findById(id).orElseThrow({ RequestRejectedException("id is null") })
-    }
+    fun getRestaurant(@DestinationVariable id: String): RestaurantEntity = restaurantRepository.findById(id).orElseThrow { RequestRejectedException("id is null") }
 
     // ORDERS
-
     @SubscribeMapping("/orders")
-    fun allOrders(): Iterable<OrderEntity> {
-        return orderRepository.findAll()
-    }
+    fun allOrders(): Iterable<OrderEntity> = orderRepository.findAll()
 
     @SubscribeMapping("/orders/{id}")
-    fun getOrder(@DestinationVariable id: String): OrderEntity {
-        return orderRepository.findById(id).orElseThrow({ RequestRejectedException("id is null") })
-    }
+    fun getOrder(@DestinationVariable id: String): OrderEntity = orderRepository.findById(id).orElseThrow { RequestRejectedException("id is null") }
 
     // RESTAURANT ORDERS
-
     @SubscribeMapping("/restaurants/orders")
-    fun allRestaurantOrders(): Iterable<RestaurantOrderEntity> {
-        return restaurantOrderRepository.findAll()
-    }
+    fun allRestaurantOrders(): Iterable<RestaurantOrderEntity> = restaurantOrderRepository.findAll()
 
     @SubscribeMapping("/restaurants/orders/{id}")
-    fun getRestaurantOrder(@DestinationVariable id: String): RestaurantOrderEntity {
-        return restaurantOrderRepository.findById(id).orElseThrow({ RequestRejectedException("id is null") })
-    }
+    fun getRestaurantOrder(@DestinationVariable id: String): RestaurantOrderEntity = restaurantOrderRepository.findById(id).orElseThrow { RequestRejectedException("id is null") }
 
     // COURIER ORDERS
-
     @SubscribeMapping("/couriers/orders")
-    fun allCourierOrders(): Iterable<CourierOrderEntity> {
-        return courierOrderRepository.findAll()
-    }
+    fun allCourierOrders(): Iterable<CourierOrderEntity> = courierOrderRepository.findAll()
 
     @SubscribeMapping("/couriers/orders/{id}")
-    fun getCourierOrder(@DestinationVariable id: String): CourierOrderEntity {
-        return courierOrderRepository.findById(id).orElseThrow({ RequestRejectedException("id is null") })
-    }
+    fun getCourierOrder(@DestinationVariable id: String): CourierOrderEntity = courierOrderRepository.findById(id).orElseThrow { RequestRejectedException("id is null") }
 }

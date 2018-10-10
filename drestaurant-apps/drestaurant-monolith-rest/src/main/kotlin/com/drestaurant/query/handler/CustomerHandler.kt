@@ -20,7 +20,8 @@ import java.lang.UnsupportedOperationException
 internal class CustomerHandler(private val repository: CustomerRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: CustomerCreatedEvent, @SequenceNumber aggregateVersion: Long) {
         /* saving the record in our read/query model. */
         val record = CustomerEntity(event.aggregateIdentifier, aggregateVersion, event.name.firstName, event.name.lastName, event.orderLimit.amount)
@@ -36,24 +37,18 @@ internal class CustomerHandler(private val repository: CustomerRepository, priva
         /* sending it to subscription queries of type FindAllCustomers. */
         queryUpdateEmitter.emit(
                 FindAllCustomersQuery::class.java,
-                { query -> true },
+                { true },
                 record
         )
     }
 
-    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        repository.deleteAll()
-    }
+    /* Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table */
+    @ResetHandler
+    fun onReset() = repository.deleteAll()
 
     @QueryHandler
-    fun handle(query: FindCustomerQuery): CustomerEntity {
-        return repository.findById(query.customerId).orElseThrow { UnsupportedOperationException("Customer with id '" + query.customerId + "' not found") }
-    }
+    fun handle(query: FindCustomerQuery): CustomerEntity = repository.findById(query.customerId).orElseThrow { UnsupportedOperationException("Customer with id '" + query.customerId + "' not found") }
 
     @QueryHandler
-    fun handle(query: FindAllCustomersQuery): MutableIterable<CustomerEntity> {
-        return repository.findAll()
-    }
-
+    fun handle(query: FindAllCustomersQuery): MutableIterable<CustomerEntity> = repository.findAll()
 }

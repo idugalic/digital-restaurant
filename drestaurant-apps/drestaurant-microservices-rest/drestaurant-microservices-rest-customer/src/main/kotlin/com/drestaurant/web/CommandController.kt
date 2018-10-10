@@ -40,23 +40,17 @@ class CommandController(private val commandGateway: CommandGateway, private val 
     private val auditEntry: AuditEntry
         get() = AuditEntry(currentUser, Calendar.getInstance().time)
 
-    @RequestMapping(value = "/customers", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @RequestMapping(value = ["/customers"], method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun createCustomer(@RequestBody request: CreateCustomerRequest, response: HttpServletResponse): ResponseEntity<Any> {
         val orderLimit = Money(request.orderLimit)
         val command = CreateCustomerCommand(PersonName(request.firstName, request.lastName), orderLimit, auditEntry)
-        val queryResult = queryGateway.subscriptionQuery(
-                FindCustomerQuery(command.targetAggregateIdentifier),
-                ResponseTypes.instanceOf<CustomerEntity>(CustomerEntity::class.java),
-                ResponseTypes.instanceOf<CustomerEntity>(CustomerEntity::class.java))
-        try {
-            val commandResult: String = commandGateway.sendAndWait(command)
-            /* Returning the first update sent to our find customer query. */
-            val customerEntity = queryResult.updates().blockFirst()
-            return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(CustomerRepository::class.java, customerEntity?.id).href)).build()
-        } finally {
-            /* Closing the subscription query. */
-            queryResult.close();
-        }
+        queryGateway.subscriptionQuery(FindCustomerQuery(command.targetAggregateIdentifier), ResponseTypes.instanceOf<CustomerEntity>(CustomerEntity::class.java), ResponseTypes.instanceOf<CustomerEntity>(CustomerEntity::class.java))
+                .use {
+                    val commandResult: String = commandGateway.sendAndWait(command)
+                    /* Returning the first update sent to our find customer query. */
+                    val customerEntity = it.updates().blockFirst()
+                    return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(CustomerRepository::class.java, customerEntity?.id).href)).build()
+                }
     }
 }
 

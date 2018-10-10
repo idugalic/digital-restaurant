@@ -32,7 +32,7 @@ class CommandController(private val commandGateway: CommandGateway) {
         get() = AuditEntry(currentUser, Calendar.getInstance().time)
 
 
-    @RequestMapping(value = "/restaurant/createcommand", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @RequestMapping(value = ["/restaurant/createcommand"], method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(value = HttpStatus.CREATED)
     fun createRestaurant(@RequestBody request: CreateRestaurantRequest, response: HttpServletResponse) {
         val menuItems = ArrayList<MenuItem>()
@@ -46,12 +46,9 @@ class CommandController(private val commandGateway: CommandGateway) {
     }
 
 
-    @RequestMapping(value = "/restaurant/order/{id}/markpreparedcommand", method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @RequestMapping(value = ["/restaurant/order/{id}/markpreparedcommand"], method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(value = HttpStatus.CREATED)
-    fun markRestaurantOrderAsPrepared(@PathVariable id: String, response: HttpServletResponse) {
-        val command = MarkRestaurantOrderAsPreparedCommand(id, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    fun markRestaurantOrderAsPrepared(@PathVariable id: String, response: HttpServletResponse) = commandGateway.send(MarkRestaurantOrderAsPreparedCommand(id, auditEntry), LoggingCallback.INSTANCE)
 
 }
 

@@ -37,20 +37,19 @@ internal class CourierHandler(private val repository: CourierRepository, private
         /* sending it to subscription queries of type FindAllCouriers. */
         queryUpdateEmitter.emit(
                 FindAllCouriersQuery::class.java,
-                { query -> true },
+                { true },
                 record
         )
     }
 
     @QueryHandler
     fun handle(query: FindCourierQuery): CourierEntity {
-        return repository.findById(query.courierId).orElseThrow { UnsupportedOperationException("Courier with id '" + query.courierId + "' not found") }
+        return repository.findById(query.courierId).orElseThrow { UnsupportedOperationException("Courier with id '${query.courierId}' not found") }
     }
 
     @QueryHandler
     fun handle(query: FindAllCouriersQuery): MutableIterable<CourierEntity> {
         return repository.findAll()
     }
-
 }
 

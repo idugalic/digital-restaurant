@@ -22,7 +22,6 @@ internal class RestaurantHandler(private val repository: RestaurantRepository, p
     @EventHandler
     @AllowReplay(true)
     fun handle(event: RestaurantCreatedEvent, @SequenceNumber aggregateVersion: Long) {
-
         val menuItems = ArrayList<MenuItemEmbedable>()
         for (item in event.menu.menuItems) {
             val menuItem = MenuItemEmbedable(item.id, item.name, item.price.amount)
@@ -33,12 +32,9 @@ internal class RestaurantHandler(private val repository: RestaurantRepository, p
         broadcastUpdates()
     }
 
-    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        repository.deleteAll()
-    }
+    /* Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table */
+    @ResetHandler
+    fun onReset() = repository.deleteAll()
 
-    private fun broadcastUpdates() {
-        messagingTemplate.convertAndSend("/topic/restaurants.updates", repository.findAll())
-    }
+    private fun broadcastUpdates() = messagingTemplate.convertAndSend("/topic/restaurants.updates", repository.findAll())
 }

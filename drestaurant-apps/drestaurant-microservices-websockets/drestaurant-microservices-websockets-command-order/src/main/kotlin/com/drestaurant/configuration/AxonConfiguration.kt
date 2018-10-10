@@ -25,6 +25,6 @@ class AxonConfiguration {
 
     /* Saga configuration */
     @Bean
-    fun orderSagaConfiguration() = SagaConfiguration.trackingSagaManager<OrderSaga>(OrderSaga::class.java).configureTrackingProcessor({ it -> TrackingEventProcessorConfiguration.forParallelProcessing(1) })
+    fun orderSagaConfiguration() = SagaConfiguration.trackingSagaManager<OrderSaga>(OrderSaga::class.java).configureTrackingProcessor { TrackingEventProcessorConfiguration.forParallelProcessing(1) }
 
 }

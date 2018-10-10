@@ -26,7 +26,8 @@ import java.util.*
 internal class OrderHandler(private val orderRepository: OrderRepository, private val customerRepository: CustomerRepository, private val restaurantRepository: RestaurantRepository, private val courierRepository: CourierRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: OrderCreationInitiatedEvent, @SequenceNumber aggregateVersion: Long) {
         val orderItems = ArrayList<OrderItemEmbedable>()
         for (item in event.orderDetails.lineItems) {
@@ -46,14 +47,15 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindAllOrders. */
         queryUpdateEmitter.emit(
                 FindAllOrdersQuery::class.java,
-                { query -> true },
+                { true },
                 record
         )
 
     }
 
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: OrderVerifiedByCustomerEvent, @SequenceNumber aggregateVersion: Long) {
         val orderEntity = orderRepository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Order with id '" + event.aggregateIdentifier + "' not found") }
         val customerEntity = customerRepository.findById(event.customerId).orElseThrow { UnsupportedOperationException("Customer with id '" + event.customerId + "' not found") }
@@ -72,13 +74,14 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindAllOrders. */
         queryUpdateEmitter.emit(
                 FindAllOrdersQuery::class.java,
-                { query -> true },
+                { true },
                 orderEntity
         )
     }
 
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: OrderVerifiedByRestaurantEvent, @SequenceNumber aggregateVersion: Long) {
         val orderEntity = orderRepository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Order with id '" + event.aggregateIdentifier + "' not found") }
         val restaurantEntity = restaurantRepository.findById(event.restaurantId).orElseThrow { UnsupportedOperationException("Restaurant with id '" + event.restaurantId + "' not found") }
@@ -97,13 +100,14 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindAllOrders. */
         queryUpdateEmitter.emit(
                 FindAllOrdersQuery::class.java,
-                { query -> true },
+                { true },
                 orderEntity
         )
     }
 
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: OrderPreparedEvent, @SequenceNumber aggregateVersion: Long) {
         val orderEntity = orderRepository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Order with id '" + event.aggregateIdentifier + "' not found") }
         orderEntity.aggregateVersion = aggregateVersion
@@ -120,13 +124,14 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindAllOrders. */
         queryUpdateEmitter.emit(
                 FindAllOrdersQuery::class.java,
-                { query -> true },
+                { true },
                 orderEntity
         )
     }
 
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: OrderReadyForDeliveryEvent, @SequenceNumber aggregateVersion: Long) {
         val orderEntity = orderRepository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Order with id '" + event.aggregateIdentifier + "' not found") }
         orderEntity.aggregateVersion = aggregateVersion
@@ -143,13 +148,14 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindAllOrders. */
         queryUpdateEmitter.emit(
                 FindAllOrdersQuery::class.java,
-                { query -> true },
+                { true },
                 orderEntity
         )
     }
 
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: OrderDeliveredEvent, @SequenceNumber aggregateVersion: Long) {
         val orderEntity = orderRepository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Order with id '" + event.aggregateIdentifier + "' not found") }
         orderEntity.aggregateVersion = aggregateVersion
@@ -166,13 +172,14 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindAllOrders. */
         queryUpdateEmitter.emit(
                 FindAllOrdersQuery::class.java,
-                { query -> true },
+                { true },
                 orderEntity
         )
     }
 
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: OrderRejectedEvent, @SequenceNumber aggregateVersion: Long) {
         val orderEntity = orderRepository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Order with id '" + event.aggregateIdentifier + "' not found") }
         orderEntity.aggregateVersion = aggregateVersion
@@ -189,24 +196,18 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindAllOrders. */
         queryUpdateEmitter.emit(
                 FindAllOrdersQuery::class.java,
-                { query -> true },
+                { true },
                 orderEntity
         )
     }
 
-    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        orderRepository.deleteAll()
-    }
+    /* Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table */
+    @ResetHandler
+    fun onReset() = orderRepository.deleteAll()
 
     @QueryHandler
-    fun handle(query: FindOrderQuery): OrderEntity {
-        return orderRepository.findById(query.orderId).orElseThrow { UnsupportedOperationException("Order with id '" + query.orderId + "' not found") }
-    }
+    fun handle(query: FindOrderQuery): OrderEntity = orderRepository.findById(query.orderId).orElseThrow { UnsupportedOperationException("Order with id '" + query.orderId + "' not found") }
 
     @QueryHandler
-    fun handle(query: FindAllOrdersQuery): MutableIterable<OrderEntity> {
-        return orderRepository.findAll()
-    }
-
+    fun handle(query: FindAllOrdersQuery): MutableIterable<OrderEntity> = orderRepository.findAll()
 }

@@ -40,45 +40,27 @@ class WebController(private val commandGateway: CommandGateway, private val cust
         get() = AuditEntry(currentUser, Calendar.getInstance().time)
 
     // CUSTOMERS
-
     @MessageMapping("/customers/createcommand")
-    fun createCustomer(request: CreateCustomerDTO) {
-        val orderLimit = Money(request.orderLimit)
-        val command = CreateCustomerCommand(PersonName(request.firstName, request.lastName), orderLimit, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    fun createCustomer(request: CreateCustomerDTO) = commandGateway.send(CreateCustomerCommand(PersonName(request.firstName, request.lastName), Money(request.orderLimit), auditEntry), LoggingCallback.INSTANCE)
 
     @SubscribeMapping("/customers")
-    fun allCustomers(): Iterable<CustomerEntity> {
-        return customerRepository.findAll()
-    }
+    fun allCustomers(): Iterable<CustomerEntity> = customerRepository.findAll()
 
     @SubscribeMapping("/customers/{id}")
-    fun getCustomer(@DestinationVariable id: String): CustomerEntity {
-        return customerRepository.findById(id).orElseThrow({ RequestRejectedException("id is null") })
-    }
+    fun getCustomer(@DestinationVariable id: String): CustomerEntity = customerRepository.findById(id).orElseThrow { RequestRejectedException("id is null") }
 
     // COURIERS
-
-    @MessageMapping(value = "/couriers/createcommand")
-    fun createCourier(request: CreateCourierDTO) {
-        val command = CreateCourierCommand(PersonName(request.firstName, request.lastName), request.maxNumberOfActiveOrders, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    @MessageMapping(value = ["/couriers/createcommand"])
+    fun createCourier(request: CreateCourierDTO) = commandGateway.send(CreateCourierCommand(PersonName(request.firstName, request.lastName), request.maxNumberOfActiveOrders, auditEntry), LoggingCallback.INSTANCE)
 
     @SubscribeMapping("/couriers")
-    fun allCouriers(): Iterable<CourierEntity> {
-        return courierRepository.findAll()
-    }
+    fun allCouriers(): Iterable<CourierEntity> = courierRepository.findAll()
 
     @SubscribeMapping("/couriers/{id}")
-    fun getCourier(@DestinationVariable id: String): CourierEntity {
-        return courierRepository.findById(id).orElseThrow({ RequestRejectedException("id is null") })
-    }
+    fun getCourier(@DestinationVariable id: String): CourierEntity = courierRepository.findById(id).orElseThrow { RequestRejectedException("id is null") }
 
     // RESTAURANTS
-
-    @MessageMapping(value = "/restaurants/createcommand")
+    @MessageMapping(value = ["/restaurants/createcommand"])
     fun createRestaurant(request: CreateRestaurantDTO) {
         val menuItems = ArrayList<MenuItem>()
         for ((id, name, price) in request.menuItems) {
@@ -91,18 +73,13 @@ class WebController(private val commandGateway: CommandGateway, private val cust
     }
 
     @SubscribeMapping("/restaurants")
-    fun allRestaurants(): Iterable<RestaurantEntity> {
-        return restaurantRepository.findAll()
-    }
+    fun allRestaurants(): Iterable<RestaurantEntity> = restaurantRepository.findAll()
 
     @SubscribeMapping("/restaurants/{id}")
-    fun getRestaurant(@DestinationVariable id: String): RestaurantEntity {
-        return restaurantRepository.findById(id).orElseThrow({ RequestRejectedException("id is null") })
-    }
+    fun getRestaurant(@DestinationVariable id: String): RestaurantEntity = restaurantRepository.findById(id).orElseThrow { RequestRejectedException("id is null") }
 
     // ORDERS
-
-    @MessageMapping(value = "/orders/createcommand")
+    @MessageMapping(value = ["/orders/createcommand"])
     fun createOrder(request: CreateOrderDTO) {
         val lineItems = ArrayList<OrderLineItem>()
         for ((id, name, price, quantity) in request.orderItems) {
@@ -115,56 +92,33 @@ class WebController(private val commandGateway: CommandGateway, private val cust
     }
 
     @SubscribeMapping("/orders")
-    fun allOrders(): Iterable<OrderEntity> {
-        return orderRepository.findAll()
-    }
+    fun allOrders(): Iterable<OrderEntity> = orderRepository.findAll()
 
     @SubscribeMapping("/orders/{id}")
-    fun getOrder(@DestinationVariable id: String): OrderEntity {
-        return orderRepository.findById(id).orElseThrow({ RequestRejectedException("id is null") })
-    }
+    fun getOrder(@DestinationVariable id: String): OrderEntity = orderRepository.findById(id).orElseThrow { RequestRejectedException("id is null") }
 
     // RESTAURANT ORDERS
-
-    @MessageMapping(value = "/restaurants/orders/markpreparedcommand")
-    fun markRestaurantOrderAsPrepared(id: String) {
-        val command = MarkRestaurantOrderAsPreparedCommand(id, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    @MessageMapping(value = ["/restaurants/orders/markpreparedcommand"])
+    fun markRestaurantOrderAsPrepared(id: String) = commandGateway.send(MarkRestaurantOrderAsPreparedCommand(id, auditEntry), LoggingCallback.INSTANCE)
 
     @SubscribeMapping("/restaurants/orders")
-    fun allRestaurantOrders(): Iterable<RestaurantOrderEntity> {
-        return restaurantOrderRepository.findAll()
-    }
+    fun allRestaurantOrders(): Iterable<RestaurantOrderEntity> = restaurantOrderRepository.findAll()
 
     @SubscribeMapping("/restaurants/orders/{id}")
-    fun getRestaurantOrder(@DestinationVariable id: String): RestaurantOrderEntity {
-        return restaurantOrderRepository.findById(id).orElseThrow({ RequestRejectedException("id is null") })
-    }
+    fun getRestaurantOrder(@DestinationVariable id: String): RestaurantOrderEntity = restaurantOrderRepository.findById(id).orElseThrow { RequestRejectedException("id is null") }
 
     // COURIER ORDERS
+    @MessageMapping(value = ["/couriers/orders/assigncommand"])
+    fun assignOrderToCourier(request: AssignOrderToCourierDTO) = commandGateway.send(AssignCourierOrderToCourierCommand(request.courierOrderId, request.courierId, auditEntry), LoggingCallback.INSTANCE)
 
-    @MessageMapping(value = "/couriers/orders/assigncommand")
-    fun assignOrderToCourier(request: AssignOrderToCourierDTO) {
-        val command = AssignCourierOrderToCourierCommand(request.courierOrderId, request.courierId, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
-
-    @MessageMapping(value = "/couriers/orders/markdeliveredcommand")
-    fun markCourierOrderAsDelivered(id: String) {
-        val command = MarkCourierOrderAsDeliveredCommand(id, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
-    }
+    @MessageMapping(value = ["/couriers/orders/markdeliveredcommand"])
+    fun markCourierOrderAsDelivered(id: String) = commandGateway.send(MarkCourierOrderAsDeliveredCommand(id, auditEntry), LoggingCallback.INSTANCE)
 
     @SubscribeMapping("/couriers/orders")
-    fun allCourierOrders(): Iterable<CourierOrderEntity> {
-        return courierOrderRepository.findAll()
-    }
+    fun allCourierOrders(): Iterable<CourierOrderEntity> = courierOrderRepository.findAll()
 
     @SubscribeMapping("/couriers/orders/{id}")
-    fun getCourierOrder(@DestinationVariable id: String): CourierOrderEntity {
-        return courierOrderRepository.findById(id).orElseThrow({ RequestRejectedException("id is null") })
-    }
+    fun getCourierOrder(@DestinationVariable id: String): CourierOrderEntity = courierOrderRepository.findById(id).orElseThrow { RequestRejectedException("id is null") }
 }
 
 /**

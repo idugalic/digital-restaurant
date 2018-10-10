@@ -24,9 +24,9 @@ import kotlin.collections.ArrayList
 @ProcessingGroup("restaurant")
 internal class RestaurantHandler(private val repository: RestaurantRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
-
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: RestaurantCreatedEvent, @SequenceNumber aggregateVersion: Long, replayStatus: ReplayStatus) {
 
         val menuItems = ArrayList<MenuItemEmbedable>()
@@ -49,26 +49,18 @@ internal class RestaurantHandler(private val repository: RestaurantRepository, p
         /* sending it to subscription queries of type FindAllRestaurants. */
         queryUpdateEmitter.emit(
                 FindAllRestaurantsQuery::class.java,
-                { query -> true },
+                { true },
                 record
         )
     }
 
-
-    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        repository.deleteAll()
-    }
+    /* Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table */
+    @ResetHandler
+    fun onReset() = repository.deleteAll()
 
     @QueryHandler
-    fun handle(query: FindRestaurantQuery): RestaurantEntity {
-        return repository.findById(query.restaurantId).orElseThrow { UnsupportedOperationException("Restaurant with id '" + query.restaurantId + "' not found") }
-    }
+    fun handle(query: FindRestaurantQuery): RestaurantEntity = repository.findById(query.restaurantId).orElseThrow { UnsupportedOperationException("Restaurant with id '" + query.restaurantId + "' not found") }
 
     @QueryHandler
-    fun handle(query: FindAllRestaurantsQuery): MutableIterable<RestaurantEntity> {
-        return repository.findAll()
-    }
-
-
+    fun handle(query: FindAllRestaurantsQuery): MutableIterable<RestaurantEntity> = repository.findAll()
 }

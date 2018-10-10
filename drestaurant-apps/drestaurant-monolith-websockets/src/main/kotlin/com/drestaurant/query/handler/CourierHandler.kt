@@ -26,13 +26,10 @@ internal class CourierHandler(private val repository: CourierRepository, private
         broadcastUpdates()
     }
 
-    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        repository.deleteAll()
-    }
+    /* Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table */
+    @ResetHandler
+    fun onReset() = repository.deleteAll()
 
-    private fun broadcastUpdates() {
-        messagingTemplate.convertAndSend("/topic/couriers.updates", repository.findAll())
-    }
+    private fun broadcastUpdates() = messagingTemplate.convertAndSend("/topic/couriers.updates", repository.findAll())
 }
 

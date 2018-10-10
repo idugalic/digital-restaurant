@@ -31,7 +31,6 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         }
         orderRepository.save(OrderEntity(event.aggregateIdentifier, aggregateVersion, orderItems, null, null, null, OrderState.CREATE_PENDING))
         broadcastUpdates()
-
     }
 
     @EventHandler
@@ -99,12 +98,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     }
 
     @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        orderRepository.deleteAll()
-    }
+    fun onReset() = orderRepository.deleteAll()
 
-    private fun broadcastUpdates() {
-        messagingTemplate.convertAndSend("/topic/orders.updates", orderRepository.findAll())
-    }
-
+    private fun broadcastUpdates() = messagingTemplate.convertAndSend("/topic/orders.updates", orderRepository.findAll())
 }

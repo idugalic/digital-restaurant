@@ -9,14 +9,9 @@ import org.axonframework.eventhandling.GenericEventMessage.asEventMessage
 internal open class CourierCommandHandler(private val repository: Repository<Courier>, private val eventBus: EventBus) {
 
     @CommandHandler
-    fun handle(command: ValidateOrderByCourierCommand) {
-        try {
-            val courierAggregate = repository.load(command.courierId)
-            courierAggregate.execute { courier -> courier.validateOrder(command.orderId, command.auditEntry) }
-        } catch (exception: AggregateNotFoundException) {
-            eventBus.publish(asEventMessage<Any>(CourierNotFoundForOrderEvent(command.courierId, command.orderId, command.auditEntry)))
-        }
-
+    fun handle(command: ValidateOrderByCourierCommand) = try {
+        repository.load(command.courierId).execute { it.validateOrder(command.orderId, command.auditEntry) }
+    } catch (exception: AggregateNotFoundException) {
+        eventBus.publish(asEventMessage<Any>(CourierNotFoundForOrderEvent(command.courierId, command.orderId, command.auditEntry)))
     }
-
 }

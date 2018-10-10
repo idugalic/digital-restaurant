@@ -25,14 +25,16 @@ import java.lang.UnsupportedOperationException
 internal class CourierOrderHandler(private val repository: CourierOrderRepository, private val courierRepository: CourierRepository, private val queryUpdateEmitter: QueryUpdateEmitter) {
 
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: CourierOrderCreatedEvent, @SequenceNumber aggregateVersion: Long) {
         val record = CourierOrderEntity(event.aggregateIdentifier, aggregateVersion, null, CourierOrderState.CREATED)
         repository.save(record)
     }
 
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: CourierOrderAssignedEvent, @SequenceNumber aggregateVersion: Long) {
         val courierEntity = courierRepository.findById(event.courierId).orElseThrow { UnsupportedOperationException("Courier with id '" + event.courierId + "' not found") }
         val record = repository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Courier order with id '" + event.aggregateIdentifier + "' not found") }
@@ -50,17 +52,16 @@ internal class CourierOrderHandler(private val repository: CourierOrderRepositor
         /* sending it to subscription queries of type FindAllCourierOrders. */
         queryUpdateEmitter.emit(
                 FindAllCourierOrdersQuery::class.java,
-                { query -> true },
+                { true },
                 record
         )
     }
 
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: CourierOrderNotAssignedEvent, @SequenceNumber aggregateVersion: Long) {
         val record = repository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Courier order with id '" + event.aggregateIdentifier + "' not found") }
-        //record.state = CourierOrderState.CREATED
-        //repository.save(record)
 
         /* sending it to subscription queries of type FindCourierOrderQuery, but only if the courier order id matches. */
         queryUpdateEmitter.emit(
@@ -72,13 +73,14 @@ internal class CourierOrderHandler(private val repository: CourierOrderRepositor
         /* sending it to subscription queries of type FindAllCourierOrders. */
         queryUpdateEmitter.emit(
                 FindAllCourierOrdersQuery::class.java,
-                { query -> true },
+                { true },
                 record
         )
     }
 
     @EventHandler
-    @AllowReplay(true) // It is possible to allow or prevent some handlers from being replayed/reset
+    /* It is possible to allow or prevent some handlers from being replayed/reset */
+    @AllowReplay(true)
     fun handle(event: CourierOrderDeliveredEvent, @SequenceNumber aggregateVersion: Long) {
         val record = repository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Courier order with id '" + event.aggregateIdentifier + "' not found") }
         record.state = CourierOrderState.DELIVERED
@@ -94,24 +96,18 @@ internal class CourierOrderHandler(private val repository: CourierOrderRepositor
         /* sending it to subscription queries of type FindAllCourierOrders. */
         queryUpdateEmitter.emit(
                 FindAllCourierOrdersQuery::class.java,
-                { query -> true },
+                { true },
                 record
         )
     }
 
-    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        repository.deleteAll()
-    }
+    /* Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table */
+    @ResetHandler
+    fun onReset() = repository.deleteAll()
 
     @QueryHandler
-    fun handle(query: FindCourierOrderQuery): CourierOrderEntity {
-        return repository.findById(query.courierOrderId).orElseThrow { UnsupportedOperationException("Courier order with id '" + query.courierOrderId + "' not found") }
-    }
+    fun handle(query: FindCourierOrderQuery): CourierOrderEntity = repository.findById(query.courierOrderId).orElseThrow { UnsupportedOperationException("Courier order with id '" + query.courierOrderId + "' not found") }
 
     @QueryHandler
-    fun handle(query: FindAllCourierOrdersQuery): MutableIterable<CourierOrderEntity> {
-        return repository.findAll()
-    }
-
+    fun handle(query: FindAllCourierOrdersQuery): MutableIterable<CourierOrderEntity> = repository.findAll()
 }

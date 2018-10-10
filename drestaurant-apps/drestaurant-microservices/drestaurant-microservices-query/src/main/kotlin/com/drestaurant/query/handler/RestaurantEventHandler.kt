@@ -32,9 +32,7 @@ internal class RestaurantEventHandler(private val repository: RestaurantReposito
         messagingTemplate.convertAndSend("/topic/restaurants.updates", event);
     }
 
-    @ResetHandler // Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table
-    fun onReset() {
-        repository.deleteAll()
-    }
-
+    /* Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table */
+    @ResetHandler
+    fun onReset() = repository.deleteAll()
 }

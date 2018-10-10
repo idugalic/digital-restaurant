@@ -27,8 +27,7 @@ class WebController(private val commandGateway: CommandGateway) {
 
 
     // ORDERS
-
-    @MessageMapping(value = "/orders/createcommand")
+    @MessageMapping(value = ["/orders/createcommand"])
     fun createOrder(request: CreateOrderDTO) {
         val lineItems = ArrayList<OrderLineItem>()
         for ((id, name, price, quantity) in request.orderItems) {
@@ -39,8 +38,6 @@ class WebController(private val commandGateway: CommandGateway) {
         val command = CreateOrderCommand(orderInfo, auditEntry)
         commandGateway.send(command, LoggingCallback.INSTANCE)
     }
-
-
 }
 
 /**
