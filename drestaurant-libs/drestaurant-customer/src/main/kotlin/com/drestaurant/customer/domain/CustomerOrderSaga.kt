@@ -11,6 +11,11 @@ import org.axonframework.eventhandling.saga.StartSaga
 import org.axonframework.spring.stereotype.Saga
 import org.springframework.beans.factory.annotation.Autowired
 
+/**
+ * Managing invariants (business transaction) of [CustomerOrder] and [Customer]
+ *
+ * Consider restricting the modifier of this class to internal. It is public because of the Spring configuration: drestaurant-apps/drestaurant-monolith/com.drestaurant.configuration.AxonConfiguration
+ */
 @Saga(configurationBean = "customerOrderSagaConfiguration")
 class CustomerOrderSaga {
 
@@ -21,7 +26,7 @@ class CustomerOrderSaga {
 
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    fun on(event: CustomerOrderCreationRequestedEvent) {
+    internal fun on(event: CustomerOrderCreationRequestedEvent) {
         orderId = event.aggregateIdentifier
         associateWith("orderId", orderId)
         val command = CreateCustomerOrderCommand(orderId, event.orderTotal, event.customerId, event.auditEntry)

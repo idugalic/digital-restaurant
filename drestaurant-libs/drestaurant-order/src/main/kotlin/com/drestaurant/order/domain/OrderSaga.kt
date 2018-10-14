@@ -23,6 +23,11 @@ import org.axonframework.spring.stereotype.Saga
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.*
 
+/**
+ * Managing invariants (business transaction) of different orders (CustomerOrder, RestaurantOrder and CourierOrder)
+ *
+ * Consider restricting the modifier of this class to internal. It is public because of the Spring configuration: drestaurant-apps/drestaurant-monolith/com.drestaurant.configuration.AxonConfiguration
+ */
 @Saga(configurationBean = "orderSagaConfiguration")
 class OrderSaga {
 
