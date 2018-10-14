@@ -1,6 +1,8 @@
 server:
   port: 8081
 spring:
+  application:
+    name: command-courier
   datasource:
     url: jdbc:h2:mem:restaurant-courier
   jpa:
@@ -26,4 +28,8 @@ axon:
     consumer:
       group-id: courier-command-group
       bootstrap-servers: localhost:9092
+  distributed:
+    spring-cloud:
+      fallback-to-http-get: false
+    enabled: true
 

@@ -12,21 +12,6 @@ import com.drestaurant.restaurant.domain.model.RestaurantOrderDetails
 class OrderCreationInitiatedEvent(val orderDetails: OrderDetails, aggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractEvent(aggregateIdentifier, auditEntry)
 
 /**
- * An event, noting that customer order creation has been requested
- */
-class CustomerOrderCreationRequestedEvent(aggregateIdentifier: String, val orderTotal: Money, val customerId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(aggregateIdentifier, auditEntry)
-
-/**
- * An event, noting that restaurant order creation has been requested
- */
-class RestaurantOrderCreationRequestedEvent(aggregateIdentifier: String, val orderDetails: RestaurantOrderDetails, val restaurantId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(aggregateIdentifier, auditEntry)
-
-/**
- * An event, noting that courier order creation has been requested
- */
-class CourierOrderCreationRequestedEvent(aggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractEvent(aggregateIdentifier, auditEntry)
-
-/**
  * An event, noting that order has been delivered
  */
 class OrderDeliveredEvent(orderId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(orderId, auditEntry)

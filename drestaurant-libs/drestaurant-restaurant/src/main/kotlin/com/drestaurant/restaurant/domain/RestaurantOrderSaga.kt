@@ -1,6 +1,5 @@
 package com.drestaurant.restaurant.domain
 
-import com.drestaurant.order.domain.api.RestaurantOrderCreationRequestedEvent
 import com.drestaurant.restaurant.domain.api.CreateRestaurantOrderCommand
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
@@ -25,13 +24,6 @@ class RestaurantOrderSaga {
     private lateinit var orderId: String
 
     /**
-     * Start saga on external/public event [RestaurantOrderCreationRequestedEvent]. This event can be published from another component/bounded context
-     */
-    @StartSaga
-    @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: RestaurantOrderCreationRequestedEvent) = commandGateway.send(CreateRestaurantOrderCommand(event.aggregateIdentifier, event.orderDetails, event.restaurantId, event.auditEntry), LoggingCallback.INSTANCE)
-
-    /**
      * Start saga on internal event [RestaurantOrderCreationInitiatedInternalEvent]. This event can be published from this component/bounded context only, as a result of a public [CreateRestaurantOrderCommand] command
      */
     @StartSaga
@@ -53,5 +45,4 @@ class RestaurantOrderSaga {
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
     internal fun on(event: OrderValidatedWithErrorByRestaurantInternalEvent) = commandGateway.send(MarkRestaurantOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
-
 }

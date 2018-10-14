@@ -2,6 +2,7 @@ server:
   port: 8081
 spring:
   application:
+    name: courier
     sagaqueue: courier.saga.event.stream
   rabbitmq:
     hostname: 127.0.0.1
@@ -24,6 +25,10 @@ axon:
         courierorder: 100
   amqp:
     exchange: events.fanout.exchange
+  distributed:
+    spring-cloud:
+      fallback-to-http-get: false
+    enabled: true
 
 
 

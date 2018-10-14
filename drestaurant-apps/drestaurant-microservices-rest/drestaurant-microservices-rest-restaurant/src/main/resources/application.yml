@@ -2,6 +2,7 @@ server:
   port: 8084
 spring:
   application:
+    name: restaurant
     sagaqueue: restaurant.saga.event.stream
   rabbitmq:
     hostname: 127.0.0.1
@@ -24,6 +25,10 @@ axon:
         restaurantorder: 100
   amqp:
     exchange: events.fanout.exchange
+  distributed:
+    spring-cloud:
+      fallback-to-http-get: false
+    enabled: true
 
 
 

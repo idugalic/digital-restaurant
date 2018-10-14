@@ -20,6 +20,7 @@
         <module>drestaurant-microservices-rest-restaurant</module>
         <module>drestaurant-microservices-rest-courier</module>
         <module>drestaurant-microservices-rest-order</module>
+        <module>drestaurant-microservices-rest-discovery-server</module>
     </modules>
 
 </project>

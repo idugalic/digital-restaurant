@@ -592,7 +592,9 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
  - has its own bounded context,
  - has its own JPA event store (we are not sharing the JPA Event Store between service)
- - and we distribute events between them via Apache Kafka (we do not use Kafka as event(sourcing) store)
+ - we distribute events between them via Apache Kafka (we do not use Kafka as event(sourcing) store)
+ - and we distribute commands (Command Bus) by Spring Cloud discovery and registry service (Eureka) 
+
  
 #### Apache Kafka
 
@@ -707,7 +709,9 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
  - has its own bounded context,
  - has its own JPA event(sourcing) store (we are not sharing the JPA Event Store)
- - and we distribute events between them via RabbitMQ
+ - we distribute events between them via RabbitMQ
+ - and we distribute commands (Command Bus) by Spring Cloud discovery and registry service (Eureka) 
+
  
 #### RabbitMQ
 
@@ -826,7 +830,7 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
  - has its own bounded context,
  - has shared event(sourcing) storage (AxonDB)
- - and we distribute messages between them via AxonHub
+ - and we distribute messages (events, commands, queries) between them via AxonHub
  
 #### AxonHub
 
@@ -948,6 +952,8 @@ NOTE: Docker is required. We use it to start Apache Kafka with Zookeeper
 ```bash
 $ cd digital-restaurant/drestaurant-apps/drestaurant-microservices
 $ docker-compose up -d
+$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices/drestaurant-microservices-discovery-server
+$ mvn spring-boot:run
 $ cd digital-restaurant/drestaurant-apps/drestaurant-microservices/drestaurant-microservices-command-courier
 $ mvn spring-boot:run
 $ cd digital-restaurant/drestaurant-apps/drestaurant-microservices/drestaurant-microservices-command-customer
@@ -966,6 +972,8 @@ NOTE: Docker is required. We use it to start RabbitMQ
 
 ```bash
 $ docker run -d --hostname my-rabbit --name some-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-courier
+$ mvn spring-boot:run
 $ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-courier
 $ mvn spring-boot:run
 $ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-customer

@@ -21,6 +21,7 @@
         <module>drestaurant-microservices-command-courier</module>
         <module>drestaurant-microservices-command-order</module>
         <module>drestaurant-microservices-query</module>
+        <module>drestaurant-microservices-discovery-server</module>
     </modules>
 
 </project>

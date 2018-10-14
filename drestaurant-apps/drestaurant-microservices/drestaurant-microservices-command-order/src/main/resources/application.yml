@@ -1,6 +1,8 @@
 server:
   port: 8083
 spring:
+  application:
+    name: command-order
   datasource:
     url: jdbc:h2:mem:restaurant-order
   jpa:
@@ -25,3 +27,7 @@ axon:
     consumer:
       group-id: order-command-group
       bootstrap-servers: localhost:9092
+  distributed:
+    spring-cloud:
+      fallback-to-http-get: false
+    enabled: true

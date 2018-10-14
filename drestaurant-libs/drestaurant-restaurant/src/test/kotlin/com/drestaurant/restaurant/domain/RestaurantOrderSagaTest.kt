@@ -1,8 +1,6 @@
 package com.drestaurant.restaurant.domain
 
 import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.order.domain.api.RestaurantOrderCreationRequestedEvent
-import com.drestaurant.restaurant.domain.api.CreateRestaurantOrderCommand
 import com.drestaurant.restaurant.domain.model.RestaurantOrderDetails
 import com.drestaurant.restaurant.domain.model.RestaurantOrderLineItem
 import org.axonframework.test.saga.FixtureConfiguration
@@ -32,26 +30,6 @@ class RestaurantOrderSagaTest {
     }
 
     @Test
-    fun restaurantOrderCreationRequestedTest() {
-
-        testFixture.givenNoPriorActivity()
-                .whenAggregate(orderId)
-                .publishes(RestaurantOrderCreationRequestedEvent(orderId, orderDetails, restuarantId, auditEntry))
-                .expectActiveSagas(1)
-                .expectDispatchedCommands(CreateRestaurantOrderCommand(orderId, orderDetails, restuarantId, auditEntry))
-    }
-
-    @Test
-    fun restaurantOrderCreationInitiatedTest() {
-
-        testFixture.givenAggregate(orderId)
-                .published(RestaurantOrderCreationRequestedEvent(orderId, orderDetails, restuarantId, auditEntry))
-                .whenPublishingA(RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
-                .expectActiveSagas(1)
-                .expectDispatchedCommands(ValidateOrderByRestaurantInternalCommand(orderId, restuarantId, orderDetails.lineItems, auditEntry))
-    }
-
-    @Test
     fun restaurantOrderCreationInitiatedTest2() {
 
         testFixture.givenNoPriorActivity()
@@ -65,7 +43,7 @@ class RestaurantOrderSagaTest {
     fun restaurantNotFoundTest() {
 
         testFixture.givenAggregate(orderId)
-                .published(RestaurantOrderCreationRequestedEvent(orderId, orderDetails, restuarantId, auditEntry), RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
+                .published(RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
                 .whenPublishingA(RestaurantNotFoundForOrderInternalEvent(restuarantId, orderId, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkRestaurantOrderAsRejectedInternalCommand(orderId, auditEntry))
@@ -75,7 +53,7 @@ class RestaurantOrderSagaTest {
     fun restaurantOrderNotValidAndRejected() {
 
         testFixture.givenAggregate(orderId)
-                .published(RestaurantOrderCreationRequestedEvent(orderId, orderDetails, restuarantId, auditEntry), RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
+                .published(RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
                 .whenPublishingA(OrderValidatedWithErrorByRestaurantInternalEvent(restuarantId, orderId, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkRestaurantOrderAsRejectedInternalCommand(orderId, auditEntry))
@@ -85,7 +63,7 @@ class RestaurantOrderSagaTest {
     fun restaurantOrderValidAndCreated() {
 
         testFixture.givenAggregate(orderId)
-                .published(RestaurantOrderCreationRequestedEvent(orderId, orderDetails, restuarantId, auditEntry), RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
+                .published(RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
                 .whenPublishingA(OrderValidatedWithSuccessByRestaurantInternalEvent(restuarantId, orderId, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkRestaurantOrderAsCreatedInternalCommand(orderId, auditEntry))

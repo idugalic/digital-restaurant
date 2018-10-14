@@ -1,7 +1,6 @@
 package com.drestaurant.customer.domain
 
 import com.drestaurant.customer.domain.api.CreateCustomerOrderCommand
-import com.drestaurant.order.domain.api.CustomerOrderCreationRequestedEvent
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.eventhandling.saga.EndSaga
@@ -23,13 +22,6 @@ class CustomerOrderSaga {
     @Transient
     private lateinit var commandGateway: CommandGateway
     private lateinit var orderId: String
-
-    /**
-     * Start saga on external/public event [CustomerOrderCreationRequestedEvent]. This event can be published from another component/bounded context
-     */
-    @StartSaga
-    @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: CustomerOrderCreationRequestedEvent) = commandGateway.send(CreateCustomerOrderCommand(event.aggregateIdentifier, event.orderTotal, event.customerId, event.auditEntry), LoggingCallback.INSTANCE)
 
     /**
      * Start saga on internal event [CustomerOrderCreationInitiatedInternalEvent]. This event can be published from this component/bounded context only, as a result of a public [CreateCustomerOrderCommand] command

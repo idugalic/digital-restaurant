@@ -2,6 +2,7 @@ server:
   port: 8083
 spring:
   application:
+    name: order
     sagaqueue: order.saga.event.stream
   rabbitmq:
     hostname: 127.0.0.1
@@ -23,5 +24,9 @@ axon:
         order: 100
   amqp:
     exchange: events.fanout.exchange
+  distributed:
+    spring-cloud:
+      fallback-to-http-get: false
+    enabled: true
 
 

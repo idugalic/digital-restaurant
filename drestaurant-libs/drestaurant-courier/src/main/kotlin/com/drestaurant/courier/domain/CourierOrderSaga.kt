@@ -1,7 +1,6 @@
 package com.drestaurant.courier.domain
 
 import com.drestaurant.courier.domain.api.CreateCourierOrderCommand
-import com.drestaurant.order.domain.api.CourierOrderCreationRequestedEvent
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.eventhandling.saga.EndSaga
@@ -23,13 +22,6 @@ class CourierOrderSaga {
     @Transient
     private lateinit var commandGateway: CommandGateway
     private lateinit var orderId: String
-
-    /**
-     * Start saga on external/public event [CourierOrderCreationRequestedEvent]. This event can be published from another component/bounded context
-     */
-    @StartSaga
-    @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: CourierOrderCreationRequestedEvent) = commandGateway.send(CreateCourierOrderCommand(event.aggregateIdentifier, event.auditEntry), LoggingCallback.INSTANCE)
 
     /**
      * Start saga on internal event [CourierOrderAssigningInitiatedInternalEvent]. This event can be published from this component/bounded context only, as a result of a public [CreateCourierOrderCommand] command

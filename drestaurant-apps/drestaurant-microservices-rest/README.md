@@ -9,7 +9,8 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
  - has its own bounded context,
  - has its own JPA event(sourcing) store (we are not sharing the JPA Event Store)
- - and we distribute events between them via RabbitMQ
+ - we distribute events between them via RabbitMQ
+ - and we distribute commands (Command Bus) by Spring Cloud discovery and registry service (Eureka) 
  
 #### RabbitMQ
 
@@ -146,6 +147,8 @@ NOTE: Docker is required. We use it to start RabbitMQ
 $ docker run -d --hostname my-rabbit --name some-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
 $ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-courier
 $ mvn spring-boot:run
+$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-discovery-server
+$ mvn spring-boot:run
 $ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-customer
 $ mvn spring-boot:run
 $ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-restaurant
@@ -153,7 +156,6 @@ $ mvn spring-boot:run
 $ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-order
 $ mvn spring-boot:run
 ```
-
 
 ## Continuous delivery
 
