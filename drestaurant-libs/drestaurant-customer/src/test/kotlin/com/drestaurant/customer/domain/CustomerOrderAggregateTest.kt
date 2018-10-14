@@ -29,7 +29,7 @@ class CustomerOrderAggregateTest {
     @Test
     fun createCustomerOrderTest() {
         val createCustomerOrderCommand = CreateCustomerOrderCommand(orderId, orderTotal, customerId, auditEntry)
-        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry)
+        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry)
 
         fixture
                 .given()
@@ -39,8 +39,8 @@ class CustomerOrderAggregateTest {
 
     @Test
     fun markOrderAsCreatedTest() {
-        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry)
-        val markCustomerOrderAsCreatedCommand = MarkCustomerOrderAsCreatedCommand(orderId, auditEntry)
+        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry)
+        val markCustomerOrderAsCreatedCommand = MarkCustomerOrderAsCreatedInternalCommand(orderId, auditEntry)
         val customertOrderCreatedEvent = CustomerOrderCreatedEvent(orderId, auditEntry)
 
         fixture
@@ -51,8 +51,8 @@ class CustomerOrderAggregateTest {
 
     @Test
     fun markOrderAsRejectedTest() {
-        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry)
-        val markCustomerOrderAsRejectedCommand = MarkCustomerOrderAsRejectedCommand(orderId, auditEntry)
+        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry)
+        val markCustomerOrderAsRejectedCommand = MarkCustomerOrderAsRejectedInternalCommand(orderId, auditEntry)
         val customerOrderRejectedEvent = CustomerOrderRejectedEvent(orderId, auditEntry)
 
         fixture
@@ -63,7 +63,7 @@ class CustomerOrderAggregateTest {
 
     @Test
     fun markOrderAsDeliveredTest() {
-        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry)
+        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry)
         val customertOrderCreatedEvent = CustomerOrderCreatedEvent(orderId, auditEntry)
 
         val markCustomerOrderAsDeliveredCommand = MarkCustomerOrderAsDeliveredCommand(orderId, auditEntry)

@@ -80,7 +80,7 @@ internal class Order {
     }
 
     @CommandHandler
-    fun markOrderAsVerifiedByCustomer(command: MarkOrderAsVerifiedByCustomerCommand) {
+    fun markOrderAsVerifiedByCustomer(command: MarkOrderAsVerifiedByCustomerInternalCommand) {
         if (OrderState.CREATE_PENDING == state) {
             apply(OrderVerifiedByCustomerEvent(command.targetAggregateIdentifier, command.customerId, command.auditEntry))
         } else {
@@ -94,7 +94,7 @@ internal class Order {
     }
 
     @CommandHandler
-    fun markOrderAsVerifiedByRestaurant(command: MarkOrderAsVerifiedByRestaurantCommand) {
+    fun markOrderAsVerifiedByRestaurant(command: MarkOrderAsVerifiedByRestaurantInternalCommand) {
         if (OrderState.VERIFIED_BY_CUSTOMER == state) {
             apply(OrderVerifiedByRestaurantEvent(command.targetAggregateIdentifier, command.restaurantId, command.auditEntry))
         } else {
@@ -108,7 +108,7 @@ internal class Order {
     }
 
     @CommandHandler
-    fun markOrderAsPrepared(command: MarkOrderAsPreparedCommand) {
+    fun markOrderAsPrepared(command: MarkOrderAsPreparedInternalCommand) {
         if (OrderState.VERIFIED_BY_RESTAURANT == state) {
             apply(OrderPreparedEvent(command.targetAggregateIdentifier, command.auditEntry))
         } else {
@@ -122,7 +122,7 @@ internal class Order {
     }
 
     @CommandHandler
-    fun markOrderAsReadyForDelivery(command: MarkOrderAsReadyForDeliveryCommand) {
+    fun markOrderAsReadyForDelivery(command: MarkOrderAsReadyForDeliveryInternalCommand) {
         if (OrderState.PREPARED == state) {
             apply(OrderReadyForDeliveryEvent(command.targetAggregateIdentifier, command.auditEntry))
         } else {
@@ -136,7 +136,7 @@ internal class Order {
     }
 
     @CommandHandler
-    fun markOrderAsDelivered(command: MarkOrderAsDeliveredCommand) {
+    fun markOrderAsDelivered(command: MarkOrderAsDeliveredInternalCommand) {
         if (OrderState.READY_FOR_DELIVERY == state) {
             apply(OrderDeliveredEvent(command.targetAggregateIdentifier, command.auditEntry))
         } else {
@@ -150,7 +150,7 @@ internal class Order {
     }
 
     @CommandHandler
-    fun markOrderAsRejected(command: MarkOrderAsRejectedCommand) {
+    fun markOrderAsRejected(command: MarkOrderAsRejectedInternalCommand) {
         if (OrderState.VERIFIED_BY_CUSTOMER == state || OrderState.CREATE_PENDING == state) {
             apply(OrderRejectedEvent(command.targetAggregateIdentifier, command.auditEntry))
         } else {

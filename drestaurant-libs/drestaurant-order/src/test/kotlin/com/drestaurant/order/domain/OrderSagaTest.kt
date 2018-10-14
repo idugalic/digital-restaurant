@@ -74,7 +74,7 @@ class OrderSagaTest {
                 )
                 .whenPublishingA(CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
-                .expectDispatchedCommands(MarkOrderAsVerifiedByCustomerCommand(orderId, customerId, auditEntry))
+                .expectDispatchedCommands(MarkOrderAsVerifiedByCustomerInternalCommand(orderId, customerId, auditEntry))
     }
 
     @Test
@@ -100,7 +100,7 @@ class OrderSagaTest {
                 )
                 .whenPublishingA(RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId, "restaurantOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
-                .expectDispatchedCommands(MarkOrderAsVerifiedByRestaurantCommand(orderId, restaurantId, auditEntry))
+                .expectDispatchedCommands(MarkOrderAsVerifiedByRestaurantInternalCommand(orderId, restaurantId, auditEntry))
     }
 
     @Test
@@ -115,7 +115,7 @@ class OrderSagaTest {
                 )
                 .whenPublishingA(RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
-                .expectDispatchedCommands(MarkOrderAsPreparedCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkOrderAsPreparedInternalCommand(orderId, auditEntry))
     }
 
     @Test
@@ -148,7 +148,7 @@ class OrderSagaTest {
                 )
                 .whenPublishingA(CourierOrderCreatedEvent("courierOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
-                .expectDispatchedCommands(MarkOrderAsReadyForDeliveryCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkOrderAsReadyForDeliveryInternalCommand(orderId, auditEntry))
     }
 
     @Test
@@ -166,7 +166,7 @@ class OrderSagaTest {
                 )
                 .whenPublishingA(CourierOrderDeliveredEvent("courierOrder_" + orderId, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkOrderAsDeliveredCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkOrderAsDeliveredInternalCommand(orderId, auditEntry))
     }
 
 //    @Test
@@ -197,7 +197,7 @@ class OrderSagaTest {
                 )
                 .whenPublishingA(CustomerOrderRejectedEvent("customerOrder_" + orderId, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkOrderAsRejectedCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkOrderAsRejectedInternalCommand(orderId, auditEntry))
     }
 
     @Test
@@ -211,6 +211,6 @@ class OrderSagaTest {
                 )
                 .whenPublishingA(RestaurantOrderRejectedEvent("restaurantOrder_" + orderId, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkOrderAsRejectedCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkOrderAsRejectedInternalCommand(orderId, auditEntry))
     }
 }

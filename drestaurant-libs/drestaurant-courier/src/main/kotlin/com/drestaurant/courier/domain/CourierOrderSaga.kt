@@ -12,7 +12,7 @@ import org.axonframework.spring.stereotype.Saga
 import org.springframework.beans.factory.annotation.Autowired
 
 /**
- * Managing invariants (business transaction) of [CourierOrder] and [Courier]
+ * Managing invariants (business transaction) of [CourierOrder] and [Courier] aggregates within 'Courier' bounded context
  *
  * Consider restricting the modifier of this class to internal. It is public because of the Spring configuration: drestaurant-apps/drestaurant-monolith/com.drestaurant.configuration.AxonConfiguration
  */
@@ -24,27 +24,33 @@ class CourierOrderSaga {
     private lateinit var commandGateway: CommandGateway
     private lateinit var orderId: String
 
+    /**
+     * Start saga on external/public event [CourierOrderCreationRequestedEvent]. This event can be published from another component/bounded context
+     */
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: CourierOrderCreationRequestedEvent) {
+    internal fun on(event: CourierOrderCreationRequestedEvent) = commandGateway.send(CreateCourierOrderCommand(event.aggregateIdentifier, event.auditEntry), LoggingCallback.INSTANCE)
+
+    /**
+     * Start saga on internal event [CourierOrderAssigningInitiatedInternalEvent]. This event can be published from this component/bounded context only, as a result of a public [CreateCourierOrderCommand] command
+     */
+    @StartSaga
+    @SagaEventHandler(associationProperty = "aggregateIdentifier")
+    internal fun on(event: CourierOrderAssigningInitiatedInternalEvent) {
         orderId = event.aggregateIdentifier
         associateWith("orderId", orderId)
-        val command = CreateCourierOrderCommand(orderId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
+        commandGateway.send(ValidateOrderByCourierInternalCommand(orderId, event.courierId, event.auditEntry), LoggingCallback.INSTANCE)
     }
 
-    @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: CourierOrderAssigningInitiatedEvent) = commandGateway.send(ValidateOrderByCourierCommand(orderId, event.courierId, event.auditEntry), LoggingCallback.INSTANCE)
+    @EndSaga
+    @SagaEventHandler(associationProperty = "orderId")
+    internal fun on(event: CourierNotFoundForOrderInternalEvent) = commandGateway.send(MarkCourierOrderAsNotAssignedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: CourierNotFoundForOrderEvent) = commandGateway.send(MarkCourierOrderAsNotAssignedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
+    internal fun on(event: OrderValidatedWithSuccessByCourierInternalEvent) = commandGateway.send(MarkCourierOrderAsAssignedInternalCommand(event.orderId, event.courierId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithSuccessByCourierEvent) = commandGateway.send(MarkCourierOrderAsAssignedCommand(event.orderId, event.courierId, event.auditEntry), LoggingCallback.INSTANCE)
-
-    @EndSaga
-    @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithErrorByCourierEvent) = commandGateway.send(MarkCourierOrderAsNotAssignedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
+    internal fun on(event: OrderValidatedWithErrorByCourierInternalEvent) = commandGateway.send(MarkCourierOrderAsNotAssignedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 }

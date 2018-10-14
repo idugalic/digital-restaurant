@@ -33,15 +33,15 @@ class RestaurantOrderAggregateTest {
     @Test
     fun createRestaurantOrderTest() {
         val createRestaurantOrderCommand = CreateRestaurantOrderCommand(orderId, orderDetails, restuarantId, auditEntry)
-        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry)
+        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry)
 
         fixture.given().`when`(createRestaurantOrderCommand).expectEvents(restaurantOrderCreationInitiatedEvent)
     }
 
     @Test
     fun markOrderAsCreatedTest() {
-        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry)
-        val markRestaurantOrderAsCreatedCommand = MarkRestaurantOrderAsCreatedCommand(orderId, auditEntry)
+        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry)
+        val markRestaurantOrderAsCreatedCommand = MarkRestaurantOrderAsCreatedInternalCommand(orderId, auditEntry)
         val restaurantOrderCreatedEvent = RestaurantOrderCreatedEvent(lineItems, restuarantId, orderId, auditEntry)
 
         fixture.given(restaurantOrderCreationInitiatedEvent).`when`(markRestaurantOrderAsCreatedCommand).expectEvents(restaurantOrderCreatedEvent)
@@ -49,8 +49,8 @@ class RestaurantOrderAggregateTest {
 
     @Test
     fun markOrderAsRejectedTest() {
-        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry)
-        val markRestaurantOrderAsRejectedCommand = MarkRestaurantOrderAsRejectedCommand(orderId, auditEntry)
+        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry)
+        val markRestaurantOrderAsRejectedCommand = MarkRestaurantOrderAsRejectedInternalCommand(orderId, auditEntry)
         val restaurantOrderRejectedEvent = RestaurantOrderRejectedEvent(orderId, auditEntry)
 
         fixture.given(restaurantOrderCreationInitiatedEvent).`when`(markRestaurantOrderAsRejectedCommand).expectEvents(restaurantOrderRejectedEvent)
@@ -58,8 +58,8 @@ class RestaurantOrderAggregateTest {
 
     @Test
     fun markOrderAsRejectedFaildTest() {
-        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry)
-        val markRestaurantOrderAsRejectedCommand = MarkRestaurantOrderAsRejectedCommand(orderId, auditEntry)
+        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry)
+        val markRestaurantOrderAsRejectedCommand = MarkRestaurantOrderAsRejectedInternalCommand(orderId, auditEntry)
         val restaurantOrderRejectedEvent = RestaurantOrderRejectedEvent(orderId, auditEntry)
 
         fixture.given(restaurantOrderCreationInitiatedEvent, restaurantOrderRejectedEvent) //Order already REJECTED
@@ -68,7 +68,7 @@ class RestaurantOrderAggregateTest {
 
     @Test
     fun markOrderAsPreparedTest() {
-        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry)
+        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry)
         val restaurantOrderCreatedEvent = RestaurantOrderCreatedEvent(lineItems, restuarantId, orderId, auditEntry)
 
         val markRestaurantOrderAsPreparedCommand = MarkRestaurantOrderAsPreparedCommand(orderId, auditEntry)
@@ -80,7 +80,7 @@ class RestaurantOrderAggregateTest {
 
     @Test
     fun markOrderAsPreparedFaildTest() {
-        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry)
+        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry)
         val markRestaurantOrderAsPreparedCommand = MarkRestaurantOrderAsPreparedCommand(orderId, auditEntry)
 
         fixture.given(restaurantOrderCreationInitiatedEvent) //Creation initialized ,but not yet CREATED

@@ -35,19 +35,19 @@ internal class CourierOrder {
     @CommandHandler
     fun assignToCourier(command: AssignCourierOrderToCourierCommand) {
         if (CourierOrderState.CREATED == state) {
-            apply(CourierOrderAssigningInitiatedEvent(command.courierId, command.targetAggregateIdentifier, command.auditEntry))
+            apply(CourierOrderAssigningInitiatedInternalEvent(command.courierId, command.targetAggregateIdentifier, command.auditEntry))
         } else {
             throw UnsupportedOperationException("The current state is not CREATED")
         }
     }
 
     @EventSourcingHandler
-    fun on(event: CourierOrderAssigningInitiatedEvent) {
+    fun on(event: CourierOrderAssigningInitiatedInternalEvent) {
         state = CourierOrderState.ASSIGN_PENDING
     }
 
     @CommandHandler
-    fun markOrderAsAssigned(command: MarkCourierOrderAsAssignedCommand) {
+    fun markOrderAsAssigned(command: MarkCourierOrderAsAssignedInternalCommand) {
         if (CourierOrderState.ASSIGN_PENDING == state) {
             apply(CourierOrderAssignedEvent(command.targetAggregateIdentifier, command.courierId, command.auditEntry))
         } else {
@@ -62,7 +62,7 @@ internal class CourierOrder {
     }
 
     @CommandHandler
-    fun markOrderAsNotAssigned(command: MarkCourierOrderAsNotAssignedCommand) {
+    fun markOrderAsNotAssigned(command: MarkCourierOrderAsNotAssignedInternalCommand) {
         if (CourierOrderState.ASSIGN_PENDING == state) {
             apply(CourierOrderNotAssignedEvent(command.targetAggregateIdentifier, command.auditEntry))
         } else {

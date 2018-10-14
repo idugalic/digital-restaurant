@@ -40,39 +40,49 @@ class CustomerOrderSagaTest {
 
         testFixture.givenAggregate(orderId)
                 .published(CustomerOrderCreationRequestedEvent(orderId, orderTotal, customerId, auditEntry))
-                .whenPublishingA(CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry))
+                .whenPublishingA(CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry))
                 .expectActiveSagas(1)
-                .expectDispatchedCommands(ValidateOrderByCustomerCommand(orderId, customerId, orderTotal, auditEntry))
+                .expectDispatchedCommands(ValidateOrderByCustomerInternalCommand(orderId, customerId, orderTotal, auditEntry))
+    }
+
+    @Test
+    fun customerOrderCreationInitiatedTest2() {
+
+        testFixture.givenNoPriorActivity()
+                .whenAggregate(orderId)
+                .publishes(CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry))
+                .expectActiveSagas(1)
+                .expectDispatchedCommands(ValidateOrderByCustomerInternalCommand(orderId, customerId, orderTotal, auditEntry))
     }
 
     @Test
     fun customerNotFoundTest() {
 
         testFixture.givenAggregate(orderId)
-                .published(CustomerOrderCreationRequestedEvent(orderId, orderTotal, customerId, auditEntry), CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry))
-                .whenPublishingA(CustomerNotFoundForOrderEvent(customerId, orderId, orderTotal, auditEntry))
+                .published(CustomerOrderCreationRequestedEvent(orderId, orderTotal, customerId, auditEntry), CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry))
+                .whenPublishingA(CustomerNotFoundForOrderInternalEvent(customerId, orderId, orderTotal, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkCustomerOrderAsRejectedCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkCustomerOrderAsRejectedInternalCommand(orderId, auditEntry))
     }
 
     @Test
     fun customerOrderNotValidAndRejected() {
 
         testFixture.givenAggregate(orderId)
-                .published(CustomerOrderCreationRequestedEvent(orderId, orderTotal, customerId, auditEntry), CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry))
-                .whenPublishingA(OrderValidatedWithErrorByCustomerEvent(customerId, orderId, orderTotal, auditEntry))
+                .published(CustomerOrderCreationRequestedEvent(orderId, orderTotal, customerId, auditEntry), CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry))
+                .whenPublishingA(OrderValidatedWithErrorByCustomerInternalEvent(customerId, orderId, orderTotal, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkCustomerOrderAsRejectedCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkCustomerOrderAsRejectedInternalCommand(orderId, auditEntry))
     }
 
     @Test
     fun customerOrderValidAndCreated() {
 
         testFixture.givenAggregate(orderId)
-                .published(CustomerOrderCreationRequestedEvent(orderId, orderTotal, customerId, auditEntry), CustomerOrderCreationInitiatedEvent(orderTotal, customerId, orderId, auditEntry))
-                .whenPublishingA(OrderValidatedWithSuccessByCustomerEvent(customerId, orderId, orderTotal, auditEntry))
+                .published(CustomerOrderCreationRequestedEvent(orderId, orderTotal, customerId, auditEntry), CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry))
+                .whenPublishingA(OrderValidatedWithSuccessByCustomerInternalEvent(customerId, orderId, orderTotal, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkCustomerOrderAsCreatedCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkCustomerOrderAsCreatedInternalCommand(orderId, auditEntry))
     }
 
 }

@@ -26,11 +26,11 @@ internal class RestaurantOrder {
 
     @CommandHandler
     constructor(command: CreateRestaurantOrderCommand) {
-        apply(RestaurantOrderCreationInitiatedEvent(RestaurantOrderDetails(command.orderDetails.lineItems), command.restaurantId, command.targetAggregateIdentifier, command.auditEntry))
+        apply(RestaurantOrderCreationInitiatedInternalEvent(RestaurantOrderDetails(command.orderDetails.lineItems), command.restaurantId, command.targetAggregateIdentifier, command.auditEntry))
     }
 
     @EventSourcingHandler
-    fun on(event: RestaurantOrderCreationInitiatedEvent) {
+    fun on(event: RestaurantOrderCreationInitiatedInternalEvent) {
         id = event.aggregateIdentifier
         restaurantId = event.restaurantId
         lineItems = event.orderDetails.lineItems
@@ -38,7 +38,7 @@ internal class RestaurantOrder {
     }
 
     @CommandHandler
-    fun markOrderAsCreated(command: MarkRestaurantOrderAsCreatedCommand) {
+    fun markOrderAsCreated(command: MarkRestaurantOrderAsCreatedInternalCommand) {
         if (RestaurantOrderState.CREATE_PENDING == state) {
             apply(RestaurantOrderCreatedEvent(lineItems, restaurantId, command.targetAggregateIdentifier, command.auditEntry))
         } else {
@@ -53,7 +53,7 @@ internal class RestaurantOrder {
     }
 
     @CommandHandler
-    fun markOrderAsRejected(command: MarkRestaurantOrderAsRejectedCommand) {
+    fun markOrderAsRejected(command: MarkRestaurantOrderAsRejectedInternalCommand) {
         if (RestaurantOrderState.CREATE_PENDING == state) {
             apply(RestaurantOrderRejectedEvent(command.targetAggregateIdentifier, command.auditEntry))
         } else {

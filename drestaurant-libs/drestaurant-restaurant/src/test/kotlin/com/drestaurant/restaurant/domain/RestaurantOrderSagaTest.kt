@@ -46,38 +46,48 @@ class RestaurantOrderSagaTest {
 
         testFixture.givenAggregate(orderId)
                 .published(RestaurantOrderCreationRequestedEvent(orderId, orderDetails, restuarantId, auditEntry))
-                .whenPublishingA(RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry))
+                .whenPublishingA(RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
                 .expectActiveSagas(1)
-                .expectDispatchedCommands(ValidateOrderByRestaurantCommand(orderId, restuarantId, orderDetails.lineItems, auditEntry))
+                .expectDispatchedCommands(ValidateOrderByRestaurantInternalCommand(orderId, restuarantId, orderDetails.lineItems, auditEntry))
+    }
+
+    @Test
+    fun restaurantOrderCreationInitiatedTest2() {
+
+        testFixture.givenNoPriorActivity()
+                .whenAggregate(orderId)
+                .publishes(RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
+                .expectActiveSagas(1)
+                .expectDispatchedCommands(ValidateOrderByRestaurantInternalCommand(orderId, restuarantId, orderDetails.lineItems, auditEntry))
     }
 
     @Test
     fun restaurantNotFoundTest() {
 
         testFixture.givenAggregate(orderId)
-                .published(RestaurantOrderCreationRequestedEvent(orderId, orderDetails, restuarantId, auditEntry), RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry))
-                .whenPublishingA(RestaurantNotFoundForOrderEvent(restuarantId, orderId, auditEntry))
+                .published(RestaurantOrderCreationRequestedEvent(orderId, orderDetails, restuarantId, auditEntry), RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
+                .whenPublishingA(RestaurantNotFoundForOrderInternalEvent(restuarantId, orderId, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkRestaurantOrderAsRejectedCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkRestaurantOrderAsRejectedInternalCommand(orderId, auditEntry))
     }
 
     @Test
     fun restaurantOrderNotValidAndRejected() {
 
         testFixture.givenAggregate(orderId)
-                .published(RestaurantOrderCreationRequestedEvent(orderId, orderDetails, restuarantId, auditEntry), RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry))
-                .whenPublishingA(OrderValidatedWithErrorByRestaurantEvent(restuarantId, orderId, auditEntry))
+                .published(RestaurantOrderCreationRequestedEvent(orderId, orderDetails, restuarantId, auditEntry), RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
+                .whenPublishingA(OrderValidatedWithErrorByRestaurantInternalEvent(restuarantId, orderId, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkRestaurantOrderAsRejectedCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkRestaurantOrderAsRejectedInternalCommand(orderId, auditEntry))
     }
 
     @Test
     fun restaurantOrderValidAndCreated() {
 
         testFixture.givenAggregate(orderId)
-                .published(RestaurantOrderCreationRequestedEvent(orderId, orderDetails, restuarantId, auditEntry), RestaurantOrderCreationInitiatedEvent(orderDetails, restuarantId, orderId, auditEntry))
-                .whenPublishingA(OrderValidatedWithSuccessByRestaurantEvent(restuarantId, orderId, auditEntry))
+                .published(RestaurantOrderCreationRequestedEvent(orderId, orderDetails, restuarantId, auditEntry), RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
+                .whenPublishingA(OrderValidatedWithSuccessByRestaurantInternalEvent(restuarantId, orderId, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkRestaurantOrderAsCreatedCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkRestaurantOrderAsCreatedInternalCommand(orderId, auditEntry))
     }
 }

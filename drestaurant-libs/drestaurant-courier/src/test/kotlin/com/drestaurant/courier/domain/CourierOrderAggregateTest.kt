@@ -43,7 +43,7 @@ class CourierOrderAggregateTest {
     fun assignOdrerToCourierTest() {
         val courierOrderCreatedEvent = CourierOrderCreatedEvent(orderId, auditEntry)
         val assignCourierOrderToCourierCommand = AssignCourierOrderToCourierCommand(orderId, courierId, auditEntry)
-        val courierOrderAssigningInitiatedEvent = CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry)
+        val courierOrderAssigningInitiatedEvent = CourierOrderAssigningInitiatedInternalEvent(courierId, orderId, auditEntry)
 
         fixture
                 .given(courierOrderCreatedEvent)
@@ -54,8 +54,8 @@ class CourierOrderAggregateTest {
     @Test
     fun markOrderAsAssignedTest() {
         val courierOrderCreatedEvent = CourierOrderCreatedEvent(orderId, auditEntry)
-        val markCourierOrderAsAssignedCommand = MarkCourierOrderAsAssignedCommand(orderId, courierId, auditEntry)
-        val courierOrderAssigningInitiatedEvent = CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry)
+        val markCourierOrderAsAssignedCommand = MarkCourierOrderAsAssignedInternalCommand(orderId, courierId, auditEntry)
+        val courierOrderAssigningInitiatedEvent = CourierOrderAssigningInitiatedInternalEvent(courierId, orderId, auditEntry)
         val courierOrderAssignedEvent = CourierOrderAssignedEvent(orderId, courierId, auditEntry)
 
         fixture
@@ -67,8 +67,8 @@ class CourierOrderAggregateTest {
     @Test
     fun markOrderAsNotAssignedTest() {
         val courierOrderCreatedEvent = CourierOrderCreatedEvent(orderId, auditEntry)
-        val markCourierOrderAsNotAssignedCommand = MarkCourierOrderAsNotAssignedCommand(orderId, auditEntry)
-        val courierOrderAssigningInitiatedEvent = CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry)
+        val markCourierOrderAsNotAssignedCommand = MarkCourierOrderAsNotAssignedInternalCommand(orderId, auditEntry)
+        val courierOrderAssigningInitiatedEvent = CourierOrderAssigningInitiatedInternalEvent(courierId, orderId, auditEntry)
         val courierOrderNotAssignedEvent = CourierOrderNotAssignedEvent(orderId, auditEntry)
 
         fixture
@@ -80,7 +80,7 @@ class CourierOrderAggregateTest {
     @Test
     fun markOrderAsDeliveredTest() {
         val courierOrderCreatedEvent = CourierOrderCreatedEvent(orderId, auditEntry)
-        val courierOrderAssigningInitiatedEvent = CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry)
+        val courierOrderAssigningInitiatedEvent = CourierOrderAssigningInitiatedInternalEvent(courierId, orderId, auditEntry)
         val courierOrderAssignedEvent = CourierOrderAssignedEvent(orderId, courierId, auditEntry)
         val markCourierOrderAsDeliveredCommand = MarkCourierOrderAsDeliveredCommand(orderId, auditEntry)
         val courierOrderDeliveredEvent = CourierOrderDeliveredEvent(orderId, auditEntry)

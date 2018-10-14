@@ -6,11 +6,11 @@ import com.drestaurant.common.domain.model.Money
 import org.axonframework.commandhandling.TargetAggregateIdentifier
 
 /**
- * @author: idugalic
+ * Internal commands, scoped to 'customer' bounded context only
  */
 
-internal class MarkCustomerOrderAsCreatedCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
+internal class MarkCustomerOrderAsCreatedInternalCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
 
-internal class MarkCustomerOrderAsRejectedCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
+internal class MarkCustomerOrderAsRejectedInternalCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
 
-internal class ValidateOrderByCustomerCommand(@TargetAggregateIdentifier val orderId: String, val customerId: String, val orderTotal: Money, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
+internal class ValidateOrderByCustomerInternalCommand(@TargetAggregateIdentifier val orderId: String, val customerId: String, val orderTotal: Money, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)

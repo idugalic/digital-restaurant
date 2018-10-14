@@ -9,9 +9,9 @@ import org.axonframework.eventhandling.GenericEventMessage.asEventMessage
 internal open class RestaurantCommandHandler(private val repository: Repository<Restaurant>, private val eventBus: EventBus) {
 
     @CommandHandler
-    fun handle(command: ValidateOrderByRestaurantCommand) = try {
+    fun handle(command: ValidateOrderByRestaurantInternalCommand) = try {
         repository.load(command.restaurantId).execute { it.validateOrder(command.orderId, command.lineItems, command.auditEntry) }
     } catch (exception: AggregateNotFoundException) {
-        eventBus.publish(asEventMessage<Any>(RestaurantNotFoundForOrderEvent(command.restaurantId, command.orderId, command.auditEntry)))
+        eventBus.publish(asEventMessage<Any>(RestaurantNotFoundForOrderInternalEvent(command.restaurantId, command.orderId, command.auditEntry)))
     }
 }

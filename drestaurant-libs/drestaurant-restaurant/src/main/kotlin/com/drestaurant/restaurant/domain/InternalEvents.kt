@@ -5,13 +5,13 @@ import com.drestaurant.common.domain.model.AuditEntry
 import com.drestaurant.restaurant.domain.model.RestaurantOrderDetails
 
 /**
- * @author: idugalic
+ * Internal events, scoped to 'restaurant' bounded context only
  */
 
-internal class OrderValidatedWithErrorByRestaurantEvent(val restaurantId: String, val orderId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(restaurantId, auditEntry)
+internal class OrderValidatedWithErrorByRestaurantInternalEvent(val restaurantId: String, val orderId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(restaurantId, auditEntry)
 
-internal class OrderValidatedWithSuccessByRestaurantEvent(val restaurantId: String, val orderId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(restaurantId, auditEntry)
+internal class OrderValidatedWithSuccessByRestaurantInternalEvent(val restaurantId: String, val orderId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(restaurantId, auditEntry)
 
-internal class RestaurantNotFoundForOrderEvent(val restaurantId: String, val orderId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(restaurantId, auditEntry)
+internal class RestaurantNotFoundForOrderInternalEvent(val restaurantId: String, val orderId: String, auditEntry: AuditEntry) : AuditableAbstractEvent(restaurantId, auditEntry)
 
-internal class RestaurantOrderCreationInitiatedEvent(val orderDetails: RestaurantOrderDetails, val restaurantId: String, aggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractEvent(aggregateIdentifier, auditEntry)
+internal class RestaurantOrderCreationInitiatedInternalEvent(val orderDetails: RestaurantOrderDetails, val restaurantId: String, aggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractEvent(aggregateIdentifier, auditEntry)

@@ -12,7 +12,7 @@ import org.axonframework.spring.stereotype.Saga
 import org.springframework.beans.factory.annotation.Autowired
 
 /**
- * Managing invariants (business transaction) of [CustomerOrder] and [Customer]
+ * Managing invariants (business transaction) of [CustomerOrder] and [Customer] aggregates within 'Customer' bounded context
  *
  * Consider restricting the modifier of this class to internal. It is public because of the Spring configuration: drestaurant-apps/drestaurant-monolith/com.drestaurant.configuration.AxonConfiguration
  */
@@ -24,27 +24,33 @@ class CustomerOrderSaga {
     private lateinit var commandGateway: CommandGateway
     private lateinit var orderId: String
 
+    /**
+     * Start saga on external/public event [CustomerOrderCreationRequestedEvent]. This event can be published from another component/bounded context
+     */
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: CustomerOrderCreationRequestedEvent) {
+    internal fun on(event: CustomerOrderCreationRequestedEvent) = commandGateway.send(CreateCustomerOrderCommand(event.aggregateIdentifier, event.orderTotal, event.customerId, event.auditEntry), LoggingCallback.INSTANCE)
+
+    /**
+     * Start saga on internal event [CustomerOrderCreationInitiatedInternalEvent]. This event can be published from this component/bounded context only, as a result of a public [CreateCustomerOrderCommand] command
+     */
+    @StartSaga
+    @SagaEventHandler(associationProperty = "aggregateIdentifier")
+    internal fun on(event: CustomerOrderCreationInitiatedInternalEvent) {
         orderId = event.aggregateIdentifier
         associateWith("orderId", orderId)
-        val command = CreateCustomerOrderCommand(orderId, event.orderTotal, event.customerId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
+        commandGateway.send(ValidateOrderByCustomerInternalCommand(orderId, event.customerId, event.orderTotal, event.auditEntry), LoggingCallback.INSTANCE)
     }
 
-    @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: CustomerOrderCreationInitiatedEvent) = commandGateway.send(ValidateOrderByCustomerCommand(orderId, event.customerId, event.orderTotal, event.auditEntry), LoggingCallback.INSTANCE)
+    @EndSaga
+    @SagaEventHandler(associationProperty = "orderId")
+    internal fun on(event: CustomerNotFoundForOrderInternalEvent) = commandGateway.send(MarkCustomerOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: CustomerNotFoundForOrderEvent) = commandGateway.send(MarkCustomerOrderAsRejectedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
+    internal fun on(event: OrderValidatedWithSuccessByCustomerInternalEvent) = commandGateway.send(MarkCustomerOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithSuccessByCustomerEvent) = commandGateway.send(MarkCustomerOrderAsCreatedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
-
-    @EndSaga
-    @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithErrorByCustomerEvent) = commandGateway.send(MarkCustomerOrderAsRejectedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
+    internal fun on(event: OrderValidatedWithErrorByCustomerInternalEvent) = commandGateway.send(MarkCustomerOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 }

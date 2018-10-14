@@ -24,28 +24,34 @@ class RestaurantOrderSaga {
     private lateinit var commandGateway: CommandGateway
     private lateinit var orderId: String
 
+    /**
+     * Start saga on external/public event [RestaurantOrderCreationRequestedEvent]. This event can be published from another component/bounded context
+     */
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: RestaurantOrderCreationRequestedEvent) {
+    internal fun on(event: RestaurantOrderCreationRequestedEvent) = commandGateway.send(CreateRestaurantOrderCommand(event.aggregateIdentifier, event.orderDetails, event.restaurantId, event.auditEntry), LoggingCallback.INSTANCE)
+
+    /**
+     * Start saga on internal event [RestaurantOrderCreationInitiatedInternalEvent]. This event can be published from this component/bounded context only, as a result of a public [CreateRestaurantOrderCommand] command
+     */
+    @StartSaga
+    @SagaEventHandler(associationProperty = "aggregateIdentifier")
+    internal fun on(event: RestaurantOrderCreationInitiatedInternalEvent) {
         orderId = event.aggregateIdentifier
         associateWith("orderId", orderId)
-        val command = CreateRestaurantOrderCommand(event.aggregateIdentifier, event.orderDetails, event.restaurantId, event.auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
+        commandGateway.send(ValidateOrderByRestaurantInternalCommand(orderId, event.restaurantId, event.orderDetails.lineItems, event.auditEntry), LoggingCallback.INSTANCE)
     }
 
-    @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: RestaurantOrderCreationInitiatedEvent) = commandGateway.send(ValidateOrderByRestaurantCommand(orderId, event.restaurantId, event.orderDetails.lineItems, event.auditEntry), LoggingCallback.INSTANCE)
+    @EndSaga
+    @SagaEventHandler(associationProperty = "orderId")
+    internal fun on(event: RestaurantNotFoundForOrderInternalEvent) = commandGateway.send(MarkRestaurantOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: RestaurantNotFoundForOrderEvent) = commandGateway.send(MarkRestaurantOrderAsRejectedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
+    internal fun on(event: OrderValidatedWithSuccessByRestaurantInternalEvent) = commandGateway.send(MarkRestaurantOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithSuccessByRestaurantEvent) = commandGateway.send(MarkRestaurantOrderAsCreatedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
-
-    @EndSaga
-    @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithErrorByRestaurantEvent) = commandGateway.send(MarkRestaurantOrderAsRejectedCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
+    internal fun on(event: OrderValidatedWithErrorByRestaurantInternalEvent) = commandGateway.send(MarkRestaurantOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
 }

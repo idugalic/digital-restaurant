@@ -30,11 +30,11 @@ internal class CustomerOrder {
 
     @CommandHandler
     constructor(command: CreateCustomerOrderCommand) {
-        apply(CustomerOrderCreationInitiatedEvent(command.orderTotal, command.customerId, command.targetAggregateIdentifier, command.auditEntry))
+        apply(CustomerOrderCreationInitiatedInternalEvent(command.orderTotal, command.customerId, command.targetAggregateIdentifier, command.auditEntry))
     }
 
     @EventSourcingHandler
-    fun on(event: CustomerOrderCreationInitiatedEvent) {
+    fun on(event: CustomerOrderCreationInitiatedInternalEvent) {
         this.id = event.aggregateIdentifier
         this.customerId = event.customerId
         this.orderTotal = event.orderTotal
@@ -42,7 +42,7 @@ internal class CustomerOrder {
     }
 
     @CommandHandler
-    fun markOrderAsCreated(command: MarkCustomerOrderAsCreatedCommand) {
+    fun markOrderAsCreated(command: MarkCustomerOrderAsCreatedInternalCommand) {
         if (CustomerOrderState.CREATE_PENDING == state) {
             apply(CustomerOrderCreatedEvent(command.targetAggregateIdentifier, command.auditEntry))
         } else {
@@ -57,7 +57,7 @@ internal class CustomerOrder {
     }
 
     @CommandHandler
-    fun markOrderAsRejected(command: MarkCustomerOrderAsRejectedCommand) {
+    fun markOrderAsRejected(command: MarkCustomerOrderAsRejectedInternalCommand) {
         if (CustomerOrderState.CREATE_PENDING == state) {
             apply(CustomerOrderRejectedEvent(command.targetAggregateIdentifier, command.auditEntry))
         } else {

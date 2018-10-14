@@ -57,10 +57,10 @@ internal class Customer {
 
     fun validateOrder(orderId: String, orderTotal: Money, auditEntry: AuditEntry) {
         if (orderTotal.isGreaterThanOrEqual(orderLimit)) {
-            apply(OrderValidatedWithErrorByCustomerEvent(id, orderId, orderTotal, auditEntry))
+            apply(OrderValidatedWithErrorByCustomerInternalEvent(id, orderId, orderTotal, auditEntry))
 
         } else {
-            apply(OrderValidatedWithSuccessByCustomerEvent(id, orderId, orderTotal, auditEntry))
+            apply(OrderValidatedWithSuccessByCustomerInternalEvent(id, orderId, orderTotal, auditEntry))
         }
     }
 

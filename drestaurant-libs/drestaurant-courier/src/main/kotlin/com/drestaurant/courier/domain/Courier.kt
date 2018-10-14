@@ -62,10 +62,10 @@ internal class Courier {
 
     fun validateOrder(orderId: String, auditEntry: AuditEntry) {
         if (numberOfActiveOrders + 1 > maxNumberOfActiveOrders) {
-            apply(OrderValidatedWithErrorByCourierEvent(id, orderId, auditEntry))
+            apply(OrderValidatedWithErrorByCourierInternalEvent(id, orderId, auditEntry))
 
         } else {
-            apply(OrderValidatedWithSuccessByCourierEvent(id, orderId, auditEntry))
+            apply(OrderValidatedWithSuccessByCourierInternalEvent(id, orderId, auditEntry))
         }
     }
 

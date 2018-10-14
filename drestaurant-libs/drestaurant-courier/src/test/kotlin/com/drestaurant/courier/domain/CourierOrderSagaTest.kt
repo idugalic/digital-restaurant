@@ -40,39 +40,49 @@ class CourierOrderSagaTest {
 
         testFixture.givenAggregate(orderId)
                 .published(CourierOrderCreationRequestedEvent(orderId, auditEntry))
-                .whenPublishingA(CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry))
+                .whenPublishingA(CourierOrderAssigningInitiatedInternalEvent(courierId, orderId, auditEntry))
                 .expectActiveSagas(1)
-                .expectDispatchedCommands(ValidateOrderByCourierCommand(orderId, courierId, auditEntry))
+                .expectDispatchedCommands(ValidateOrderByCourierInternalCommand(orderId, courierId, auditEntry))
+    }
+
+    @Test
+    fun courierOrderAssigningInitiatedTest2() {
+
+        testFixture.givenNoPriorActivity()
+                .whenAggregate(orderId)
+                .publishes(CourierOrderAssigningInitiatedInternalEvent(courierId, orderId, auditEntry))
+                .expectActiveSagas(1)
+                .expectDispatchedCommands(ValidateOrderByCourierInternalCommand(orderId, courierId, auditEntry))
     }
 
     @Test
     fun courierNotFoundTest() {
 
         testFixture.givenAggregate(orderId)
-                .published(CourierOrderCreationRequestedEvent(orderId, auditEntry), CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry))
-                .whenPublishingA(CourierNotFoundForOrderEvent(courierId, orderId, auditEntry))
+                .published(CourierOrderCreationRequestedEvent(orderId, auditEntry), CourierOrderAssigningInitiatedInternalEvent(courierId, orderId, auditEntry))
+                .whenPublishingA(CourierNotFoundForOrderInternalEvent(courierId, orderId, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkCourierOrderAsNotAssignedCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkCourierOrderAsNotAssignedInternalCommand(orderId, auditEntry))
     }
 
     @Test
     fun orderValidatedWithErrorByCourierTest() {
 
         testFixture.givenAggregate(orderId)
-                .published(CourierOrderCreationRequestedEvent(orderId, auditEntry), CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry))
-                .whenPublishingA(OrderValidatedWithErrorByCourierEvent(courierId, orderId, auditEntry))
+                .published(CourierOrderCreationRequestedEvent(orderId, auditEntry), CourierOrderAssigningInitiatedInternalEvent(courierId, orderId, auditEntry))
+                .whenPublishingA(OrderValidatedWithErrorByCourierInternalEvent(courierId, orderId, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkCourierOrderAsNotAssignedCommand(orderId, auditEntry))
+                .expectDispatchedCommands(MarkCourierOrderAsNotAssignedInternalCommand(orderId, auditEntry))
     }
 
     @Test
     fun orderValidatedWithSuccessByCourierTest() {
 
         testFixture.givenAggregate(orderId)
-                .published(CourierOrderCreationRequestedEvent(orderId, auditEntry), CourierOrderAssigningInitiatedEvent(courierId, orderId, auditEntry))
-                .whenPublishingA(OrderValidatedWithSuccessByCourierEvent(courierId, orderId, auditEntry))
+                .published(CourierOrderCreationRequestedEvent(orderId, auditEntry), CourierOrderAssigningInitiatedInternalEvent(courierId, orderId, auditEntry))
+                .whenPublishingA(OrderValidatedWithSuccessByCourierInternalEvent(courierId, orderId, auditEntry))
                 .expectActiveSagas(0)
-                .expectDispatchedCommands(MarkCourierOrderAsAssignedCommand(orderId, courierId, auditEntry))
+                .expectDispatchedCommands(MarkCourierOrderAsAssignedInternalCommand(orderId, courierId, auditEntry))
     }
 
 }
