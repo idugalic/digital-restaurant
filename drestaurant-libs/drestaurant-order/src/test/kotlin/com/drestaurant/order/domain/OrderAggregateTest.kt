@@ -3,7 +3,6 @@ package com.drestaurant.order.domain
 import com.drestaurant.common.domain.model.AuditEntry
 import com.drestaurant.common.domain.model.Money
 import com.drestaurant.order.domain.api.*
-import com.drestaurant.order.domain.api.OrderCreationInitiatedEvent
 import com.drestaurant.order.domain.model.OrderDetails
 import com.drestaurant.order.domain.model.OrderInfo
 import com.drestaurant.order.domain.model.OrderLineItem

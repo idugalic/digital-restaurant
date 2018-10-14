@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull
 /**
  * This command is used to construct/hire a courier
  */
-class CreateCourierCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, @field:NotNull @field:Valid val name: PersonName, val maxNumberOfActiveOrders: Int, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
+class CreateCourierCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, @field:Valid val name: PersonName, val maxNumberOfActiveOrders: Int, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
 
     constructor(name: PersonName, maxNumberOfActiveOrders: Int, auditEntry: AuditEntry) : this(UUID.randomUUID().toString(), name, maxNumberOfActiveOrders, auditEntry)
 }
@@ -21,7 +21,7 @@ class CreateCourierCommand(@TargetAggregateIdentifier val targetAggregateIdentif
  */
 class CreateCourierOrderCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
 
-    constructor(auditEntry: AuditEntry) : this(UUID.randomUUID().toString(), auditEntry) {}
+    constructor(auditEntry: AuditEntry) : this(UUID.randomUUID().toString(), auditEntry)
 }
 
 /**

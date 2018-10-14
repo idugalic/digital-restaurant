@@ -21,10 +21,10 @@ class CourierOrderSaga {
 
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    fun handle(event: CourierOrderCreationRequestedEvent) {
+    fun on(event: CourierOrderCreationRequestedEvent) {
         orderId = event.aggregateIdentifier
         associateWith("orderId", orderId)
-        val command = CreateCourierOrderCommand(event.aggregateIdentifier, event.auditEntry)
+        val command = CreateCourierOrderCommand(orderId, event.auditEntry)
         commandGateway.send(command, LoggingCallback.INSTANCE)
     }
 

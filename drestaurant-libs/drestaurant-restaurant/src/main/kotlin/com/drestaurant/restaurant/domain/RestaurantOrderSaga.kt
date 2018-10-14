@@ -21,7 +21,7 @@ class RestaurantOrderSaga {
 
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    fun handle(event: RestaurantOrderCreationRequestedEvent) {
+    fun on(event: RestaurantOrderCreationRequestedEvent) {
         orderId = event.aggregateIdentifier
         associateWith("orderId", orderId)
         val command = CreateRestaurantOrderCommand(event.aggregateIdentifier, event.orderDetails, event.restaurantId, event.auditEntry)

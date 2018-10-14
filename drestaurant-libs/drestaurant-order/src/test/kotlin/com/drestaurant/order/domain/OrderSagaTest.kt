@@ -7,7 +7,6 @@ import com.drestaurant.courier.domain.api.CourierOrderDeliveredEvent
 import com.drestaurant.customer.domain.api.CustomerOrderCreatedEvent
 import com.drestaurant.customer.domain.api.CustomerOrderRejectedEvent
 import com.drestaurant.order.domain.api.*
-import com.drestaurant.order.domain.api.OrderCreationInitiatedEvent
 import com.drestaurant.order.domain.model.OrderDetails
 import com.drestaurant.order.domain.model.OrderInfo
 import com.drestaurant.order.domain.model.OrderLineItem
@@ -99,7 +98,7 @@ class OrderSagaTest {
                         CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry)
                 )
-                .whenPublishingA(RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId,"restaurantOrder_" + orderId, auditEntry))
+                .whenPublishingA(RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId, "restaurantOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
                 .expectDispatchedCommands(MarkOrderAsVerifiedByRestaurantCommand(orderId, restaurantId, auditEntry))
     }
@@ -112,7 +111,7 @@ class OrderSagaTest {
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
                         CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId,"restaurantOrder_" + orderId, auditEntry)
+                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId, "restaurantOrder_" + orderId, auditEntry)
                 )
                 .whenPublishingA(RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry))
                 .expectActiveSagas(1)
@@ -127,7 +126,7 @@ class OrderSagaTest {
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
                         CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId,"restaurantOrder_" + orderId, auditEntry),
+                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId, "restaurantOrder_" + orderId, auditEntry),
                         RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry)
                 )
                 .whenPublishingA(OrderPreparedEvent(orderId, auditEntry))
@@ -143,7 +142,7 @@ class OrderSagaTest {
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
                         CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId,"restaurantOrder_" + orderId, auditEntry),
+                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId, "restaurantOrder_" + orderId, auditEntry),
                         RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry),
                         OrderPreparedEvent(orderId, auditEntry)
                 )
@@ -160,7 +159,7 @@ class OrderSagaTest {
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
                         CustomerOrderCreatedEvent("customerOrder_" + orderId, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId,"restaurantOrder_" + orderId, auditEntry),
+                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId, "restaurantOrder_" + orderId, auditEntry),
                         RestaurantOrderPreparedEvent("restaurantOrder_" + orderId, auditEntry),
                         OrderPreparedEvent(orderId, auditEntry),
                         CourierOrderCreatedEvent("courierOrder_" + orderId, auditEntry)
