@@ -31,7 +31,7 @@ Subdomains are identified using the same approach as identifying business capabi
 The end result is very likely to be subdomains that are similar to the business capabilities.
 Each sub-domain model belongs to exactly one bounded context.
 
-![](digital-restaurant.png)
+![](../digital-restaurant.png)
 
 ### Core subdomains
 
@@ -52,7 +52,7 @@ The [Order](https://github.com/idugalic/digital-restaurant/tree/master/drestaura
 
  - We must maintain consistency between these different 'order' aggregates in different components/domains. For example, once the Order component has initiated order creation it must trigger the creation of RestaurantOrder in the Restaurant component. We will [maintain consistency between components/bounded-context using sagas](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/OrderSaga.kt).
 
-![](digital-restaurant-state-machine.png)
+![](../digital-restaurant-state-machine.png)
 
 #### Event sourcing
 
