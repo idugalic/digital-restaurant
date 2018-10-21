@@ -8,8 +8,8 @@ import com.drestaurant.query.FindCustomerQuery
 import com.drestaurant.query.model.CustomerEntity
 import com.drestaurant.query.repository.CustomerRepository
 import org.axonframework.commandhandling.gateway.CommandGateway
+import org.axonframework.messaging.responsetypes.ResponseTypes
 import org.axonframework.queryhandling.QueryGateway
-import org.axonframework.queryhandling.responsetypes.ResponseTypes
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks
 import org.springframework.http.MediaType

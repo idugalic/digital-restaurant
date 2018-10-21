@@ -12,9 +12,9 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
  - we distribute events between them via RabbitMQ
  - and we distribute commands (Command Bus) by Spring Cloud discovery and registry service (Eureka) 
  
-#### RabbitMQ
+#### RabbitMQ & event messages
 
-RabbitMQ is the most popular open source message broker.
+RabbitMQ is the most popular open source message broker. It is used to route and distribute `events`.
 It supports several messaging protocols, directly and through the use of plugins:
 
  - AMQP
@@ -31,6 +31,13 @@ This queues are bind to one common exchange (`events.fanout.exchange`).
 
 RabbitMQ allows more sophisticated message routing then Apache Kafka can offer.
 Having one exchange bind to every service queue covered our scenario, but you can do more if you like.
+
+#### Spring Cloud connector & command messages
+
+The [Spring Cloud connector](https://docs.axoniq.io/reference-guide/1.3-infrastructure-components/command-dispatching#spring-cloud-connector) setup uses the service registration and discovery mechanism described by Spring Cloud for distributing the command bus (`commands`).
+You are thus left free to choose which Spring Cloud implementation to use to distribute your commands.
+An example implementation is the Eureka Discovery/Eureka Server combination.
+
 
 #### Restaurant management
 
@@ -168,23 +175,22 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 - [Kotlin][kotlin]
 
 ### Frameworks and Platforms
-- [Spring (spring boot, spring cloud, spring data, spring data rest)][spring]
-- [Axonframework (eventsourcing, CQRS)][axonframework]
+- [Spring (SpringBoot, SpringCloud, SpringData, SpringDataRest)][spring]
+- [AxonFramework][axonframework]
 
 ### Continuous Integration and Delivery 
 - Travis
 
-### Infrastructure
-- [H2, MySQL (event store, materialized views)][mysql]
+### Infrastructure and Platform (As A Service)
+- [H2 - java SQL databse][h2]
 - [RabbitMQ][rabbitMQ]
-
- 
 
 [mvn]: https://maven.apache.org/
 [kotlin]: https://kotlinlang.org/
 [spring]: https://spring.io/
 [axonframework]: https://axoniq.io/
 [mysql]: https://www.mysql.com/
+[h2]: http://h2database.com/html/main.html
 [rabbitMQ]: https://www.rabbitmq.com/
 [kafka]: https://kafka.apache.org/
 [pivotalCF]: https://run.pivotal.io/

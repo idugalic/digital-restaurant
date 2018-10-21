@@ -24,15 +24,17 @@ We have created more 'web' applications (standalone Spring Boot applications) to
     - we don't synchronize on the backend
     - we provide WebSockets for the frontend to handle async nature of the backend
     - we use Apache Kafka to distribute events between services
+    - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
  - [Microservices 2](#microservices-2-rest-rabbitmq)
     - **REST API** by not segregating Command and Query
     - we synchronize on the backend side
     - we use RabbitMQ to distribute events between services (bounded contexts)
+    - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
  - [Microservices 3](#microservices-3-websockets-axondb-and-axonhub)
     - **WebSockets API**
     - we are async all the way
-    - we use [AxonHub](https://axoniq.io/product-overview/axonhub) to distribute events/messages between services
-      
+    - we use [AxonServer](https://axoniq.io/product-overview/axon-server) to route and distribute all type of messages (commands, events, queries) between services (bounded contexts)
+          
 ### Monolith 1 (HTTP and WebSockets API by segregating Command and Query)
 
 Source code: [https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith)
@@ -265,8 +267,7 @@ $ mvn spring-boot:run
 ```
 ### Run microservices 3 (Websockets, AxonDB and AxonHub)
 
-[AxonHub](https://axoniq.io/product-overview/axonhub) and [AxonDB](https://axoniq.io/product-overview/axondb) are required.
-Developer editions are available for free, and you should have them up and running before you start the services.
+[AxonServer](https://axoniq.io/product-overview/axon-server) is required.
 
 ```bash
 $ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-websockets/drestaurant-microservices-websockets-comand-courier
@@ -293,31 +294,31 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 
 ### Frameworks and Platforms
 - [Spring (spring boot, spring cloud, spring data, spring data rest)][spring]
-- [Axonframework (eventsourcing, CQRS)][axonframework]
+- [Axon][axonframework]
 
 ### Continuous Integration and Delivery 
 - Travis
 
 ### Infrastructure and Platform (As A Service)
-- [H2, MySQL (event store, materialized views)][mysql]
+- [H2 - java SQL database][h2]
 - [Apache Kafka][kafka]
 - [RabbitMQ][rabbitMQ]
+- [AxonServer](https://axoniq.io/product-overview/axon-server)
 
 ## References and further reading
-**Inspired by the book "Microservices Patterns" - Chris Richardson**
 
   - https://github.com/microservice-patterns/ftgo-application
   - https://docs.axonframework.org/
   - https://spring.io/blog/2018/04/11/event-storming-and-spring-with-a-splash-of-ddd
   - http://www.codingthearchitecture.com/2016/04/25/layers_hexagons_features_and_components.html
-  
- 
+
 
 [mvn]: https://maven.apache.org/
 [kotlin]: https://kotlinlang.org/
 [spring]: https://spring.io/
 [axonframework]: https://axoniq.io/
 [mysql]: https://www.mysql.com/
+[h2]: http://h2database.com/html/main.html
 [rabbitMQ]: https://www.rabbitmq.com/
 [kafka]: https://kafka.apache.org/
 [pivotalCF]: https://run.pivotal.io/

@@ -1,10 +1,11 @@
 package com.drestaurant.restaurant.domain
 
 import org.axonframework.commandhandling.CommandHandler
-import org.axonframework.commandhandling.model.AggregateNotFoundException
-import org.axonframework.commandhandling.model.Repository
+
 import org.axonframework.eventhandling.EventBus
 import org.axonframework.eventhandling.GenericEventMessage.asEventMessage
+import org.axonframework.modelling.command.AggregateNotFoundException
+import org.axonframework.modelling.command.Repository
 
 internal open class RestaurantCommandHandler(private val repository: Repository<Restaurant>, private val eventBus: EventBus) {
 

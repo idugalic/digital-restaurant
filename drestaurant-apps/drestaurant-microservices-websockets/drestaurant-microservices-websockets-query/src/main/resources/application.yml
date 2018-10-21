@@ -12,6 +12,7 @@ spring:
     console:
       enabled: true
       path: /h2-console
+#All processros are 'tracking' by default, you can remove this!
 axon:
   eventhandling:
     processors:
@@ -27,7 +28,5 @@ axon:
         mode: tracking
       restaurantorder:
         mode: tracking
-axoniq:
-  axonhub:
-    servers: localhost
+
 

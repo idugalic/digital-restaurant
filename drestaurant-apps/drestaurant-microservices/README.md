@@ -12,9 +12,9 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
  - we distribute events between them via Apache Kafka (we do not use Kafka as event(sourcing) store)
  - and we distribute commands (Command Bus) by Spring Cloud discovery and registry service (Eureka) 
  
-#### Apache Kafka
+#### Apache Kafka & event messages
 
-Apache Kafka is a distributed streaming platform.
+Apache Kafka is a distributed streaming platform. It is used to route and distribute `events`.
 
 ##### Order of events (kafka topics & partitions)
 
@@ -36,6 +36,12 @@ When multiple consumer groups exist, the flow of the data consumption model alig
 **The messages are broadcast to all consumer groups.**
 
 We [configured our (micro)services](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-microservices/drestaurant-microservices-command-customer/src/main/resources/application.yml) to use publish-subscribe model, by setting unique consumer group id for each (micro)service.
+
+#### Spring Cloud connector & command messages
+
+The [Spring Cloud connector](https://docs.axoniq.io/reference-guide/1.3-infrastructure-components/command-dispatching#spring-cloud-connector) setup uses the service registration and discovery mechanism described by Spring Cloud for distributing the command bus (`commands`).
+You are thus left free to choose which Spring Cloud implementation to use to distribute your commands.
+An example implementation is the Eureka Discovery/Eureka Server combination.
 
  
 #### 'Command' HTTP API
@@ -167,16 +173,15 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 - [Kotlin][kotlin]
 
 ### Frameworks and Platforms
-- [Spring (spring boot, spring cloud, spring data, spring data rest)][spring]
-- [Axonframework (eventsourcing, CQRS)][axonframework]
+- [Spring (SpringBoot, SpringCloud, SpringData, SpringDataRest)][spring]
+- [AxonFramework][axonframework]
 
 ### Continuous Integration and Delivery 
 - Travis
 
-### Infrastructure
-- [H2, MySQL (event store, materialized views)][mysql]
+### Infrastructure and Platform (As A Service)
+- [H2 - java SQL databse][h2]
 - [Apache Kafka][kafka]
-
  
 
 [mvn]: https://maven.apache.org/
@@ -184,6 +189,7 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 [spring]: https://spring.io/
 [axonframework]: https://axoniq.io/
 [mysql]: https://www.mysql.com/
+[h2]: http://h2database.com/html/main.html
 [rabbitMQ]: https://www.rabbitmq.com/
 [kafka]: https://kafka.apache.org/
 [pivotalCF]: https://run.pivotal.io/

@@ -12,8 +12,8 @@ import com.drestaurant.query.model.CourierEntity
 import com.drestaurant.query.model.CourierOrderEntity
 import com.drestaurant.query.repository.CourierRepository
 import org.axonframework.commandhandling.gateway.CommandGateway
+import org.axonframework.messaging.responsetypes.ResponseTypes
 import org.axonframework.queryhandling.QueryGateway
-import org.axonframework.queryhandling.responsetypes.ResponseTypes
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks
 import org.springframework.http.MediaType

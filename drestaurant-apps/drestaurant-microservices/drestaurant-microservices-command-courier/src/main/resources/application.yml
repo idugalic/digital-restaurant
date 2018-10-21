@@ -29,7 +29,13 @@ axon:
       group-id: courier-command-group
       bootstrap-servers: localhost:9092
   distributed:
-    spring-cloud:
-      fallback-to-http-get: false
     enabled: true
+  serializer:
+    messages: xstream
+  eventhandling:
+    processors:
+      courierordersaga:
+        mode: tracking
+        source: kafkaMessageSource
+
 

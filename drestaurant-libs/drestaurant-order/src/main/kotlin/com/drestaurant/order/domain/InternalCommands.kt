@@ -2,7 +2,7 @@ package com.drestaurant.order.domain
 
 import com.drestaurant.common.domain.command.AuditableAbstractCommand
 import com.drestaurant.common.domain.model.AuditEntry
-import org.axonframework.commandhandling.TargetAggregateIdentifier
+import org.axonframework.modelling.command.TargetAggregateIdentifier
 
 /**
  * Internal commands, scoped to 'order' bounded context only

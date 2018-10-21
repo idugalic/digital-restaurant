@@ -12,11 +12,10 @@ import com.drestaurant.restaurant.domain.model.RestaurantOrderState
 import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.AllowReplay
 import org.axonframework.eventhandling.EventHandler
-import org.axonframework.eventsourcing.SequenceNumber
+import org.axonframework.eventhandling.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
 import org.axonframework.queryhandling.QueryUpdateEmitter
 import org.springframework.stereotype.Component
-import java.lang.UnsupportedOperationException
 
 @Component
 @ProcessingGroup("restaurant")

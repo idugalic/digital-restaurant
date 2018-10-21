@@ -41,7 +41,7 @@ class CommandController(private val commandGateway: CommandGateway) {
         }
         val orderInfo = OrderInfo(request.customerId!!, request.restaurantId!!, lineItems)
         val command = CreateOrderCommand(orderInfo, auditEntry)
-        commandGateway.send(command, LoggingCallback.INSTANCE)
+        commandGateway.sendAndWait<CreateOrderCommand>(command)
     }
 }
 

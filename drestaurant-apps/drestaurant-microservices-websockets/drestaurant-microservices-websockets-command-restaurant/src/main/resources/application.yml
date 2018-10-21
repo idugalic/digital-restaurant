@@ -9,7 +9,3 @@ axon:
       treshold:
         restaurant: 100
         restaurantorder: 100
-
-axoniq:
-  axonhub:
-    servers: localhost

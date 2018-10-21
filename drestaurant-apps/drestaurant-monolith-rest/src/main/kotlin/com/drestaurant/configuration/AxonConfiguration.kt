@@ -25,18 +25,4 @@ class AxonConfiguration {
     /* Domain event snapshot configuration */
     @Bean
     fun snapshotterFactoryBean() = SpringAggregateSnapshotterFactoryBean()
-
-    /* Saga configuration */
-    @Bean
-    fun courierOrderSagaConfiguration() = SagaConfiguration.trackingSagaManager<CourierOrderSaga>(CourierOrderSaga::class.java).configureTrackingProcessor { TrackingEventProcessorConfiguration.forParallelProcessing(1) }
-
-    @Bean
-    fun customerOrderSagaConfiguration() = SagaConfiguration.trackingSagaManager<CustomerOrderSaga>(CustomerOrderSaga::class.java).configureTrackingProcessor { TrackingEventProcessorConfiguration.forParallelProcessing(1) }
-
-    @Bean
-    fun restaurantOrderSagaConfiguration() = SagaConfiguration.trackingSagaManager<RestaurantOrderSaga>(RestaurantOrderSaga::class.java).configureTrackingProcessor { TrackingEventProcessorConfiguration.forParallelProcessing(1) }
-
-    @Bean
-    fun orderSagaConfiguration() = SagaConfiguration.trackingSagaManager<OrderSaga>(OrderSaga::class.java).configureTrackingProcessor { TrackingEventProcessorConfiguration.forParallelProcessing(1) }
-
 }

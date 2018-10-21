@@ -7,108 +7,109 @@ Customers use the website application to place food orders at local restaurants.
 
 ## Table of Contents
 
-* [Domain layer](#domain-layer)
-   * [Core subdomains](#core-subdomains)
-      * [Event sourcing](#event-sourcing)
-      * [Snapshoting](#snapshoting)
-   * [Generic subdomains](#generic-subdomains)
-   * [Organisation vs encapsulation](#organisation-vs-encapsulation)
-* [Application/s layer](#applications-layer)
-   * [Monolith 1 (HTTP and WebSockets API by segregating Command and Query)](#monolith-1-http-and-websockets-api-by-segregating-command-and-query)
-      * ['Command' HTTP API](#command-http-api)
-         * [Create new Restaurant](#create-new-restaurant)
-         * [Create/Register new Customer](#createregister-new-customer)
-         * [Create/Hire new Courier](#createhire-new-courier)
-         * [Create/Place the Order](#createplace-the-order)
-         * [Restaurant marks the Order as prepared](#restaurant-marks-the-order-as-prepared)
-         * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared)
-         * [Courier marks the Order as delivered](#courier-marks-the-order-as-delivered)
-      * ['Query' HTTP API](#query-http-api)
-      * [Administration](#administration)
-         * [Read all event processors](#read-all-event-processors)
-         * [Event processors reset](#event-processors-reset)
-         * [Event processor status](#event-processor-status)
-      * [WebSocket (STOMP) API](#websocket-stomp-api)
-   * [Monolith 2 (REST API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
-      * [Restaurant management](#restaurant-management)
-         * [Read all restaurants](#read-all-restaurants)
-         * [Create new restaurant](#create-new-restaurant-1)
-         * [Mark restaurant order as prepared](#mark-restaurant-order-as-prepared)
-      * [Customer management](#customer-management)
-         * [Read all customers](#read-all-customers)
-         * [Create/Register new Customer](#createregister-new-customer-1)
-      * [Courier management](#courier-management)
-         * [Read all couriers](#read-all-couriers)
-         * [Create/Hire new Courier](#createhire-new-courier-1)
-         * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared-1)
-         * [Courier marks the order as delivered](#courier-marks-the-order-as-delivered-1)
-      * [Order management](#order-management)
-         * [Read all orders](#read-all-orders)
-         * [Create/Place the Order](#createplace-the-order-1)
-      * [Administration](#administration-1)
-         * [Read all event processors](#read-all-event-processors-1)
-         * [Event processors reset](#event-processors-reset-1)
-         * [Event processor status](#event-processor-status-1)
-   * [Monolith 3 (STOMP over WebSockets API. We are async all the way)](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
-      * [STOMP over WebSockets API](#stomp-over-websockets-api)
-         * [Topics:](#topics)
-         * [Message endpoints:](#message-endpoints)
-   * [Microservices 1 (HTTP, Websockets, Apache Kafka)](#microservices-1-http-websockets-apache-kafka)
-      * [Apache Kafka](#apache-kafka)
-         * [Order of events (kafka topics &amp; partitions)](#order-of-events-kafka-topics--partitions)
-         * [Queue vs publish-subscribe (kafka groups)](#queue-vs-publish-subscribe-kafka-groups)
-      * ['Command' HTTP API](#command-http-api-1)
-         * [Create new Restaurant](#create-new-restaurant-2)
-         * [Create/Register new Customer](#createregister-new-customer-2)
-         * [Create/Hire new Courier](#createhire-new-courier-2)
-         * [Create/Place the Order](#createplace-the-order-2)
-         * [Restaurant marks the Order as prepared](#restaurant-marks-the-order-as-prepared-1)
-         * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared-2)
-         * [Courier marks the Order as delivered](#courier-marks-the-order-as-delivered-2)
-      * ['Query' HTTP API](#query-http-api-1)
-   * [Microservices 2 (REST, RabbitMQ)](#microservices-2-rest-rabbitmq)
-      * [RabbitMQ](#rabbitmq)
-         * [Publish-subscribe](#publish-subscribe)
-      * [Restaurant management](#restaurant-management-1)
-         * [Read all restaurants](#read-all-restaurants-1)
-         * [Create new restaurant](#create-new-restaurant-3)
-         * [Mark restaurant order as prepared](#mark-restaurant-order-as-prepared-1)
-      * [Customer management](#customer-management-1)
-         * [Read all customers](#read-all-customers-1)
-         * [Create/Register new Customer](#createregister-new-customer-3)
-      * [Courier management](#courier-management-1)
-         * [Read all couriers](#read-all-couriers-1)
-         * [Create/Hire new Courier](#createhire-new-courier-3)
-         * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared-3)
-         * [Courier marks the order as delivered](#courier-marks-the-order-as-delivered-3)
-      * [Order management](#order-management-1)
-         * [Read all orders](#read-all-orders-1)
-         * [Create/Place the Order](#createplace-the-order-3)
-   * [Microservices 3 (Websockets, AxonDB and AxonHub)](#microservices-3-websockets-axondb-and-axonhub)
-      * [AxonHub](#axonhub)
-      * [AxonDB](#axondb)
-      * [STOMP over WebSockets API](#stomp-over-websockets-api-1)
-         * [Customer (command side)](#customer-command-side)
-         * [Courier (command side)](#courier-command-side)
-         * [Restaurant (command side)](#restaurant-command-side)
-         * [Order (command side)](#order-command-side)
-         * [Query side](#query-side)
-* [Development](#development)
-   * [Clone](#clone)
-   * [Build](#build)
-   * [Run monolith 1 (HTTP and WebSockets API by segregating Command and Query)](#run-monolith-1-http-and-websockets-api-by-segregating-command-and-query)
-   * [Run monolith 2 (REST API by not segregating Command and Query)](#run-monolith-2-rest-api-by-not-segregating-command-and-query)
-   * [Run monolith 3 (STOMP over WebSockets API. We are async all the way)](#run-monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
-   * [Run microservices 1 (HTTP, Websockets, Apache Kafka)](#run-microservices-1-http-websockets-apache-kafka)
-   * [Run microservices 2 (REST, RabbitMQ)](#run-microservices-2-rest-rabbitmq)
-   * [Run microservices 3 (Websockets, AxonDB and AxonHub)](#run-microservices-3-websockets-axondb-and-axonhub)
-* [Continuous delivery](#continuous-delivery)
-* [Technology](#technology)
-   * [Language](#language)
-   * [Frameworks and Platforms](#frameworks-and-platforms)
-   * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
-   * [Infrastructure and Platform (As A Service)](#infrastructure-and-platform-as-a-service)
-* [References and further reading](#references-and-further-reading)
+  * [Domain layer](#domain-layer)
+     * [Core subdomains](#core-subdomains)
+        * [Event sourcing](#event-sourcing)
+        * [Snapshoting](#snapshoting)
+     * [Generic subdomains](#generic-subdomains)
+     * [Organisation vs encapsulation](#organisation-vs-encapsulation)
+  * [Application/s layer](#applications-layer)
+     * [Monolith 1 (HTTP and WebSockets API by segregating Command and Query)](#monolith-1-http-and-websockets-api-by-segregating-command-and-query)
+        * ['Command' HTTP API](#command-http-api)
+           * [Create new Restaurant](#create-new-restaurant)
+           * [Create/Register new Customer](#createregister-new-customer)
+           * [Create/Hire new Courier](#createhire-new-courier)
+           * [Create/Place the Order](#createplace-the-order)
+           * [Restaurant marks the Order as prepared](#restaurant-marks-the-order-as-prepared)
+           * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared)
+           * [Courier marks the Order as delivered](#courier-marks-the-order-as-delivered)
+        * ['Query' HTTP API](#query-http-api)
+        * [Administration](#administration)
+           * [Read all event processors](#read-all-event-processors)
+           * [Event processors reset](#event-processors-reset)
+           * [Event processor status](#event-processor-status)
+        * [WebSocket (STOMP) API](#websocket-stomp-api)
+     * [Monolith 2 (REST API by not segregating Command and Query)](#monolith-2-rest-api-by-not-segregating-command-and-query)
+        * [Restaurant management](#restaurant-management)
+           * [Read all restaurants](#read-all-restaurants)
+           * [Create new restaurant](#create-new-restaurant-1)
+           * [Mark restaurant order as prepared](#mark-restaurant-order-as-prepared)
+        * [Customer management](#customer-management)
+           * [Read all customers](#read-all-customers)
+           * [Create/Register new Customer](#createregister-new-customer-1)
+        * [Courier management](#courier-management)
+           * [Read all couriers](#read-all-couriers)
+           * [Create/Hire new Courier](#createhire-new-courier-1)
+           * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared-1)
+           * [Courier marks the order as delivered](#courier-marks-the-order-as-delivered-1)
+        * [Order management](#order-management)
+           * [Read all orders](#read-all-orders)
+           * [Create/Place the Order](#createplace-the-order-1)
+        * [Administration](#administration-1)
+           * [Read all event processors](#read-all-event-processors-1)
+           * [Event processors reset](#event-processors-reset-1)
+           * [Event processor status](#event-processor-status-1)
+     * [Monolith 3 (STOMP over WebSockets API. We are async all the way)](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
+        * [STOMP over WebSockets API](#stomp-over-websockets-api)
+           * [Topics:](#topics)
+           * [Message endpoints:](#message-endpoints)
+     * [Microservices 1 (HTTP, Websockets, Apache Kafka)](#microservices-1-http-websockets-apache-kafka)
+        * [Apache Kafka &amp; event messages](#apache-kafka--event-messages)
+           * [Order of events (kafka topics &amp; partitions)](#order-of-events-kafka-topics--partitions)
+           * [Queue vs publish-subscribe (kafka groups)](#queue-vs-publish-subscribe-kafka-groups)
+        * [Spring Cloud connector &amp; command messages](#spring-cloud-connector--command-messages)
+        * ['Command' HTTP API](#command-http-api-1)
+           * [Create new Restaurant](#create-new-restaurant-2)
+           * [Create/Register new Customer](#createregister-new-customer-2)
+           * [Create/Hire new Courier](#createhire-new-courier-2)
+           * [Create/Place the Order](#createplace-the-order-2)
+           * [Restaurant marks the Order as prepared](#restaurant-marks-the-order-as-prepared-1)
+           * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared-2)
+           * [Courier marks the Order as delivered](#courier-marks-the-order-as-delivered-2)
+        * ['Query' HTTP API](#query-http-api-1)
+     * [Microservices 2 (REST, RabbitMQ)](#microservices-2-rest-rabbitmq)
+        * [RabbitMQ &amp; event messages](#rabbitmq--event-messages)
+           * [Publish-subscribe](#publish-subscribe)
+        * [Spring Cloud connector &amp; command messages](#spring-cloud-connector--command-messages-1)
+        * [Restaurant management](#restaurant-management-1)
+           * [Read all restaurants](#read-all-restaurants-1)
+           * [Create new restaurant](#create-new-restaurant-3)
+           * [Mark restaurant order as prepared](#mark-restaurant-order-as-prepared-1)
+        * [Customer management](#customer-management-1)
+           * [Read all customers](#read-all-customers-1)
+           * [Create/Register new Customer](#createregister-new-customer-3)
+        * [Courier management](#courier-management-1)
+           * [Read all couriers](#read-all-couriers-1)
+           * [Create/Hire new Courier](#createhire-new-courier-3)
+           * [Courier takes/claims the Order that is ready for delivery (prepared)](#courier-takesclaims-the-order-that-is-ready-for-delivery-prepared-3)
+           * [Courier marks the order as delivered](#courier-marks-the-order-as-delivered-3)
+        * [Order management](#order-management-1)
+           * [Read all orders](#read-all-orders-1)
+           * [Create/Place the Order](#createplace-the-order-3)
+     * [Microservices 3 (Websockets, AxonServer)](#microservices-3-websockets-axonserver)
+        * [AxonServer &amp; event messages &amp; command messages &amp; query messages](#axonserver--event-messages--command-messages--query-messages)
+        * [STOMP over WebSockets API](#stomp-over-websockets-api-1)
+           * [Customer (command side)](#customer-command-side)
+           * [Courier (command side)](#courier-command-side)
+           * [Restaurant (command side)](#restaurant-command-side)
+           * [Order (command side)](#order-command-side)
+           * [Query side](#query-side)
+  * [Development](#development)
+     * [Clone](#clone)
+     * [Build](#build)
+     * [Run monolith 1 (HTTP and WebSockets API by segregating Command and Query)](#run-monolith-1-http-and-websockets-api-by-segregating-command-and-query)
+     * [Run monolith 2 (REST API by not segregating Command and Query)](#run-monolith-2-rest-api-by-not-segregating-command-and-query)
+     * [Run monolith 3 (STOMP over WebSockets API. We are async all the way)](#run-monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
+     * [Run microservices 1 (HTTP, Websockets, Apache Kafka)](#run-microservices-1-http-websockets-apache-kafka)
+     * [Run microservices 2 (REST, RabbitMQ)](#run-microservices-2-rest-rabbitmq)
+     * [Run microservices 3 (Websockets, AxonDB and AxonHub)](#run-microservices-3-websockets-axondb-and-axonhub)
+  * [Continuous delivery](#continuous-delivery)
+  * [Technology](#technology)
+     * [Language](#language)
+     * [Frameworks and Platforms](#frameworks-and-platforms)
+     * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
+     * [Infrastructure and Platform (As A Service)](#infrastructure-and-platform-as-a-service)
+  * [References and further reading](#references-and-further-reading)
 
 
 
@@ -241,20 +242,24 @@ We have created more 'web' applications (standalone Spring Boot applications) to
 
  - [Microservices 1](#microservices-1-http-websockets-apache-kafka)
     - **HTTP and WebSockets API** by segregating Command and Query
-    - [Monolith 1](#monolith-1-http-and-websockets-api-by-segregating-command-and-query) as monolithic version
+    - [Monolith 1](#monolith-1-http-and-websockets-api-by-segregating-command-and-query) as a monolithic version
     - we don't synchronize on the backend
     - we provide WebSockets for the frontend to handle async nature of the backend
     - we use Apache Kafka to distribute events between services
+    - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
+
  - [Microservices 2](#microservices-2-rest-rabbitmq)
     - **REST API** by not segregating Command and Query
-    - [Monolith 2](#monolith-2-rest-api-by-not-segregating-command-and-query) as monolithic version
+    - [Monolith 2](#monolith-2-rest-api-by-not-segregating-command-and-query) as a monolithic version
     - we synchronize on the backend side
     - we use RabbitMQ to distribute events between services (bounded contexts)
+    - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
+    
  - [Microservices 3](#microservices-3-websockets-axondb-and-axonhub)
     - **WebSockets API**
-    - [Monolith 3](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way) as monolithic version
+    - [Monolith 3](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way) as a monolithic version
     - we are async all the way
-    - we use [AxonHub](https://axoniq.io/product-overview/axonhub) to distribute events/messages between services
+    - we use [AxonServer](https://axoniq.io/product-overview/axon-server) to route and distribute all type of messages (commands, events, queries) between services (bounded contexts)
       
 ### Monolith 1 (HTTP and WebSockets API by segregating Command and Query)
 
@@ -596,9 +601,9 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
  - and we distribute commands (Command Bus) by Spring Cloud discovery and registry service (Eureka) 
 
  
-#### Apache Kafka
+#### Apache Kafka & event messages
 
-Apache Kafka is a distributed streaming platform.
+Apache Kafka is a distributed streaming platform. It is used to route and distribute `events`.
 
 ##### Order of events (kafka topics & partitions)
 
@@ -620,6 +625,13 @@ When multiple consumer groups exist, the flow of the data consumption model alig
 **The messages are broadcast to all consumer groups.**
 
 We [configured our (micro)services](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-microservices/drestaurant-microservices-command-customer/src/main/resources/application.yml) to use publish-subscribe model, by setting unique consumer group id for each (micro)service.
+
+#### Spring Cloud connector & command messages
+
+The [Spring Cloud connector](https://docs.axoniq.io/reference-guide/1.3-infrastructure-components/command-dispatching#spring-cloud-connector) setup uses the service registration and discovery mechanism described by Spring Cloud for distributing the command bus (`commands`).
+You are thus left free to choose which Spring Cloud implementation to use to distribute your commands.
+An example implementation is the Eureka Discovery/Eureka Server combination.
+
 
 
 #### 'Command' HTTP API
@@ -713,9 +725,9 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
  - and we distribute commands (Command Bus) by Spring Cloud discovery and registry service (Eureka) 
 
  
-#### RabbitMQ
+#### RabbitMQ & event messages
 
-RabbitMQ is the most popular open source message broker.
+RabbitMQ is the most popular open source message broker. It is used to route and distribute `events`.
 It supports several messaging protocols, directly and through the use of plugins:
 
  - AMQP
@@ -733,6 +745,11 @@ This queues are bind to one common exchange (`events.fanout.exchange`).
 RabbitMQ allows more sophisticated message routing then Apache Kafka can offer.
 Having one exchange bind to every service queue covered our scenario, but you can do more if you like.
 
+#### Spring Cloud connector & command messages
+
+The [Spring Cloud connector](https://docs.axoniq.io/reference-guide/1.3-infrastructure-components/command-dispatching#spring-cloud-connector) setup uses the service registration and discovery mechanism described by Spring Cloud for distributing the command bus (`commands`).
+You are thus left free to choose which Spring Cloud implementation to use to distribute your commands.
+An example implementation is the Eureka Discovery/Eureka Server combination.
 
 #### Restaurant management
 
@@ -821,7 +838,7 @@ curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*'
 ```
  Note: Replace CUSTOMER_ID and RESTAURANT_ID with concrete values.
  
-### Microservices 3 (Websockets, AxonDB and AxonHub)
+### Microservices 3 (Websockets, AxonServer)
 
 We designed and structured our [domain components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
 and that enable us to choose different deployment strategy and decompose [Monolith 3](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way) to microservices. 
@@ -829,26 +846,35 @@ and that enable us to choose different deployment strategy and decompose [Monoli
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
 
  - has its own bounded context,
- - has shared event(sourcing) storage (AxonDB)
- - and we distribute messages (events, commands, queries) between them via AxonHub
+ - has shared event(sourcing) storage (AxonServer)
+ - and we route and distribute messages (`events`, `commands`, `queries`) between them via AxonServer
  
-#### AxonHub
+#### AxonServer & event messages & command messages & query messages
 
-[AxonHub](https://axoniq.io/product-overview/axonhub) is a messaging platform specifically built to support distributed Axon Framework applications. It is a drop in replacement for the other CommandBus, EventBus and QueryBus implementations.
-
-The key characteristics for AxonHub are:
- - Dedicated infrastructure for exchanging messages in a message-driven micro-services environment.
- - Easy-to-use and easy-to-manage
+The key characteristics of [AxonServer](https://axoniq.io/product-overview/axon-server) are:
+ - Dedicated infrastructure for exchanging three types of messages (`commands`, `events`, `queries`) in a message-driven micro-services environment
+ - Purpose-built database system optimized for the storage of event data of the type that is generated by applications that use the event sourcing architecture pattern
  - Built-in knowledge on CQRS message patterns
+ - Easy-to-use and easy-to-manage
+ 
+Both [AxonFramework](https://axoniq.io/product-overview/axon-framework) and [AxonServer](https://axoniq.io/product-overview/axon-server) form [Axon platform](https://docs.axoniq.io/reference-guide/).
 
 
-#### AxonDB
+Axon platform is end-to-end development and infrastructure platform for smoothly evolving Event-Driven microservices focused on CQRS and Event Sourcing.
 
-AxonDB is a purpose-built database system optimized for the storage of event data of the type that is generated by applications that use the event sourcing architecture pattern.
-It has been primarily designed with the use case of Axon Framework-based Java applications in mind, although there is nothing in the architecture that restricts its use to these applications only.
+AxonFramework and AxonServer are `open source`. [Axon Server Enterprise](https://axoniq.io/product-overview/axon-enterprise) is targeted towards mission-critical, medium to large scale production deployments of Axon. AxonEnterprise is not open source.
 
-AxonHub and AxonDB are commercial software products by AxonIQ B.V.
-Free 'developer' editions are available.
+Axon is integrated with Spring Boot platform. You can choose many Spring Boot starters, and start with minimal configuration.
+AxonServer is configured by default.
+
+```
+<dependency>
+    <groupId>org.axonframework</groupId>
+    <artifactId>axon-spring-boot-starter</artifactId>
+    <version>${axon.version}</version>
+</dependency>
+
+```
 
 #### STOMP over WebSockets API
 
@@ -985,8 +1011,7 @@ $ mvn spring-boot:run
 ```
 ### Run microservices 3 (Websockets, AxonDB and AxonHub)
 
-[AxonHub](https://axoniq.io/product-overview/axonhub) and [AxonDB](https://axoniq.io/product-overview/axondb) are required.
-Developer editions are available for free, and you should have them up and running before you start the services.
+[AxonServer](https://axoniq.io/product-overview/axon-server) is required.
 
 ```bash
 $ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-websockets/drestaurant-microservices-websockets-comand-courier
@@ -1012,25 +1037,24 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 - [Kotlin][kotlin]
 
 ### Frameworks and Platforms
-- [Spring (spring boot, spring cloud, spring data, spring data rest)][spring]
-- [Axonframework (eventsourcing, CQRS)][axonframework]
+- [Spring (SpringBoot, SpringCloud, SpringData, SpringDataRest)][spring]
+- [Axon (AxonFramework, AxonServer)][axonframework]
 
 ### Continuous Integration and Delivery 
 - Travis
 
 ### Infrastructure and Platform (As A Service)
-- [H2, MySQL (event store, materialized views)][mysql]
+- [H2 - java SQL databse][h2]
 - [Apache Kafka][kafka]
 - [RabbitMQ][rabbitMQ]
+- [AxonServer](https://axoniq.io/product-overview/axon-server)
 
 ## References and further reading
-**Inspired by the book "Microservices Patterns" - Chris Richardson**
 
   - https://github.com/microservice-patterns/ftgo-application
   - https://docs.axonframework.org/
   - https://spring.io/blog/2018/04/11/event-storming-and-spring-with-a-splash-of-ddd
   - http://www.codingthearchitecture.com/2016/04/25/layers_hexagons_features_and_components.html
-  
  
 
 [mvn]: https://maven.apache.org/
@@ -1038,6 +1062,7 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 [spring]: https://spring.io/
 [axonframework]: https://axoniq.io/
 [mysql]: https://www.mysql.com/
+[h2]: http://h2database.com/html/main.html
 [rabbitMQ]: https://www.rabbitmq.com/
 [kafka]: https://kafka.apache.org/
 [pivotalCF]: https://run.pivotal.io/

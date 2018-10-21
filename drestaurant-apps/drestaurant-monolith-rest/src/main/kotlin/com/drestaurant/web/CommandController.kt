@@ -24,8 +24,8 @@ import com.drestaurant.restaurant.domain.model.MenuItem
 import com.drestaurant.restaurant.domain.model.RestaurantMenu
 import com.drestaurant.restaurant.domain.model.RestaurantOrderState
 import org.axonframework.commandhandling.gateway.CommandGateway
+import org.axonframework.messaging.responsetypes.ResponseTypes
 import org.axonframework.queryhandling.QueryGateway
-import org.axonframework.queryhandling.responsetypes.ResponseTypes
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks
 import org.springframework.http.MediaType

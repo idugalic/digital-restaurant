@@ -10,7 +10,4 @@ axon:
         courier: 100
         courierorder: 100
 
-axoniq:
-  axonhub:
-    servers: localhost
 

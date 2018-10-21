@@ -3,12 +3,17 @@ package com.drestaurant.common.domain.model
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
+import org.springframework.boot.jackson.JsonComponent
+import java.io.Serializable
 import java.math.BigDecimal
 
 /**
  * A simple abstraction of the 'money' concept
  */
-class Money(val amount: BigDecimal) {
+@JsonComponent
+class Money(val amount: BigDecimal): Serializable {
+
+    constructor() : this(BigDecimal.ZERO)
 
     fun add(delta: Money): Money {
         return Money(amount.add(delta.amount))

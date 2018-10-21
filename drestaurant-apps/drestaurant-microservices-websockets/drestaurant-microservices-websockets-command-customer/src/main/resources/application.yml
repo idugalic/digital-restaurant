@@ -10,7 +10,4 @@ axon:
         customer: 100
         customerorder: 100
 
-axoniq:
-  axonhub:
-    servers: localhost
 

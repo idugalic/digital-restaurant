@@ -28,6 +28,11 @@ axon:
       group-id: order-command-group
       bootstrap-servers: localhost:9092
   distributed:
-    spring-cloud:
-      fallback-to-http-get: false
     enabled: true
+  serializer:
+    messages: xstream
+  eventhandling:
+    processors:
+      ordersaga:
+        mode: tracking
+        source: kafkaMessageSource

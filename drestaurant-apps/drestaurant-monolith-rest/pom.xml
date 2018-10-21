@@ -23,6 +23,12 @@
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.axonframework</groupId>
+                    <artifactId>axon-server-connector</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -88,9 +94,5 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>io.axoniq</groupId>-->
-            <!--<artifactId>axonhub-spring-boot-autoconfigure</artifactId>-->
-        <!--</dependency>-->
     </dependencies>
 </project>

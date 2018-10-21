@@ -3,10 +3,9 @@ package com.drestaurant.courier.domain.api
 import com.drestaurant.common.domain.command.AuditableAbstractCommand
 import com.drestaurant.common.domain.model.AuditEntry
 import com.drestaurant.common.domain.model.PersonName
-import org.axonframework.commandhandling.TargetAggregateIdentifier
+import org.axonframework.modelling.command.TargetAggregateIdentifier
 import java.util.*
 import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 /**
  * This command is used to construct/hire a courier

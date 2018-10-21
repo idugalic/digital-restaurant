@@ -1,10 +1,7 @@
 package com.drestaurant.configuration
 
-import com.drestaurant.order.domain.OrderSaga
-import org.axonframework.amqp.eventhandling.spring.SpringAMQPMessageSource
 import org.axonframework.commandhandling.CommandBus
 import org.axonframework.common.transaction.TransactionManager
-import org.axonframework.config.SagaConfiguration
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor
 import org.axonframework.spring.eventsourcing.SpringAggregateSnapshotterFactoryBean
 import org.springframework.amqp.core.AmqpAdmin
@@ -76,7 +73,4 @@ class AxonAndRabbitConfiguration {
 
     @Bean
     fun snapshotterFactoryBean() = SpringAggregateSnapshotterFactoryBean()
-
-    @Bean
-    fun orderSagaConfiguration(amqpMessageSource: SpringAMQPMessageSource) = SagaConfiguration.subscribingSagaManager<OrderSaga>(OrderSaga::class.java) { amqpMessageSource }
 }
