@@ -231,12 +231,18 @@ We have created more 'web' applications (standalone Spring Boot applications) to
     - **HTTP and WebSockets API** by segregating Command and Query
     - we don't synchronize on the backend
     - we provide WebSockets for the frontend to handle async nature of the backend
+    - we use H2 SQL database as event store
+    - we use H2 SQL database to store materialized views (query side)
  - [Monolith 2](#monolith-2-rest-api-by-not-segregating-command-and-query)
     - **REST API** by not segregating Command and Query
     - we synchronize on the backend side
+    - we use H2 SQL database as event store
+    - we use H2 SQL database to store materialized views (query side)
  - [Monolith 3](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way)
     - **WebSockets API**
     - we are async all the way
+    - we use H2 SQL database as event store
+    - we use H2 SQL database to store materialized views (query side)
 
 **Microservices**
 
@@ -247,6 +253,8 @@ We have created more 'web' applications (standalone Spring Boot applications) to
     - we provide WebSockets for the frontend to handle async nature of the backend
     - we use Apache Kafka to distribute events between services
     - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
+    - we use H2 SQL database as event store
+    - we use H2 SQL database to store materialized views (query side)
 
  - [Microservices 2](#microservices-2-rest-rabbitmq)
     - **REST API** by not segregating Command and Query
@@ -254,12 +262,15 @@ We have created more 'web' applications (standalone Spring Boot applications) to
     - we synchronize on the backend side
     - we use RabbitMQ to distribute events between services (bounded contexts)
     - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
+    - we use H2 SQL database as event store
+    - we use H2 SQL database to store materialized views (query side)
     
  - [Microservices 3](#microservices-3-websockets-axondb-and-axonhub)
     - **WebSockets API**
     - [Monolith 3](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way) as a monolithic version
     - we are async all the way
-    - we use [AxonServer](https://axoniq.io/product-overview/axon-server) to route and distribute all type of messages (commands, events, queries) between services (bounded contexts)
+    - we use [AxonServer](https://axoniq.io/product-overview/axon-server) as event store, and to distibute messages (commands, events and queries)
+    - we use H2 SQL database to store materialized views (query side)
       
 ### Monolith 1 (HTTP and WebSockets API by segregating Command and Query)
 
@@ -591,7 +602,7 @@ WebSocket SockJS endpoint: `ws://localhost:8080/drestaurant/websocket`
 ### Microservices 1 (HTTP, Websockets, Apache Kafka)
 
 We designed and structured our [domain components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
-and that enable us to choose different deployment strategy and decompose [Monolith 1](#monolith-1-http-and-websockets-api-by-segregating-command-and-query) to microservices. 
+and that enables us to choose different deployment strategy and decompose [Monolith 1](#monolith-1-http-and-websockets-api-by-segregating-command-and-query) to microservices. 
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices):
 
@@ -714,7 +725,7 @@ curl http://localhost:8085/api/query
 ### Microservices 2 (REST, RabbitMQ)
 
 We designed and structured our [domain components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
-and that enable us to choose different deployment strategy and decompose [Monolith 2](#monolith-2-rest-api-by-not-segregating-command-and-query) to microservices. 
+and that enables us to choose different deployment strategy and decompose [Monolith 2](#monolith-2-rest-api-by-not-segregating-command-and-query) to microservices. 
 
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
@@ -841,7 +852,7 @@ curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*'
 ### Microservices 3 (Websockets, AxonServer)
 
 We designed and structured our [domain components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
-and that enable us to choose different deployment strategy and decompose [Monolith 3](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way) to microservices. 
+and that enables us to choose different deployment strategy and decompose [Monolith 3](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way) to microservices. 
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
 
