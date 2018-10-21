@@ -1,4 +1,4 @@
-### Microservices / Websockets / AxonDB and AxonHub
+### Microservices / Websockets / AxonServer
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
