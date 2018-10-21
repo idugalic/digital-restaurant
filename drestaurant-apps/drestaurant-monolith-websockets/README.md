@@ -44,3 +44,40 @@ WebSocket SockJS endpoint: `ws://localhost:8080/drestaurant/websocket`
  - `/restaurants/orders/markpreparedcommand`, messageType=[MESSAGE]
  - `/restaurants/orders`, messageType=[SUBSCRIBE]
  - `/restaurants/orders/{id}`, messageType=[SUBSCRIBE]
+
+
+### Run the application
+
+```bash
+$ cd digital-restaurant/drestaurant-apps/drestaurant-monolith-websockets
+$ mvn spring-boot:run
+```
+
+
+### Continuous integration
+
+We have one deployment pipeline for all applications and libraries within this repository. In addition, all projects in the repository share the same dependencies. Hence, there are no version conflicts because everyone has to use the same/the latest (SNAPSHOTS) version. And you don't need to deal with a private NPM (JavaScript) or Maven (Java) registry when you just want to use your own libraries.
+This setup and project structure is usually addressed as a [monorepo](https://medium.com/@maoberlehner/monorepos-in-the-wild-33c6eb246cb9).
+
+### Technology
+
+#### Language
+- [Kotlin][kotlin]
+
+#### Frameworks and Platforms
+- [Spring (SpringBoot, SpringCloud, SpringData, SpringDataRest)][spring]
+- [AxonFramework][axonframework]
+
+#### Continuous Integration and Delivery 
+- Travis
+
+#### Infrastructure
+- [H2 - java SQL databse][h2]
+ 
+
+[mvn]: https://maven.apache.org/
+[kotlin]: https://kotlinlang.org/
+[spring]: https://spring.io/
+[axonframework]: https://axoniq.io/
+[mysql]: https://www.mysql.com/
+[h2]: http://h2database.com/html/main.html

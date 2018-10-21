@@ -5,8 +5,6 @@
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
-Sometimes, you are simply being required to deliver HTTP/REST API
-
 A recurring question with CQRS and EventSourcing is how to put a synchronous HTTP front-end on top of an asynchronous CQRS back-end.
 
 In general there are two approaches:
@@ -117,3 +115,37 @@ WebSocket API (ws://localhost:8080/drestaurant/websocket) topics:
 
 Frontend part of the solution is available here [http://idugalic.github.io/digital-restaurant-angular](http://idugalic.github.io/digital-restaurant-angular/)
 
+### Run the application
+
+```bash
+$ cd digital-restaurant/drestaurant-apps/drestaurant-monolith
+$ mvn spring-boot:run
+```
+
+### Continuous integration
+
+We have one deployment pipeline for all applications and libraries within this repository. In addition, all projects in the repository share the same dependencies. Hence, there are no version conflicts because everyone has to use the same/the latest (SNAPSHOTS) version. And you don't need to deal with a private NPM (JavaScript) or Maven (Java) registry when you just want to use your own libraries.
+This setup and project structure is usually addressed as a [monorepo](https://medium.com/@maoberlehner/monorepos-in-the-wild-33c6eb246cb9).
+
+### Technology
+
+#### Language
+- [Kotlin][kotlin]
+
+#### Frameworks and Platforms
+- [Spring (SpringBoot, SpringCloud, SpringData, SpringDataRest)][spring]
+- [AxonFramework][axonframework]
+
+#### Continuous Integration and Delivery 
+- Travis
+
+#### Infrastructure
+- [H2 - java SQL databse][h2]
+ 
+
+[mvn]: https://maven.apache.org/
+[kotlin]: https://kotlinlang.org/
+[spring]: https://spring.io/
+[axonframework]: https://axoniq.io/
+[mysql]: https://www.mysql.com/
+[h2]: http://h2database.com/html/main.html
