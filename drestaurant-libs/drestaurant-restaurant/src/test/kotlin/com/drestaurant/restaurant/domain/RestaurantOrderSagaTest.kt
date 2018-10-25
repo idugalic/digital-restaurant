@@ -18,8 +18,8 @@ class RestaurantOrderSagaTest {
     private val lineItem: RestaurantOrderLineItem = RestaurantOrderLineItem(1, "menuItemId", "name")
     private var lineItems: MutableList<RestaurantOrderLineItem> = ArrayList()
     private val orderDetails: RestaurantOrderDetails = RestaurantOrderDetails(lineItems)
-    private val WHO = "johndoe"
-    private val auditEntry: AuditEntry = AuditEntry(WHO, Calendar.getInstance().time)
+    private val who = "johndoe"
+    private val auditEntry: AuditEntry = AuditEntry(who, Calendar.getInstance().time)
 
 
     @Before

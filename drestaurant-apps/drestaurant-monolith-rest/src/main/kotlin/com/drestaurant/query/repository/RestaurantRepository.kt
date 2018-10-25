@@ -1,6 +1,5 @@
 package com.drestaurant.query.repository
 
-import com.drestaurant.query.model.CourierEntity
 import com.drestaurant.query.model.RestaurantEntity
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.data.rest.core.annotation.RepositoryRestResource

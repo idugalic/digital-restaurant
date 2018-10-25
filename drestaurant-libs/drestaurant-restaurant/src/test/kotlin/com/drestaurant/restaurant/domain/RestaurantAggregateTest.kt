@@ -18,8 +18,8 @@ import java.util.*
 class RestaurantAggregateTest {
 
     private lateinit var fixture: FixtureConfiguration<Restaurant>
-    private val WHO = "johndoe"
-    private var auditEntry: AuditEntry = AuditEntry(WHO, Calendar.getInstance().time);
+    private val who = "johndoe"
+    private var auditEntry: AuditEntry = AuditEntry(who, Calendar.getInstance().time)
 
 
     @Before

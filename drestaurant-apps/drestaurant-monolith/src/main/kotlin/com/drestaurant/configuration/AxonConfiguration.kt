@@ -13,7 +13,9 @@ class AxonConfiguration {
 
     /* Register a command interceptor */
     @Autowired
-    fun registerInterceptors(commandBus: CommandBus) = commandBus.registerDispatchInterceptor(BeanValidationInterceptor())
+    fun registerInterceptors(commandBus: CommandBus) {
+        commandBus.registerDispatchInterceptor(BeanValidationInterceptor())
+    }
 
 
     @Bean

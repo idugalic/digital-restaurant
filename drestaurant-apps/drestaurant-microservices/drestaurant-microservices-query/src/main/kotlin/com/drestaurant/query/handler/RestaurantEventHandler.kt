@@ -27,9 +27,9 @@ internal class RestaurantEventHandler(private val repository: RestaurantReposito
             val menuItem = MenuItemEmbedable(item.id, item.name, item.price.amount)
             menuItems.add(menuItem)
         }
-        val menu = RestaurantMenuEmbedable(menuItems, event.menu.menuVersion);
-        repository.save(RestaurantEntity(event.aggregateIdentifier, aggregateVersion, event.name, menu));
-        messagingTemplate.convertAndSend("/topic/restaurants.updates", event);
+        val menu = RestaurantMenuEmbedable(menuItems, event.menu.menuVersion)
+        repository.save(RestaurantEntity(event.aggregateIdentifier, aggregateVersion, event.name, menu))
+        messagingTemplate.convertAndSend("/topic/restaurants.updates", event)
     }
 
     /* Will be called before replay/reset starts. Do pre-reset logic, like clearing out the Projection table */

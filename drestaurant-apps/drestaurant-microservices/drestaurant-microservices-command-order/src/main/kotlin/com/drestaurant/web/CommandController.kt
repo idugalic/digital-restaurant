@@ -5,7 +5,6 @@ import com.drestaurant.common.domain.model.Money
 import com.drestaurant.order.domain.api.CreateOrderCommand
 import com.drestaurant.order.domain.model.OrderInfo
 import com.drestaurant.order.domain.model.OrderLineItem
-import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType

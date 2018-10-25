@@ -39,7 +39,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindOrderQuery, but only if the order id matches. */
         queryUpdateEmitter.emit(
                 FindOrderQuery::class.java,
-                { query -> query.orderId.equals(event.aggregateIdentifier) },
+                { query -> query.orderId == event.aggregateIdentifier },
                 record
         )
 
@@ -66,7 +66,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindOrderQuery, but only if the order id matches. */
         queryUpdateEmitter.emit(
                 FindOrderQuery::class.java,
-                { query -> query.orderId.equals(event.aggregateIdentifier) },
+                { query -> query.orderId == event.aggregateIdentifier },
                 orderEntity
         )
 
@@ -92,7 +92,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindOrderQuery, but only if the order id matches. */
         queryUpdateEmitter.emit(
                 FindOrderQuery::class.java,
-                { query -> query.orderId.equals(event.aggregateIdentifier) },
+                { query -> query.orderId == event.aggregateIdentifier },
                 orderEntity
         )
 
@@ -116,7 +116,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindOrderQuery, but only if the order id matches. */
         queryUpdateEmitter.emit(
                 FindOrderQuery::class.java,
-                { query -> query.orderId.equals(event.aggregateIdentifier) },
+                { query -> query.orderId == event.aggregateIdentifier },
                 orderEntity
         )
 
@@ -140,7 +140,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindOrderQuery, but only if the order id matches. */
         queryUpdateEmitter.emit(
                 FindOrderQuery::class.java,
-                { query -> query.orderId.equals(event.aggregateIdentifier) },
+                { query -> query.orderId == event.aggregateIdentifier },
                 orderEntity
         )
 
@@ -164,7 +164,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindOrderQuery, but only if the order id matches. */
         queryUpdateEmitter.emit(
                 FindOrderQuery::class.java,
-                { query -> query.orderId.equals(event.aggregateIdentifier) },
+                { query -> query.orderId == event.aggregateIdentifier },
                 orderEntity
         )
 
@@ -188,7 +188,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
         /* sending it to subscription queries of type FindOrderQuery, but only if the order id matches. */
         queryUpdateEmitter.emit(
                 FindOrderQuery::class.java,
-                { query -> query.orderId.equals(event.aggregateIdentifier) },
+                { query -> query.orderId == event.aggregateIdentifier },
                 orderEntity
         )
 

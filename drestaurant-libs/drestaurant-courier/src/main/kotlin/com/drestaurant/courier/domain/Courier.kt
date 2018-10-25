@@ -57,7 +57,7 @@ internal class Courier {
         id = event.aggregateIdentifier
         name = event.name
         maxNumberOfActiveOrders = event.maxNumberOfActiveOrders
-        numberOfActiveOrders = numberOfActiveOrders + 1
+        numberOfActiveOrders += 1
     }
 
     fun validateOrder(orderId: String, auditEntry: AuditEntry) {

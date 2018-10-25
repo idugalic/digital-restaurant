@@ -19,10 +19,10 @@ import java.util.*
 class OrderAggregateTest {
 
     private lateinit var fixture: FixtureConfiguration<Order>
-    private val WHO = "johndoe"
-    private var auditEntry: AuditEntry = AuditEntry(WHO, Calendar.getInstance().time)
+    private val who = "johndoe"
+    private var auditEntry: AuditEntry = AuditEntry(who, Calendar.getInstance().time)
 
-    private val lineItems: MutableList<OrderLineItem> = ArrayList<OrderLineItem>()
+    private val lineItems: MutableList<OrderLineItem> = ArrayList()
     private val lineItem1: OrderLineItem = OrderLineItem("menuItemId1", "name1", Money(BigDecimal.valueOf(11)), 2)
     private val lineItem2: OrderLineItem = OrderLineItem("menuItemId2", "name2", Money(BigDecimal.valueOf(22)), 3)
     private var orderInfo: OrderInfo = OrderInfo("consumerId", "restaurantId", lineItems)
@@ -35,7 +35,7 @@ class OrderAggregateTest {
         fixture.registerCommandDispatchInterceptor(BeanValidationInterceptor())
         lineItems.add(lineItem1)
         lineItems.add(lineItem2)
-        orderDetails = OrderDetails(orderInfo, lineItems.stream().map(OrderLineItem::total).reduce(Money(BigDecimal.ZERO), Money::add));
+        orderDetails = OrderDetails(orderInfo, lineItems.stream().map(OrderLineItem::total).reduce(Money(BigDecimal.ZERO), Money::add))
     }
 
     // ########## CREATE ###########

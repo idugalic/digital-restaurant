@@ -64,7 +64,7 @@ internal class Order {
 
     /**
      * This method is marked as an EventSourcingHandler and is therefore used by the
-     * Axon framework to handle events of the specified type [OrderCreatedEvent].
+     * Axon framework to handle events of the specified type [OrderCreationInitiatedEvent].
      * The [OrderCreationInitiatedEvent] can be raised either by the constructor during
      * Order(CreateOrderCommand) or by the evensourcing zepository when 're-loading' the aggregate.
      *

@@ -19,8 +19,8 @@ class RestaurantOrderAggregateTest {
     private val lineItem: RestaurantOrderLineItem = RestaurantOrderLineItem(1, "menuItemId", "name")
     private var lineItems: MutableList<RestaurantOrderLineItem> = ArrayList()
     private var orderDetails: RestaurantOrderDetails = RestaurantOrderDetails(lineItems)
-    private val WHO = "johndoe"
-    private var auditEntry: AuditEntry = AuditEntry(WHO, Calendar.getInstance().time)
+    private val who = "johndoe"
+    private var auditEntry: AuditEntry = AuditEntry(who, Calendar.getInstance().time)
 
     @Before
     fun setUp() {

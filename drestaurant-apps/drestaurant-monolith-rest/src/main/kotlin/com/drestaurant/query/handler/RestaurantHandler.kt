@@ -37,7 +37,7 @@ internal class RestaurantHandler(private val repository: RestaurantRepository, p
         /* sending it to subscription queries of type FindRestaurantQuery, but only if the restaurant id matches. */
         queryUpdateEmitter.emit(
                 FindRestaurantQuery::class.java,
-                { query -> query.restaurantId.equals(event.aggregateIdentifier) },
+                { query -> query.restaurantId == event.aggregateIdentifier },
                 record
         )
 

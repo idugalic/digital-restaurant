@@ -12,8 +12,8 @@ import java.util.*
 class CustomerOrderSagaTest {
 
     private lateinit var testFixture: FixtureConfiguration
-    private val WHO = "johndoe"
-    private val auditEntry: AuditEntry = AuditEntry(WHO, Calendar.getInstance().time)
+    private val who = "johndoe"
+    private val auditEntry: AuditEntry = AuditEntry(who, Calendar.getInstance().time)
     private val orderId: String = "orderId"
     private val customerId: String = "customerId"
     private val orderTotal: Money = Money(BigDecimal.valueOf(100))

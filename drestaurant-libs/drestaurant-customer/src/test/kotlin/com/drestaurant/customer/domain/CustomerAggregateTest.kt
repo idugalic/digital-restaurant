@@ -17,9 +17,9 @@ import java.util.*
 class CustomerAggregateTest {
 
     private lateinit var fixture: FixtureConfiguration<Customer>
-    private val WHO = "johndoe"
-    private val auditEntry: AuditEntry = AuditEntry(WHO, Calendar.getInstance().time)
-    private val auditEntry2: AuditEntry = AuditEntry(WHO + "2", Calendar.getInstance().time)
+    private val who = "johndoe"
+    private val auditEntry: AuditEntry = AuditEntry(who, Calendar.getInstance().time)
+    private val auditEntry2: AuditEntry = AuditEntry(who + "2", Calendar.getInstance().time)
     private val orderLimit = Money(BigDecimal.valueOf(1000000))
 
     @Before

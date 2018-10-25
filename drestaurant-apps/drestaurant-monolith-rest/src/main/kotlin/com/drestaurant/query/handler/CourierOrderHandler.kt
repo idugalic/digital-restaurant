@@ -44,7 +44,7 @@ internal class CourierOrderHandler(private val repository: CourierOrderRepositor
         /* sending it to subscription queries of type FindCourierOrderQuery, but only if the courier order id matches. */
         queryUpdateEmitter.emit(
                 FindCourierOrderQuery::class.java,
-                { query -> query.courierOrderId.equals(event.aggregateIdentifier) },
+                { query -> query.courierOrderId == event.aggregateIdentifier },
                 record
         )
 
@@ -65,7 +65,7 @@ internal class CourierOrderHandler(private val repository: CourierOrderRepositor
         /* sending it to subscription queries of type FindCourierOrderQuery, but only if the courier order id matches. */
         queryUpdateEmitter.emit(
                 FindCourierOrderQuery::class.java,
-                { query -> query.courierOrderId.equals(event.aggregateIdentifier) },
+                { query -> query.courierOrderId == event.aggregateIdentifier },
                 record
         )
 
@@ -88,7 +88,7 @@ internal class CourierOrderHandler(private val repository: CourierOrderRepositor
         /* sending it to subscription queries of type FindCourierOrderQuery, but only if the courier order id matches. */
         queryUpdateEmitter.emit(
                 FindCourierOrderQuery::class.java,
-                { query -> query.courierOrderId.equals(event.aggregateIdentifier) },
+                { query -> query.courierOrderId == event.aggregateIdentifier },
                 record
         )
 

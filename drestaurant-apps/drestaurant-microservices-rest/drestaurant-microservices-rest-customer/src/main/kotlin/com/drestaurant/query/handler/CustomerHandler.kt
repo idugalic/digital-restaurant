@@ -27,7 +27,7 @@ internal class CustomerHandler(private val repository: CustomerRepository, priva
         /* sending it to subscription queries of type FindCustomerQuery, but only if the customer id matches. */
         queryUpdateEmitter.emit(
                 FindCustomerQuery::class.java,
-                { query -> query.customerId.equals(event.aggregateIdentifier) },
+                { query -> query.customerId == event.aggregateIdentifier },
                 record
         )
 

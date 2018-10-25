@@ -20,7 +20,7 @@ class Money(val amount: BigDecimal): Serializable {
     }
 
     fun isGreaterThanOrEqual(other: Money): Boolean {
-        return amount.compareTo(other.amount) >= 0
+        return amount >= other.amount
     }
 
     fun multiply(x: Int): Money {

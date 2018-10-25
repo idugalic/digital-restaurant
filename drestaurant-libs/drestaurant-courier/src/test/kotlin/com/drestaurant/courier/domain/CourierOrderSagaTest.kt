@@ -13,12 +13,12 @@ class CourierOrderSagaTest {
     private lateinit var auditEntry: AuditEntry
     private lateinit var orderId: String
     private lateinit var courierId: String
-    private val WHO = "johndoe"
+    private val who = "johndoe"
 
     @Before
     fun setUp() {
         testFixture = SagaTestFixture(CourierOrderSaga::class.java)
-        auditEntry = AuditEntry(WHO, Calendar.getInstance().time)
+        auditEntry = AuditEntry(who, Calendar.getInstance().time)
         orderId = "orderId"
         courierId = "courierId"
     }

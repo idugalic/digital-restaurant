@@ -18,14 +18,14 @@ class CourierAggregateTest {
     private lateinit var auditEntry: AuditEntry
     private lateinit var auditEntry2: AuditEntry
     private var maxNumberOfActiveOrders: Int = 5
-    private val WHO = "johndoe"
+    private val who = "johndoe"
 
     @Before
     fun setUp() {
         fixture = AggregateTestFixture(Courier::class.java)
         fixture.registerCommandDispatchInterceptor(BeanValidationInterceptor())
-        auditEntry = AuditEntry(WHO, Calendar.getInstance().time)
-        auditEntry2 = AuditEntry(WHO + "2", Calendar.getInstance().time)
+        auditEntry = AuditEntry(who, Calendar.getInstance().time)
+        auditEntry2 = AuditEntry(who + "2", Calendar.getInstance().time)
     }
 
     @Test

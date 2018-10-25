@@ -2,9 +2,7 @@ package com.drestaurant.order.domain.api
 
 import com.drestaurant.common.domain.event.AuditableAbstractEvent
 import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.Money
 import com.drestaurant.order.domain.model.OrderDetails
-import com.drestaurant.restaurant.domain.model.RestaurantOrderDetails
 
 /**
  * An event, noting that order has been initiated (creation has been initiated)

@@ -29,7 +29,7 @@ internal class CourierHandler(private val repository: CourierRepository, private
         /* sending it to subscription queries of type FindCourierQuery, but only if the courier id matches. */
         queryUpdateEmitter.emit(
                 FindCourierQuery::class.java,
-                { query -> query.courierId.equals(event.aggregateIdentifier) },
+                { query -> query.courierId == event.aggregateIdentifier },
                 record
         )
 

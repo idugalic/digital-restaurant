@@ -2,7 +2,6 @@ package com.drestaurant.courier.domain
 
 import org.axonframework.eventhandling.EventBus
 import org.axonframework.eventsourcing.EventCountSnapshotTriggerDefinition
-import org.axonframework.eventsourcing.SnapshotTriggerDefinition
 import org.axonframework.eventsourcing.Snapshotter
 import org.axonframework.spring.config.AxonConfiguration
 import org.springframework.beans.factory.annotation.Value

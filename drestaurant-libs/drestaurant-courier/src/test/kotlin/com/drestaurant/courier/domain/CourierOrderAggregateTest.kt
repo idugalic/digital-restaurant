@@ -17,13 +17,13 @@ class CourierOrderAggregateTest {
     private lateinit var orderId: String
     private lateinit var courierId: String
     
-    private val WHO = "johndoe"
+    private val who = "johndoe"
 
     @Before
     fun setUp() {
         fixture = AggregateTestFixture(CourierOrder::class.java)
         fixture.registerCommandDispatchInterceptor(BeanValidationInterceptor())
-        auditEntry = AuditEntry(WHO, Calendar.getInstance().time)
+        auditEntry = AuditEntry(who, Calendar.getInstance().time)
         orderId = "orderId"
         courierId = "courierId"
     }
