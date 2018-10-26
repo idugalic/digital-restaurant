@@ -1,6 +1,5 @@
 package com.drestaurant.restaurant.domain
 
-import com.drestaurant.restaurant.domain.api.CreateRestaurantOrderCommand
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.config.ProcessingGroup
@@ -13,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired
 
 /**
  * Managing invariants (business transaction) of [RestaurantOrder] and [Restaurant]
- *
- * Consider restricting the modifier of this class to internal. It is public because of the Spring configuration: drestaurant-apps/drestaurant-monolith/com.drestaurant.configuration.AxonConfiguration
  */
 @Saga
 @ProcessingGroup("restaurantordersaga")
@@ -25,9 +22,6 @@ class RestaurantOrderSaga {
     private lateinit var commandGateway: CommandGateway
     private lateinit var orderId: String
 
-    /**
-     * Start saga on internal event [RestaurantOrderCreationInitiatedInternalEvent]. This event can be published from this component/bounded context only, as a result of a public [CreateRestaurantOrderCommand] command
-     */
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
     internal fun on(event: RestaurantOrderCreationInitiatedInternalEvent) {
