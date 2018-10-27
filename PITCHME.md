@@ -184,40 +184,13 @@ Core subdomains are more important to the business
  - [Order subdomain - drestaurant-libs/drestaurant-order/](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order)
 
 
+
 +++
 @transition[none]
 
 @snap[north-west]
 @color[gray](Domain layer)
 @snapend
-
-#### Core subdomains - Saga
-
- - Sagas are used to manage business transactions
- - They respond on Events and may dispatch Commands, invoke external applications, ...
-
-```java
-@Saga
-@ProcessingGroup("restaurantordersaga")
-class RestaurantOrderSaga {
-    @Autowired
-    @Transient
-    private lateinit var commandGateway: CommandGateway
-    private lateinit var orderId: String
-
-    @StartSaga
-    @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: RestaurantOrderCreationInitiatedInternalEvent) {
-        orderId = event.aggregateIdentifier
-        associateWith("orderId", orderId)
-        commandGateway.send(ValidateOrderByRestaurantInternalCommand(orderId, event.restaurantId, event.orderDetails.lineItems, event.auditEntry), LoggingCallback.INSTANCE)
-    }
-
-    @EndSaga
-    @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithSuccessByRestaurantInternalEvent) = commandGateway.send(MarkRestaurantOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
-```
- 
 
 #### Core subdomains - State machine
 
@@ -291,6 +264,40 @@ Consider using event sourcing within 'core subdomain' only!
 
 ```java
 @Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")
+```
+
++++
+@transition[none]
+
+@snap[north-west]
+@color[gray](Domain layer)
+@snapend
+
+#### Saga
+
+ - Sagas are used to manage business transactions
+ - They respond on Events and may dispatch Commands, invoke external applications, ...
+
+```java
+@Saga
+@ProcessingGroup("restaurantordersaga")
+class RestaurantOrderSaga {
+    @Autowired
+    @Transient
+    private lateinit var commandGateway: CommandGateway
+    private lateinit var orderId: String
+
+    @StartSaga
+    @SagaEventHandler(associationProperty = "aggregateIdentifier")
+    internal fun on(event: RestaurantOrderCreationInitiatedInternalEvent) {
+        orderId = event.aggregateIdentifier
+        associateWith("orderId", orderId)
+        commandGateway.send(ValidateOrderByRestaurantInternalCommand(orderId, event.restaurantId, event.orderDetails.lineItems, event.auditEntry), LoggingCallback.INSTANCE)
+    }
+
+    @EndSaga
+    @SagaEventHandler(associationProperty = "orderId")
+    internal fun on(event: OrderValidatedWithSuccessByRestaurantInternalEvent) = commandGateway.send(MarkRestaurantOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 ```
 
 ---
