@@ -122,9 +122,11 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
   
 +++
 
-### Domain layer
+@snap[north-west]
+Domain layer
+@snapend
 
-<span style="color:gray">Subdomains - The problem</span>
+#### Subdomains - The problem
 
   - getting different parts of an organization to agree on a single unified model is a monumental task. 
   - from the perspective of a given part of the organization, the model is overly complex for their needs. 
@@ -132,18 +134,22 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 +++
 
-### Domain layer
+@snap[north-west]
+Domain layer
+@snapend
 
-<span style="color:gray">Subdomains - Analyze</span>
+#### Subdomains - Analyze
 
   - Analyze the business and identify the different areas of expertise. The end result is very likely to be subdomains
   - http://eventstorming.com/
 
 +++
 
-### Domain layer
+@snap[north-west]
+Domain layer
+@snapend
 
-<span style="color:gray">Core subdomains</span>
+#### Core subdomains
 
 Core subdomains are more important to the business
 
@@ -154,9 +160,11 @@ Core subdomains are more important to the business
 
 +++
 
-### Domain layer
+@snap[north-west]
+Domain layer
+@snapend
 
-<span style="color:gray">Generic subdomains</span>
+#### Generic subdomains
 
 Generic subdomains facilitate the business, but are not core to the business. In general, these types of pieces can be purchased from a vendor or outsourced.
 
@@ -164,9 +172,11 @@ Generic subdomains facilitate the business, but are not core to the business. In
 
 +++
 
-### Domain layer
+@snap[north-west]
+Domain layer
+@snapend
 
-<span style="color:gray">Eventsourcing</span>
+#### Eventsourcing
 
  - We use [event sourcing](http://microservices.io/patterns/data/event-sourcing.html) to persist our [event sourced aggregates](https://docs.axonframework.org/part-ii-domain-logic/command-model#event-sourced-aggregates) as a sequence of events
  - Each event represents a state change of the aggregate
@@ -174,9 +184,11 @@ Generic subdomains facilitate the business, but are not core to the business. In
 
 +++
 
-### Domain layer
+@snap[north-west]
+Domain layer
+@snapend
 
-<span style="color:gray">Eventsourcing benefits</span>
+#### Eventsourcing benefits
 
  - It preserves the history of aggregates (100%), which is valuable for auditing and regulatory purposes
  - It reliably publishes domain events, which is particularly useful in a microservice architecture
@@ -184,9 +196,11 @@ Generic subdomains facilitate the business, but are not core to the business. In
 
 +++
  
-### Domain layer
+@snap[north-west]
+Domain layer
+@snapend
  
-<span style="color:gray">Eventsourcing drawbacks</span>
+#### Eventsourcing drawbacks
  
  - There is a learning curve because its a different way to write your business logic
  - Events will change shape over time
@@ -196,9 +210,11 @@ Consider using event sourcing within 'core subdomain' only!
 
 +++
 
-### Domain layer
+@snap[north-west]
+Domain layer
+@snapend
  
-<span style="color:gray">Eventsourcing & snapshotting</span>
+#### Eventsourcing & snapshotting
  
  - A Snapshot is a denormalization of the current state of an aggregate at a given point in time
  - It represents the state when all events to that point in time have been replayed
@@ -215,7 +231,9 @@ Consider using event sourcing within 'core subdomain' only!
 
 +++
 
-### Applications layer
+@snap[north-west]
+Applications layer
+@snapend
 
  - Monolith 1 - HTTP and WebSockets API
  - Monolith 2 - HTTP/REST API
@@ -225,10 +243,11 @@ Consider using event sourcing within 'core subdomain' only!
  - Microservices 3 - *Monolith 3 decomposed*
 
 +++
+@snap[north-west]
+Applications layer
+@snapend
 
-### Applications layer
-
-<span style="color:gray">Monolith 1 (HTTP and WebSockets API)</span>
+#### Monolith 1 (HTTP and WebSockets API)
 
  - [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) consumes events, and creates query models
  - It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
@@ -239,9 +258,11 @@ Consider using event sourcing within 'core subdomain' only!
  
 +++
 
-### Applications layer
+@snap[north-west]
+Applications layer
+@snapend
 
-<span style="color:gray">Monolith 2 (HTTP/REST API)</span>
+#### Monolith 2 (HTTP/REST API)
 
  - [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/handler) consumes events, and creates query models
  - It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
@@ -251,9 +272,11 @@ Consider using event sourcing within 'core subdomain' only!
 
 +++
 
-### Applications layer
+@snap[north-west]
+Applications layer
+@snapend
 
-<span style="color:gray">Monolith 3 (WebSockets API)</span>
+#### Monolith 3 (WebSockets API)
  
  - [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/query/handler) consumes domain events, and creates query models
  - It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
@@ -263,9 +286,11 @@ Consider using event sourcing within 'core subdomain' only!
 
 +++
 
-### Applications layer
+@snap[north-west]
+Applications layer
+@snapend
 
-<span style="color:gray">Microservices 1 (Monolith 1 decomposed)</span>
+#### Microservices 1 (Monolith 1 decomposed)
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices):
 
@@ -276,9 +301,11 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
  
 +++
 
-### Applications layer
+@snap[north-west]
+Applications layer
+@snapend
 
-<span style="color:gray">Microservices 2 (Monolith 2 decomposed)</span>
+#### Microservices 2 (Monolith 2 decomposed)
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
 
@@ -289,9 +316,11 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
  
 +++
 
-### Applications layer
+@snap[north-west]
+Applications layer
+@snapend
 
-<span style="color:gray">Microservices 3 (Monolith 3 decomposed)</span>
+#### Microservices 3 (Monolith 3 decomposed)
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets):
 
@@ -303,9 +332,9 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 ### Thank you
 
  - Ivan Dugalic
- - [http://idugalic.pro/](http://idugalic.pro/)
- - [https://twitter.com/idugalic](https://twitter.com/idugalic)
- - [https://github.com/idugalic](https://github.com/idugalic)
+ - @fa[smile](http://idugalic.pro/)
+ - @fa[twitter](https://twitter.com/idugalic)
+ - @fa[github](https://github.com/idugalic)
 
 
 
