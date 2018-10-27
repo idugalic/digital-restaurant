@@ -139,9 +139,13 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 #### Subdomains
 
-  - getting different parts of an organization to agree on a single unified model is a monumental task. 
-  - from the perspective of a given part of the organization, the model is overly complex for their needs. 
-  - the domain model can be confusing since different parts of the organization might use either the same term for different concepts or different terms for the same concept. 
+@ul
+
+- getting different parts of an organization to agree on a single unified model is a monumental task. 
+- from the perspective of a given part of the organization, the model is overly complex for their needs. 
+- the domain model can be confusing since different parts of the organization might use either the same term for different concepts or different terms for the same concept. 
+
+@ulend
 
 +++
 @transition[none]
