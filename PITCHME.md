@@ -263,8 +263,10 @@ Consider using event sourcing within 'core subdomain' only!
 
 #### Saga
 
- - Sagas are used to manage business transactions
+ - [Sagas](http://www.amundsen.com/downloads/sagas.pdf) are used to manage business transactions
  - They respond on Events and may dispatch Commands, invoke external applications, ...
+ - It is a finite state machine
+ - Its goal is to bring you to a final state, where you know that your transaction has succeeded or failed
 
 +++
 @transition[none]
