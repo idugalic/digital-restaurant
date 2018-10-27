@@ -71,7 +71,7 @@ $ mvn spring-boot:run
 
 ### Sample application
 
-<span style="color:gray">Run microservices 1 (Monolith 1 decomposed & Apache Kafka)</span>
+<span style="color:gray">Run microservices 1 (Monolith 1 decomposed)</span>
 
 ```bash
 https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices
@@ -81,7 +81,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 ### Sample application
 
-<span style="color:gray">Run microservices 2 (Monolith 2 decomposed & RabbitMQ)</span>
+<span style="color:gray">Run microservices 2 (Monolith 2 decomposed)</span>
 
 ```bash
 https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest
@@ -91,7 +91,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 ### Sample application
 
-<span style="color:gray">Run microservices 3 (Monolith 3 decomposed & AxonServer)</span>
+<span style="color:gray">Run microservices 3 (Monolith 3 decomposed)</span>
 
 ```bash
 https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets
