@@ -430,10 +430,12 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 @transition[none]
 
 ### Thank you
+<hr />
+@fa[terminal] Ivan Dugalic, software engineer
 
-Ivan Dugalic
+@fa[globe] http://idugalic.pro
 
-@fa[terminal] http://idugalic.pro
+@fa[envelope] idugalic@gmail.com
 
 @fa[twitter](https://twitter.com/idugalic)
 
