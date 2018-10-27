@@ -18,7 +18,8 @@
 @snap[north-west]
 Sample application
 @snapend
-<span style="color:gray">Technology</span>
+
+#### Technology
 
   - It is built using Event Sourcing and CQRS patterns
   - It is written in [Kotlin](https://kotlinlang.org/), and uses [Spring Boot](https://spring.io/projects/spring-boot)
@@ -27,9 +28,11 @@ Sample application
   
 +++
 
-### Sample application
+@snap[north-west]
+Sample application
+@snapend
 
-<span style="color:gray">Clone & Build</span>
+#### Clone & Build
 
 ```bash
 $ git clone https://github.com/idugalic/digital-restaurant
@@ -38,9 +41,11 @@ $ mvn clean install
 
 +++
 
-### Sample application
+@snap[north-west]
+Sample application
+@snapend
 
-<span style="color:gray">Run monolith 1 (HTTP & Websockets)</span>
+#### Run monolith 1 (HTTP & Websockets)
 
 ```bash
 $ cd drestaurant-apps/drestaurant-monolith
@@ -49,9 +54,11 @@ $ mvn spring-boot:run
 
 +++
 
-### Sample application
+@snap[north-west]
+Sample application
+@snapend
 
-<span style="color:gray">Run monolith 2 (REST)</span>
+#### Run monolith 2 (REST)
 
 ```bash
 $ cd drestaurant-apps/drestaurant-monolith-rest
@@ -60,9 +67,11 @@ $ mvn spring-boot:run
 
 +++
 
-### Sample application
+@snap[north-west]
+Sample application
+@snapend
 
-<span style="color:gray">Run monolith 3 (Websockets)</span>
+#### Run monolith 3 (Websockets)
 
 ```bash
 $ cd drestaurant-apps/drestaurant-monolith-websockets
@@ -70,9 +79,11 @@ $ mvn spring-boot:run
 ```
 +++
 
-### Sample application
+@snap[north-west]
+Sample application
+@snapend
 
-<span style="color:gray">Run microservices 1 (Monolith 1 decomposed)</span>
+#### Run microservices 1 (Monolith 1 decomposed)
 
 ```bash
 https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices
@@ -80,9 +91,11 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 +++
 
-### Sample application
+@snap[north-west]
+Sample application
+@snapend
 
-<span style="color:gray">Run microservices 2 (Monolith 2 decomposed)</span>
+#### Run microservices 2 (Monolith 2 decomposed)
 
 ```bash
 https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest
@@ -90,9 +103,11 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 +++
 
-### Sample application
+@snap[north-west]
+Sample application
+@snapend
 
-<span style="color:gray">Run microservices 3 (Monolith 3 decomposed)</span>
+#### Run microservices 3 (Monolith 3 decomposed)
 
 ```bash
 https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets
