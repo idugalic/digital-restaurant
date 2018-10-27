@@ -152,10 +152,20 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 #### Subdomains - Analyze
 
-![](digital-restaurant.png)
-
   - Analyze the business and identify the different areas of expertise. The end result is very likely to be subdomains
   - http://eventstorming.com/
+
++++
+@transition[none]
+
+@snap[north-west]
+@color[gray](Domain layer)
+@snapend
+
+#### Subdomains - Context
+
+![](digital-restaurant.png)
+  
 
 +++
 @transition[none]
@@ -172,6 +182,53 @@ Core subdomains are more important to the business
  - [Restaurant subdomain - drestaurant-libs/drestaurant-restaurant/](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant)
  - [Customer subdomain - drestaurant-libs/drestaurant-customer/](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer)
  - [Order subdomain - drestaurant-libs/drestaurant-order/](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order)
+
++++
+@transition[none]
+
+@snap[north-west]
+@color[gray](Domain layer)
+@snapend
+
++++
+@transition[none]
+
+@snap[north-west]
+@color[gray](Domain layer)
+@snapend
+
+#### Core subdomains - Saga
+
+ - Sagas are used to manage business transactions
+ - They respond on Events and may dispatch Commands, invoke external applications, ...
+ 
+ ```java
+@Saga
+@ProcessingGroup("restaurantordersaga")
+class RestaurantOrderSaga {
+    @Autowired
+    @Transient
+    private lateinit var commandGateway: CommandGateway
+    private lateinit var orderId: String
+
+    @StartSaga
+    @SagaEventHandler(associationProperty = "aggregateIdentifier")
+    internal fun on(event: RestaurantOrderCreationInitiatedInternalEvent) {
+        orderId = event.aggregateIdentifier
+        associateWith("orderId", orderId)
+        commandGateway.send(ValidateOrderByRestaurantInternalCommand(orderId, event.restaurantId, event.orderDetails.lineItems, event.auditEntry), LoggingCallback.INSTANCE)
+    }
+
+    @EndSaga
+    @SagaEventHandler(associationProperty = "orderId")
+    internal fun on(event: OrderValidatedWithSuccessByRestaurantInternalEvent) = commandGateway.send(MarkRestaurantOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
+
+```
+ 
+
+#### Core subdomains - State machine
+
+![](digital-restaurant-state-machine.png)
 
 +++
 @transition[none]
