@@ -221,7 +221,7 @@ Generic subdomains facilitate the business, but are not core to the business. In
  
  - There is a learning curve because its a different way to write your business logic
  - Events will change shape over time
- - Querying the event store is often difficult, which forces you to use the Command Query Responsibility Segragation (CQRS) pattern
+ - Forces you to use the CQRS pattern
 
 Consider using event sourcing within 'core subdomain' only!
 
@@ -237,7 +237,7 @@ Consider using event sourcing within 'core subdomain' only!
  - A Snapshot is a denormalization of the current state of an aggregate at a given point in time
  - It represents the state when all events to that point in time have been replayed
  - They are used as a heuristic to prevent the need to load all events for the entire history of an aggregate
- - `@Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")`
+ - ```@Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")```
 
 ---
 @transition[none]
