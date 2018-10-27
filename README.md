@@ -1062,9 +1062,8 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 
 ## References and further reading
 
-  - https://github.com/microservice-patterns/ftgo-application
-  - https://docs.axonframework.org/
-  - https://spring.io/blog/2018/04/11/event-storming-and-spring-with-a-splash-of-ddd
+  - https://www.manning.com/books/microservices-patterns
+  - https://docs.axoniq.io/reference-guide/
   - http://www.codingthearchitecture.com/2016/04/25/layers_hexagons_features_and_components.html
  
 
