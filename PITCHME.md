@@ -273,7 +273,7 @@ Consider using event sourcing within 'core subdomain' only!
 @color[gray](Domain layer)
 @snapend
 
-#### Saga
+#### Saga example
 
 ```java
 @Saga
