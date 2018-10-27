@@ -1,6 +1,6 @@
 ### Domain Driven Design 
 
-<span style="color:gray">by example</span>
+ @color[gray](by example)
 
 [https://github.com/idugalic/digital-restaurant](https://github.com/idugalic/digital-restaurant)
 
@@ -9,7 +9,7 @@
 
 ### Sample application
 
-<span style="color:gray">d-restaurant</span>
+@color[gray](d-restaurant)
 
   - Customers use the website applications to place food orders at local restaurants
   - Application coordinates a network of couriers who deliver the orders to customers
