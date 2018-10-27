@@ -234,10 +234,12 @@ Consider using event sourcing within 'core subdomain' only!
  
 #### Eventsourcing & snapshotting
  
- - A Snapshot is a denormalization of the current state of an aggregate at a given point in time
- - It represents the state when all events to that point in time have been replayed
+ - A Snapshot represents the state when all events to that point in time have been replayed
  - They are used as a heuristic to prevent the need to load all events for the entire history of an aggregate
- - ```@Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")```
+
+```java
+@Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")
+```
 
 ---
 @transition[none]
