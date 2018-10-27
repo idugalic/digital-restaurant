@@ -23,11 +23,15 @@
 
 #### Technology
 
-  - It is built using Event Sourcing and CQRS patterns
-  - It is written in [Kotlin](https://kotlinlang.org/), and uses [Spring Boot](https://spring.io/projects/spring-boot)
-  - It is built using [Axonframework](https://axoniq.io/), which is focused on making applications based on the DDD principles
-  - It is driven using [Maven](https://maven.apache.org/).
-  
+@ul
+
+- It is built using Event Sourcing and CQRS patterns
+- It is written in [Kotlin](https://kotlinlang.org/), and uses [Spring Boot](https://spring.io/projects/spring-boot)
+- It is built using [Axonframework](https://axoniq.io/), which is focused on making applications based on the DDD principles
+- It is driven using [Maven](https://maven.apache.org/)
+
+@ulend
+
 +++
 @transition[none]
 
@@ -126,10 +130,14 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 ### Domain layer
 
-  - [This layer](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) contains information about the domain
-  - This is the heart of the business software
-  - The state of business objects is held here
-  
+@ul
+
+- [This layer](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) contains information about the domain
+- This is the heart of the business software
+- The state of business objects is held here
+
+@ulend
+
 +++
 @transition[none]
 
@@ -210,9 +218,13 @@ Generic subdomains facilitate the business, but are not core to the business. In
 
 #### Eventsourcing
 
- - We use [event sourcing](http://microservices.io/patterns/data/event-sourcing.html) to persist our [event sourced aggregates](https://docs.axonframework.org/part-ii-domain-logic/command-model#event-sourced-aggregates) as a sequence of events
- - Each event represents a state change of the aggregate
- - An application rebuild the current state of an aggregate by replaying the events
+@ul
+
+- We use [event sourcing](http://microservices.io/patterns/data/event-sourcing.html) to persist our [event sourced aggregates](https://docs.axonframework.org/part-ii-domain-logic/command-model#event-sourced-aggregates) as a sequence of events
+- Each event represents a state change of the aggregate
+- An application rebuild the current state of an aggregate by replaying the events
+
+@ulend
 
 +++
 @transition[none]
@@ -223,9 +235,13 @@ Generic subdomains facilitate the business, but are not core to the business. In
 
 #### Eventsourcing benefits
 
- - It preserves the history of aggregates (100%), which is valuable for auditing and regulatory purposes
- - It reliably publishes domain events, which is particularly useful in a microservice architecture
- - You can use any database technology to store the state
+@ul
+
+- It preserves the history of aggregates (100%), which is valuable for auditing and regulatory purposes
+- It reliably publishes domain events, which is particularly useful in a microservice architecture
+- You can use any database technology to store the state
+
+@ulend
 
 +++
 @transition[none]
@@ -236,11 +252,14 @@ Generic subdomains facilitate the business, but are not core to the business. In
  
 #### Eventsourcing drawbacks
  
- - There is a learning curve because its a different way to write your business logic
- - Events will change shape over time
- - Forces you to use the CQRS pattern
+@ul
 
-Consider using event sourcing within 'core subdomain' only!
+- There is a learning curve because its a different way to write your business logic
+- Events will change shape over time
+- Forces you to use the CQRS pattern
+- Consider using event sourcing within 'core subdomain' only
+
+@ulend
 
 +++
 @transition[none]
@@ -251,8 +270,12 @@ Consider using event sourcing within 'core subdomain' only!
  
 #### Eventsourcing & snapshotting
  
- - A Snapshot represents the state when all events to that point in time have been replayed
- - They are used as a heuristic to prevent the need to load all events for the entire history of an aggregate
+@ul
+
+- A Snapshot represents the state when all events to that point in time have been replayed
+- They are used as a heuristic to prevent the need to load all events for the entire history of an aggregate
+
+@ulend
 
 ```java
 @Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")
@@ -267,10 +290,14 @@ Consider using event sourcing within 'core subdomain' only!
 
 #### Saga
 
- - [Sagas](http://www.amundsen.com/downloads/sagas.pdf) are used to manage business transactions
- - They respond on Events and may dispatch Commands, invoke external applications, ...
- - It is a finite state machine
- - Its goal is to bring you to a final state, where you know that your transaction has succeeded or failed
+@ul
+
+- [Sagas](http://www.amundsen.com/downloads/sagas.pdf) are used to manage business transactions
+- They respond on Events and may dispatch Commands, invoke external applications, ...
+- It is a finite state machine
+- Its goal is to bring you to a final state, where you know that your transaction has succeeded or failed
+
+@ulend
 
 +++
 @transition[none]
@@ -319,9 +346,13 @@ class RestaurantOrderSaga {
 
 ### Applications layer
 
- - [This is a thin layer](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps) which coordinates the application activity
- - It does not contain business logic
- - It does not hold the state of the business objects
+@ul
+
+- [This is a thin layer](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps) which coordinates the application activity
+- It does not contain business logic
+- It does not hold the state of the business objects
+
+@ulend
 
 +++
 @transition[none]
@@ -346,12 +377,15 @@ class RestaurantOrderSaga {
 
 #### Monolith 1 (HTTP and WebSockets API)
 
- - [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) consumes events, and creates query models
- - It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
- - It is publishing a WebSocket events to notify on update of a query model
- - Query models are exposed via [Spring Data Rest](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository/OrderRepository.kt)
- - One-to-many relation between a [command resource](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/web/CommandController.kt) and [query resource](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository/OrderRepository.kt)
+@ul
+
+- [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) consumes events, and creates query models
+- It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
+- It is publishing a WebSocket events to notify on update of a query model
+- Query models are exposed via [Spring Data Rest](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository/OrderRepository.kt)
+- One-to-many relation between a [command resource](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/web/CommandController.kt) and [query resource](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository/OrderRepository.kt)
  
+@ulend
  
 +++
 @transition[none]
@@ -362,11 +396,14 @@ class RestaurantOrderSaga {
 
 #### Monolith 2 (HTTP/REST API)
 
- - [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/handler) consumes events, and creates query models
- - It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
- - We emit 'any change on Query Model' to Axon subscription queries, and we subscribe on them within [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt)
- - One-to-one relation between a [command resource](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt) and [query resource (Spring Data Rest)](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/repository/OrderRepository.kt)
+@ul
 
+- [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/handler) consumes events, and creates query models
+- It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
+- We emit 'any change on Query Model' to Axon subscription queries, and we subscribe on them within [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt)
+- One-to-one relation between a [command resource](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt) and [query resource (Spring Data Rest)](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/repository/OrderRepository.kt)
+
+@ulend
 
 +++
 @transition[none]
@@ -377,11 +414,14 @@ class RestaurantOrderSaga {
 
 #### Monolith 3 (WebSockets API)
  
- - [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/query/handler) consumes domain events, and creates query models
- - It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
- - It is publishing a WebSocket messages to topics on every update of a query model
- - [WebController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/web/WebController.kt) expose WebSocket message endpoints
+@ul
 
+- [Event handler](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/query/handler) consumes domain events, and creates query models
+- It can be replied (`@AllowReplay(true)`) to re-create (`@ResetHandler`) query model
+- It is publishing a WebSocket messages to topics on every update of a query model
+- [WebController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/web/WebController.kt) expose WebSocket message endpoints
+
+@ulend
 
 +++
 @transition[none]
@@ -394,11 +434,15 @@ class RestaurantOrderSaga {
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices):
 
- - has its own bounded context,
- - has its own JPA event store (we are not sharing the JPA Event Store)
- - we distribute *events* between them via **Apache Kafka**
- - we distribute *commands* via **Spring Cloud discovery and registry service (Eureka)**
+@ul
+
+- has its own bounded context,
+- has its own JPA event store (we are not sharing the JPA Event Store)
+- we distribute *events* between them via **Apache Kafka**
+- we distribute *commands* via **Spring Cloud discovery and registry service (Eureka)**
  
+@ulend
+
 +++
 @transition[none]
 
@@ -410,11 +454,15 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
 
- - has its own bounded context,
- - has its own JPA event store (we are not sharing the JPA Event Store)
- - we distribute *events* between them via **RabbitMQ**
- - we distribute *commands* via **Spring Cloud discovery and registry service (Eureka)**
- 
+@ul
+
+- has its own bounded context,
+- has its own JPA event store (we are not sharing the JPA Event Store)
+- we distribute *events* between them via **RabbitMQ**
+- we distribute *commands* via **Spring Cloud discovery and registry service (Eureka)**
+
+@ulend
+
 +++
 @transition[none]
 
@@ -426,10 +474,13 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets):
 
- - has its own bounded context,
- - has shared event(sourcing) storage (**[AxonServer](https://axoniq.io/product-overview/axon-server)**)
- - and we distribute messages (*commands*, *events* and *queries*) between them via **AxonServer**
- 
+@ul
+
+- has its own bounded context,
+- has shared event(sourcing) storage (**[AxonServer](https://axoniq.io/product-overview/axon-server)**)
+- and we distribute messages (*commands*, *events* and *queries*) between them via **AxonServer**
+
+@ulend
 ---
 @transition[none]
 
