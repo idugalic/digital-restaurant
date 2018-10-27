@@ -71,7 +71,7 @@ $ mvn spring-boot:run
 
 ### Sample application
 
-<span style="color:gray">Run microservices 1 (HTTP & Websockets & Apache Kafka)</span>
+<span style="color:gray">Run microservices 1 (Monolith 1 decomposed & Apache Kafka)</span>
 
 ```bash
 https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices
@@ -81,7 +81,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 ### Sample application
 
-<span style="color:gray">Run microservices 2 (REST & RabbitMQ)</span>
+<span style="color:gray">Run microservices 2 (Monolith 2 decomposed & RabbitMQ)</span>
 
 ```bash
 https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest
@@ -91,7 +91,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 ### Sample application
 
-<span style="color:gray">Run microservices 3 (Websockets & AxonServer)</span>
+<span style="color:gray">Run microservices 3 (Monolith 3 decomposed & AxonServer)</span>
 
 ```bash
 https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets
@@ -249,7 +249,7 @@ Consider using event sourcing within 'core subdomain' only!
 
 ### Applications layer
 
-<span style="color:gray">Microservices 1 (HTTP, WebSockets API and Apache Kafka)</span>
+<span style="color:gray">Microservices 1 (Monolith 1 decomposed and Apache Kafka)</span>
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices):
 
@@ -262,7 +262,7 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
 ### Applications layer
 
-<span style="color:gray">Microservices 2 (REST and RabbitMQ)</span>
+<span style="color:gray">Microservices 2 (Monolith 2 decomposed and RabbitMQ)</span>
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
 
@@ -275,7 +275,7 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
 ### Applications layer
 
-<span style="color:gray">Microservices 3 (Websockets and AxonServer)</span>
+<span style="color:gray">Microservices 3 (Monolith 3 decomposed and AxonServer)</span>
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets):
 
