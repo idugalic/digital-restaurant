@@ -137,7 +137,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 @color[gray](Domain layer)
 @snapend
 
-#### Subdomains - The problem
+#### Subdomains
 
   - getting different parts of an organization to agree on a single unified model is a monumental task. 
   - from the perspective of a given part of the organization, the model is overly complex for their needs. 
