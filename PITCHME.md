@@ -152,6 +152,8 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 #### Subdomains - Analyze
 
+![](digital-restaurant.png)
+
   - Analyze the business and identify the different areas of expertise. The end result is very likely to be subdomains
   - http://eventstorming.com/
 
