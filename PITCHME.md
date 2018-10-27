@@ -1,6 +1,6 @@
 ### Domain Driven Design 
 
- @color[gray](by example)
+ @color[red](by example)
 
 [https://github.com/idugalic/digital-restaurant](https://github.com/idugalic/digital-restaurant)
 
@@ -9,7 +9,7 @@
 
 ### Sample application
 
-@color[gray](d-restaurant)
+@color[red](d-restaurant)
 
   - Customers use the website applications to place food orders at local restaurants
   - Application coordinates a network of couriers who deliver the orders to customers
@@ -18,7 +18,7 @@
 @transition[none]
 
 @snap[north-west]
-Sample application
+@color[red](Sample application)
 @snapend
 
 #### Technology
@@ -32,7 +32,7 @@ Sample application
 @transition[none]
 
 @snap[north-west]
-Sample application
+@color[red](Sample application)
 @snapend
 
 #### Clone & Build
@@ -46,7 +46,7 @@ $ mvn clean install
 @transition[none]
 
 @snap[north-west]
-Sample application
+@color[red](Sample application)
 @snapend
 
 #### Run monolith 1 (HTTP & Websockets)
@@ -60,7 +60,7 @@ $ mvn spring-boot:run
 @transition[none]
 
 @snap[north-west]
-Sample application
+@color[red](Sample application)
 @snapend
 
 #### Run monolith 2 (REST)
@@ -74,7 +74,7 @@ $ mvn spring-boot:run
 @transition[none]
 
 @snap[north-west]
-Sample application
+@color[red](Sample application)
 @snapend
 
 #### Run monolith 3 (Websockets)
@@ -87,7 +87,7 @@ $ mvn spring-boot:run
 @transition[none]
 
 @snap[north-west]
-Sample application
+@color[red](Sample application)
 @snapend
 
 #### Run microservices 1 (Monolith 1 decomposed)
@@ -100,7 +100,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 @transition[none]
 
 @snap[north-west]
-Sample application
+@color[red](Sample application)
 @snapend
 
 #### Run microservices 2 (Monolith 2 decomposed)
@@ -113,7 +113,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 @transition[none]
 
 @snap[north-west]
-Sample application
+@color[red](Sample application)
 @snapend
 
 #### Run microservices 3 (Monolith 3 decomposed)
