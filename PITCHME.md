@@ -91,7 +91,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 ### Sample application
 
-<span style="color:gray">Run microservices 3 (Websockets, AxonHub & AxonDB)</span>
+<span style="color:gray">Run microservices 3 (Websockets & AxonServer)</span>
 
 ```bash
 https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets
