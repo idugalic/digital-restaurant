@@ -362,9 +362,11 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
 Ivan Dugalic
 
- - @fa[terminal] http://idugalic.pro
- - @fa[twitter](https://twitter.com/idugalic)
- - @fa[github](https://github.com/idugalic)
+@fa[terminal] http://idugalic.pro
+
+@fa[twitter](https://twitter.com/idugalic)
+
+@fa[github](https://github.com/idugalic)
 
 
 
