@@ -1,6 +1,6 @@
 ### Domain Driven Design 
 
- @color[red](by example)
+ @color[gray](by example)
 
 [https://github.com/idugalic/digital-restaurant](https://github.com/idugalic/digital-restaurant)
 
