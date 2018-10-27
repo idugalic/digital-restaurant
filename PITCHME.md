@@ -43,6 +43,7 @@ $ mvn clean install
 ```
 
 +++
+@transition[none]
 
 @snap[north-west]
 Sample application
@@ -56,6 +57,7 @@ $ mvn spring-boot:run
 ```
 
 +++
+@transition[none]
 
 @snap[north-west]
 Sample application
@@ -69,6 +71,7 @@ $ mvn spring-boot:run
 ```
 
 +++
+@transition[none]
 
 @snap[north-west]
 Sample application
@@ -81,6 +84,7 @@ $ cd drestaurant-apps/drestaurant-monolith-websockets
 $ mvn spring-boot:run
 ```
 +++
+@transition[none]
 
 @snap[north-west]
 Sample application
@@ -93,6 +97,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 ```
 
 +++
+@transition[none]
 
 @snap[north-west]
 Sample application
@@ -105,6 +110,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 ```
 
 +++
+@transition[none]
 
 @snap[north-west]
 Sample application
@@ -125,6 +131,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
   - The state of business objects is held here
   
 +++
+@transition[none]
 
 @snap[north-west]
 Domain layer
@@ -137,6 +144,7 @@ Domain layer
   - the domain model can be confusing since different parts of the organization might use either the same term for different concepts or different terms for the same concept. 
 
 +++
+@transition[none]
 
 @snap[north-west]
 Domain layer
@@ -148,6 +156,7 @@ Domain layer
   - http://eventstorming.com/
 
 +++
+@transition[none]
 
 @snap[north-west]
 Domain layer
@@ -163,6 +172,7 @@ Core subdomains are more important to the business
  - [Order subdomain - drestaurant-libs/drestaurant-order/](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order)
 
 +++
+@transition[none]
 
 @snap[north-west]
 Domain layer
@@ -175,6 +185,7 @@ Generic subdomains facilitate the business, but are not core to the business. In
  - [Accounting subdomain - drestaurant-libs/drestaurant-accounting/](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-accounting)
 
 +++
+@transition[none]
 
 @snap[north-west]
 Domain layer
@@ -187,6 +198,7 @@ Domain layer
  - An application rebuild the current state of an aggregate by replaying the events
 
 +++
+@transition[none]
 
 @snap[north-west]
 Domain layer
@@ -199,6 +211,7 @@ Domain layer
  - You can use any database technology to store the state
 
 +++
+@transition[none]
  
 @snap[north-west]
 Domain layer
@@ -213,6 +226,7 @@ Domain layer
 Consider using event sourcing within 'core subdomain' only!
 
 +++
+@transition[none]
 
 @snap[north-west]
 Domain layer
@@ -235,6 +249,7 @@ Domain layer
  - It does not hold the state of the business objects
 
 +++
+@transition[none]
 
 @snap[north-west]
 Applications layer
@@ -248,6 +263,8 @@ Applications layer
  - Microservices 3 - *Monolith 3 decomposed*
 
 +++
+@transition[none]
+
 @snap[north-west]
 Applications layer
 @snapend
@@ -262,6 +279,7 @@ Applications layer
  
  
 +++
+@transition[none]
 
 @snap[north-west]
 Applications layer
@@ -276,6 +294,7 @@ Applications layer
 
 
 +++
+@transition[none]
 
 @snap[north-west]
 Applications layer
@@ -290,6 +309,7 @@ Applications layer
 
 
 +++
+@transition[none]
 
 @snap[north-west]
 Applications layer
@@ -305,6 +325,7 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
  - we distribute *commands* via **Spring Cloud discovery and registry service (Eureka)**
  
 +++
+@transition[none]
 
 @snap[north-west]
 Applications layer
@@ -320,6 +341,7 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
  - we distribute *commands* via **Spring Cloud discovery and registry service (Eureka)**
  
 +++
+@transition[none]
 
 @snap[north-west]
 Applications layer
@@ -338,7 +360,9 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
 ### Thank you
 
- - Ivan Dugalic http://idugalic.pro
+Ivan Dugalic
+
+ - @fa[terminal] http://idugalic.pro
  - @fa[twitter](https://twitter.com/idugalic)
  - @fa[github](https://github.com/idugalic)
 
