@@ -204,9 +204,9 @@ Consider using event sourcing within 'core subdomain' only!
  - Monolith 1 - HTTP and WebSockets API
  - Monolith 2 - HTTP/REST API
  - Monolith 3 - WebSockets API
- - Microservices 1 - HTTP, WebSockets API and Kafka
- - Microservices 2 - REST and RabbitMQ
- - Microservices 3 - Websockets, AxonHub & AxonDB
+ - Microservices 1 - HTTP, WebSockets API and **Apache Kafka**
+ - Microservices 2 - REST and **RabbitMQ**
+ - Microservices 3 - Websockets and **[AxonServer](https://axoniq.io/product-overview/axon-server)**
 
 +++
 
@@ -255,7 +255,8 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
  - has its own bounded context,
  - has its own JPA event store (we are not sharing the JPA Event Store)
- - and we distribute events between them via **Apache Kafka**
+ - we distribute *events* between them via **Apache Kafka**
+ - we distribute *commands* via **Spring Cloud discovery and registry service (Eureka)**
  
 +++
 
@@ -267,19 +268,20 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
  - has its own bounded context,
  - has its own JPA event store (we are not sharing the JPA Event Store)
- - and we distribute events between them via **RabbitMQ**
+ - we distribute *events* between them via **RabbitMQ**
+ - we distribute *commands* via **Spring Cloud discovery and registry service (Eureka)**
  
 +++
 
 ### Applications layer
 
-<span style="color:gray">Microservices 3 (Websockets, AxonHub & AxonDB)</span>
+<span style="color:gray">Microservices 3 (Websockets and AxonServer)</span>
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets):
 
  - has its own bounded context,
- - has shared event(sourcing) storage (AxonDB)
- - and we distribute messages between them via AxonHub
+ - has shared event(sourcing) storage (**AxonServer**)
+ - and we distribute messages (*commands*, *events* and *queries*) between them via **AxonServer**
  
 ---
 ### Thank you
