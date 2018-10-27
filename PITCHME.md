@@ -183,12 +183,6 @@ Core subdomains are more important to the business
  - [Customer subdomain - drestaurant-libs/drestaurant-customer/](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer)
  - [Order subdomain - drestaurant-libs/drestaurant-order/](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order)
 
-+++
-@transition[none]
-
-@snap[north-west]
-@color[gray](Domain layer)
-@snapend
 
 +++
 @transition[none]
@@ -201,8 +195,8 @@ Core subdomains are more important to the business
 
  - Sagas are used to manage business transactions
  - They respond on Events and may dispatch Commands, invoke external applications, ...
- 
- ```java
+
+```java
 @Saga
 @ProcessingGroup("restaurantordersaga")
 class RestaurantOrderSaga {
@@ -222,7 +216,6 @@ class RestaurantOrderSaga {
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
     internal fun on(event: OrderValidatedWithSuccessByRestaurantInternalEvent) = commandGateway.send(MarkRestaurantOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
-
 ```
  
 
