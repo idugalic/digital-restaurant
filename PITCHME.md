@@ -15,8 +15,9 @@
   
 +++
 
-### Sample application
-
+@snap[north-west]
+Sample application
+@snapend
 <span style="color:gray">Technology</span>
 
   - It is built using Event Sourcing and CQRS patterns
