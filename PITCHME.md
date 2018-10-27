@@ -9,7 +9,7 @@
 
 ### Sample application
 
-@color[red](d-restaurant)
+@color[gray](d-restaurant)
 
   - Customers use the website applications to place food orders at local restaurants
   - Application coordinates a network of couriers who deliver the orders to customers
@@ -18,7 +18,7 @@
 @transition[none]
 
 @snap[north-west]
-@color[red](Sample application)
+@color[gray](Sample application)
 @snapend
 
 #### Technology
@@ -32,7 +32,7 @@
 @transition[none]
 
 @snap[north-west]
-@color[red](Sample application)
+@color[gray](Sample application)
 @snapend
 
 #### Clone & Build
@@ -46,7 +46,7 @@ $ mvn clean install
 @transition[none]
 
 @snap[north-west]
-@color[red](Sample application)
+@color[gray](Sample application)
 @snapend
 
 #### Run monolith 1 (HTTP & Websockets)
@@ -60,7 +60,7 @@ $ mvn spring-boot:run
 @transition[none]
 
 @snap[north-west]
-@color[red](Sample application)
+@color[gray](Sample application)
 @snapend
 
 #### Run monolith 2 (REST)
@@ -74,7 +74,7 @@ $ mvn spring-boot:run
 @transition[none]
 
 @snap[north-west]
-@color[red](Sample application)
+@color[gray](Sample application)
 @snapend
 
 #### Run monolith 3 (Websockets)
@@ -87,7 +87,7 @@ $ mvn spring-boot:run
 @transition[none]
 
 @snap[north-west]
-@color[red](Sample application)
+@color[gray](Sample application)
 @snapend
 
 #### Run microservices 1 (Monolith 1 decomposed)
@@ -100,7 +100,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 @transition[none]
 
 @snap[north-west]
-@color[red](Sample application)
+@color[gray](Sample application)
 @snapend
 
 #### Run microservices 2 (Monolith 2 decomposed)
@@ -113,7 +113,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 @transition[none]
 
 @snap[north-west]
-@color[red](Sample application)
+@color[gray](Sample application)
 @snapend
 
 #### Run microservices 3 (Monolith 3 decomposed)
@@ -134,7 +134,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 @transition[none]
 
 @snap[north-west]
-Domain layer
+@color[gray](Domain layer)
 @snapend
 
 #### Subdomains - The problem
@@ -147,7 +147,7 @@ Domain layer
 @transition[none]
 
 @snap[north-west]
-Domain layer
+@color[gray](Domain layer)
 @snapend
 
 #### Subdomains - Analyze
@@ -159,7 +159,7 @@ Domain layer
 @transition[none]
 
 @snap[north-west]
-Domain layer
+@color[gray](Domain layer)
 @snapend
 
 #### Core subdomains
@@ -175,7 +175,7 @@ Core subdomains are more important to the business
 @transition[none]
 
 @snap[north-west]
-Domain layer
+@color[gray](Domain layer)
 @snapend
 
 #### Generic subdomains
@@ -188,7 +188,7 @@ Generic subdomains facilitate the business, but are not core to the business. In
 @transition[none]
 
 @snap[north-west]
-Domain layer
+@color[gray](Domain layer)
 @snapend
 
 #### Eventsourcing
@@ -201,7 +201,7 @@ Domain layer
 @transition[none]
 
 @snap[north-west]
-Domain layer
+@color[gray](Domain layer)
 @snapend
 
 #### Eventsourcing benefits
@@ -214,7 +214,7 @@ Domain layer
 @transition[none]
  
 @snap[north-west]
-Domain layer
+@color[gray](Domain layer)
 @snapend
  
 #### Eventsourcing drawbacks
@@ -229,7 +229,7 @@ Consider using event sourcing within 'core subdomain' only!
 @transition[none]
 
 @snap[north-west]
-Domain layer
+@color[gray](Domain layer)
 @snapend
  
 #### Eventsourcing & snapshotting
@@ -252,7 +252,7 @@ Domain layer
 @transition[none]
 
 @snap[north-west]
-Applications layer
+@color[gray](Applications layer)
 @snapend
 
  - Monolith 1 - HTTP and WebSockets API
@@ -266,7 +266,7 @@ Applications layer
 @transition[none]
 
 @snap[north-west]
-Applications layer
+@color[gray](Applications layer)
 @snapend
 
 #### Monolith 1 (HTTP and WebSockets API)
@@ -282,7 +282,7 @@ Applications layer
 @transition[none]
 
 @snap[north-west]
-Applications layer
+@color[gray](Applications layer)
 @snapend
 
 #### Monolith 2 (HTTP/REST API)
@@ -297,7 +297,7 @@ Applications layer
 @transition[none]
 
 @snap[north-west]
-Applications layer
+@color[gray](Applications layer)
 @snapend
 
 #### Monolith 3 (WebSockets API)
@@ -312,7 +312,7 @@ Applications layer
 @transition[none]
 
 @snap[north-west]
-Applications layer
+@color[gray](Applications layer)
 @snapend
 
 #### Microservices 1 (Monolith 1 decomposed)
@@ -328,7 +328,7 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 @transition[none]
 
 @snap[north-west]
-Applications layer
+@color[gray](Applications layer)
 @snapend
 
 #### Microservices 2 (Monolith 2 decomposed)
@@ -344,7 +344,7 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 @transition[none]
 
 @snap[north-west]
-Applications layer
+@color[gray](Applications layer)
 @snapend
 
 #### Microservices 3 (Monolith 3 decomposed)
