@@ -306,7 +306,7 @@ class RestaurantOrderSaga {
 
 #### State machine
 
-<img src="digital-restaurant-state-machine.png" width="800">
+<img src="digital-restaurant-state-machine.png" width="700">
 
 ---
 @transition[none]
