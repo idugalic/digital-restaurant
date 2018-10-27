@@ -5,6 +5,7 @@
 [https://github.com/idugalic/digital-restaurant](https://github.com/idugalic/digital-restaurant)
 
 ---
+@transition[none]
 
 ### Sample application
 
@@ -113,6 +114,7 @@ Sample application
 https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets
 ```
 ---
+@transition[none]
 
 ### Domain layer
 
@@ -222,6 +224,7 @@ Domain layer
  - `@Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")`
 
 ---
+@transition[none]
 
 ### Applications layer
 
@@ -329,10 +332,11 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
  - and we distribute messages (*commands*, *events* and *queries*) between them via **AxonServer**
  
 ---
+@transition[none]
+
 ### Thank you
 
- - Ivan Dugalic
- - @fa[smile](http://idugalic.pro/)
+ - Ivan Dugalic http://idugalic.pro
  - @fa[twitter](https://twitter.com/idugalic)
  - @fa[github](https://github.com/idugalic)
 
