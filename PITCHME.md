@@ -20,9 +20,9 @@
 <span style="color:gray">Technology</span>
 
   - It is built using Event Sourcing and CQRS patterns
-  - It is written in Kotlin, and uses Spring Boot
-  - It is built using Axonframework, which is focused on making applications based on the DDD principles
-  - It is driven using Maven.
+  - It is written in [Kotlin](https://kotlinlang.org/), and uses [Spring Boot](https://spring.io/projects/spring-boot)
+  - It is built using [Axonframework](https://axoniq.io/), which is focused on making applications based on the DDD principles
+  - It is driven using [Maven](https://maven.apache.org/).
   
 +++
 
@@ -100,7 +100,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 
 ### Domain layer
 
-  - This layer contains information about the domain
+  - [This layer](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) contains information about the domain
   - This is the heart of the business software
   - The state of business objects is held here
   
@@ -193,7 +193,7 @@ Consider using event sourcing within 'core subdomain' only!
 
 ### Applications layer
 
- - This is a thin layer which coordinates the application activity
+ - [This is a thin layer](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps) which coordinates the application activity
  - It does not contain business logic
  - It does not hold the state of the business objects
 
@@ -204,9 +204,9 @@ Consider using event sourcing within 'core subdomain' only!
  - Monolith 1 - HTTP and WebSockets API
  - Monolith 2 - HTTP/REST API
  - Monolith 3 - WebSockets API
- - Microservices 1 - *Monolith 1 decomposed* and **Apache Kafka**
- - Microservices 2 - *Monolith 2 decomposed* and **RabbitMQ**
- - Microservices 3 - *Monolith 2 decomposed* and **[AxonServer](https://axoniq.io/product-overview/axon-server)**
+ - Microservices 1 - *Monolith 1 decomposed*
+ - Microservices 2 - *Monolith 2 decomposed*
+ - Microservices 3 - *Monolith 3 decomposed*
 
 +++
 
@@ -249,7 +249,7 @@ Consider using event sourcing within 'core subdomain' only!
 
 ### Applications layer
 
-<span style="color:gray">Microservices 1 (Monolith 1 decomposed and Apache Kafka)</span>
+<span style="color:gray">Microservices 1 (Monolith 1 decomposed)</span>
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices):
 
@@ -262,7 +262,7 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
 ### Applications layer
 
-<span style="color:gray">Microservices 2 (Monolith 2 decomposed and RabbitMQ)</span>
+<span style="color:gray">Microservices 2 (Monolith 2 decomposed)</span>
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
 
@@ -275,12 +275,12 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
 ### Applications layer
 
-<span style="color:gray">Microservices 3 (Monolith 3 decomposed and AxonServer)</span>
+<span style="color:gray">Microservices 3 (Monolith 3 decomposed)</span>
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets):
 
  - has its own bounded context,
- - has shared event(sourcing) storage (**AxonServer**)
+ - has shared event(sourcing) storage (**[AxonServer](https://axoniq.io/product-overview/axon-server)**)
  - and we distribute messages (*commands*, *events* and *queries*) between them via **AxonServer**
  
 ---
