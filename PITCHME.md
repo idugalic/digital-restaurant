@@ -15,6 +15,7 @@
   - Application coordinates a network of couriers who deliver the orders to customers
   
 +++
+@transition[none]
 
 @snap[north-west]
 Sample application
@@ -28,6 +29,7 @@ Sample application
   - It is driven using [Maven](https://maven.apache.org/).
   
 +++
+@transition[none]
 
 @snap[north-west]
 Sample application
