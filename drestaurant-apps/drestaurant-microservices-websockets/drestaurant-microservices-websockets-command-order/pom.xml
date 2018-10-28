@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-websockets-command-order</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-microservices-websockets-command-order</name>
-    <description>d-restaurant microservice rest - order (command)</description>
+    <name>apps-microservices-websockets-command-order</name>
+    <description>Microservice Websockets - Order (command)</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

@@ -6,8 +6,8 @@
     <artifactId>drestaurant-customer</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-libs-customer</name>
-    <description>d-restaurant customer lib</description>
+    <name>libs-customer</name>
+    <description>Module for managing customer information and customer order</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>
@@ -49,5 +49,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-rest-discovery-server</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-microservices-rest-discovery-server</name>
-    <description>d-restaurant microservice rest - discovery-server</description>
+    <name>apps-microservices-rest-discovery-server</name>
+    <description>Microservice REST - Discovery server</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

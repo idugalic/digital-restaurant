@@ -6,8 +6,8 @@
     <artifactId>drestaurant-courier</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-libs-courier</name>
-    <description>managing courier information</description>
+    <name>libs-courier</name>
+    <description>Module for managing courier information and courier order/delivery</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>
@@ -49,5 +49,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

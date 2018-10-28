@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-query</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-microservices-query</name>
-    <description>d-restaurant microservice - qury</description>
+    <name>apps-microservices-query</name>
+    <description>Microservice - Query</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

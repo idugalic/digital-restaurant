@@ -6,8 +6,8 @@
     <artifactId>drestaurant-restaurant</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-libs-restaurant</name>
-    <description>managing restaurant menus and other information including location and opening hours</description>
+    <name>libs-restaurant</name>
+    <description>Module for managing restaurant information and restaurant order</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>
@@ -49,5 +49,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

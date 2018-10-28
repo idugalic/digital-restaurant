@@ -6,8 +6,8 @@
     <artifactId>drestaurant-libs</artifactId>
     <packaging>pom</packaging>
 
-    <name>drestaurant-libs (parent)</name>
-    <description>d-restaurant libraries</description>
+    <name>libs (parent)</name>
+    <description>Domain modules/libraries parent pom</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

@@ -6,8 +6,8 @@
     <artifactId>drestaurant-order</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-libs-order</name>
-    <description>d-restaurant order - parent</description>
+    <name>libs-order</name>
+    <description>Module for managing general order fulfilment process</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>
@@ -49,5 +49,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

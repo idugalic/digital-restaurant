@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-rest-order</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-microservices-rest-order</name>
-    <description>d-restaurant microservice rest - order</description>
+    <name>apps-microservices-rest-order</name>
+    <description>Microservice REST - Order</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

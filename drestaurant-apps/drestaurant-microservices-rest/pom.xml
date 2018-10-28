@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-rest</artifactId>
     <packaging>pom</packaging>
 
-    <name>drestaurant-apps-microservices-rest (parent)</name>
-    <description>d-restaurant microservices rest</description>
+    <name>apps-microservices-rest (parent)</name>
+    <description>Microservices - REST</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>
@@ -22,5 +22,4 @@
         <module>drestaurant-microservices-rest-order</module>
         <module>drestaurant-microservices-rest-discovery-server</module>
     </modules>
-
 </project>

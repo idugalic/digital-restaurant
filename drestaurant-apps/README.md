@@ -30,7 +30,7 @@ We have created more 'web' applications (standalone Spring Boot applications) to
     - we synchronize on the backend side
     - we use RabbitMQ to distribute events between services (bounded contexts)
     - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
- - [Microservices 3](#microservices-3-websockets-axondb-and-axonhub)
+ - [Microservices 3](#microservices-3-websockets-axonserver)
     - **WebSockets API**
     - we are async all the way
     - we use [AxonServer](https://axoniq.io/product-overview/axon-server) to route and distribute all type of messages (commands, events, queries) between services (bounded contexts)
@@ -67,8 +67,6 @@ Each event handler allows 'reply' of events. Please note that 'reset handler' wi
 ### Monolith 2 (REST API by not segregating Command and Query)
 
 Source code: [https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest)
-
-Sometimes, you are simply being required to deliver REST API.
 
 This application is using the second approach (**not segregating Command and Query**) by exposing capabilities of our 'domain' via the REST API components that are responsible for
  
@@ -109,11 +107,12 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
  - has its own bounded context,
  - has its own JPA event store (we are not sharing the JPA Event Store between service)
- - and we distribute events between them via Apache Kafka (we do not use Kafka as event(sourcing) store)
- 
-#### Apache Kafka
+ - we distribute events between them via Apache Kafka (we do not use Kafka as event(sourcing) store)
+ - and we distribute commands (Command Bus) by Spring Cloud discovery and registry service (Eureka)
 
-Apache Kafka is a distributed streaming platform.
+#### Apache Kafka & event messages
+
+Apache Kafka is a distributed streaming platform. It is used to route and distribute `events`.
 
 ##### Order of events (kafka topics & partitions)
 
@@ -123,19 +122,24 @@ When using Kafka, you can preserve the order of those events by putting them all
 They must be in the same Kafka **topic** because different topics mean different partitions.
 
 We [configured our Kafka instance](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-microservices/docker-compose.yml) to crate only one topic (**axon-events**) with one partition initially.
- 
+
 ##### Queue vs publish-subscribe (kafka groups)
 
 If all consumers are from the same group, the Kafka model functions as a traditional **message queue** would.
 All the records and processing is then load balanced.
 **Each message would be consumed by one consumer of the group only.**
 Each partition is connected to at most one consumer from a group.
- 
+
 When multiple consumer groups exist, the flow of the data consumption model aligns with the traditional **publish-subscribe** model.
 **The messages are broadcast to all consumer groups.**
 
 We [configured our (micro)services](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-microservices/drestaurant-microservices-command-customer/src/main/resources/application.yml) to use publish-subscribe model, by setting unique consumer group id for each (micro)service.
 
+#### Spring Cloud connector & command messages
+
+The [Spring Cloud connector](https://docs.axoniq.io/reference-guide/1.3-infrastructure-components/command-dispatching#spring-cloud-connector) setup uses the service registration and discovery mechanism described by Spring Cloud for distributing the command bus (`commands`).
+You are thus left free to choose which Spring Cloud implementation to use to distribute your commands.
+An example implementation is the Eureka Discovery/Eureka Server combination.
 
 
 ### Microservices 2 (REST, RabbitMQ)
@@ -144,18 +148,20 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 
  - has its own bounded context,
  - has its own JPA event(sourcing) store (we are not sharing the JPA Event Store)
- - and we distribute events between them via RabbitMQ
- 
-#### RabbitMQ
+ - we distribute events between them via RabbitMQ
+ - and we distribute commands (Command Bus) by Spring Cloud discovery and registry service (Eureka)
 
-RabbitMQ is the most popular open source message broker.
+ 
+#### RabbitMQ & event messages
+
+RabbitMQ is the most popular open source message broker. It is used to route and distribute `events`.
 It supports several messaging protocols, directly and through the use of plugins:
 
  - AMQP
  - STOMP
  - MQTT
  - HTTP ...
- 
+
 ##### Publish-subscribe
 
 This messaging pattern supports delivering a message to multiple consumers.
@@ -166,34 +172,49 @@ This queues are bind to one common exchange (`events.fanout.exchange`).
 RabbitMQ allows more sophisticated message routing then Apache Kafka can offer.
 Having one exchange bind to every service queue covered our scenario, but you can do more if you like.
 
+#### Spring Cloud connector & command messages
+
+The [Spring Cloud connector](https://docs.axoniq.io/reference-guide/1.3-infrastructure-components/command-dispatching#spring-cloud-connector) setup uses the service registration and discovery mechanism described by Spring Cloud for distributing the command bus (`commands`).
+You are thus left free to choose which Spring Cloud implementation to use to distribute your commands.
+An example implementation is the Eureka Discovery/Eureka Server combination.
 
 
-### Microservices 3 (Websockets, AxonDB and AxonHub)
+
+### Microservices 3 (Websockets, AxonServer)
 
 Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
 
  - has its own bounded context,
- - has shared event(sourcing) storage (AxonDB)
- - and we distribute messages between them via AxonHub
+ - has shared event(sourcing) storage (AxonServer)
+ - and we distribute messages between them via AxonServer
  
-#### AxonHub
 
-[AxonHub](https://axoniq.io/product-overview/axonhub) is a messaging platform specifically built to support distributed Axon Framework applications. It is a drop in replacement for the other CommandBus, EventBus and QueryBus implementations.
+#### AxonServer & event messages & command messages & query messages
 
-The key characteristics for AxonHub are:
- - Dedicated infrastructure for exchanging messages in a message-driven micro-services environment.
- - Easy-to-use and easy-to-manage
+The key characteristics of [AxonServer](https://axoniq.io/product-overview/axon-server) are:
+ - Dedicated infrastructure for exchanging three types of messages (`commands`, `events`, `queries`) in a message-driven micro-services environment
+ - Purpose-built database system optimized for the storage of event data of the type that is generated by applications that use the event sourcing architecture pattern
  - Built-in knowledge on CQRS message patterns
+ - Easy-to-use and easy-to-manage
+
+Both [AxonFramework](https://axoniq.io/product-overview/axon-framework) and [AxonServer](https://axoniq.io/product-overview/axon-server) form [Axon platform](https://docs.axoniq.io/reference-guide/).
 
 
-#### AxonDB
+Axon platform is end-to-end development and infrastructure platform for smoothly evolving Event-Driven microservices focused on CQRS and Event Sourcing.
 
-AxonDB is a purpose-built database system optimized for the storage of event data of the type that is generated by applications that use the event sourcing architecture pattern.
-It has been primarily designed with the use case of Axon Framework-based Java applications in mind, although there is nothing in the architecture that restricts its use to these applications only.
+AxonFramework and AxonServer are `open source`. [Axon Server Enterprise](https://axoniq.io/product-overview/axon-enterprise) is targeted towards mission-critical, medium to large scale production deployments of Axon. AxonEnterprise is not open source.
 
-AxonHub and AxonDB are commercial software products by AxonIQ B.V.
-Free 'developer' editions are available.
+Axon is integrated with Spring Boot platform. You can choose many Spring Boot starters, and start with minimal configuration.
+AxonServer is configured by default.
 
+```
+<dependency>
+    <groupId>org.axonframework</groupId>
+    <artifactId>axon-spring-boot-starter</artifactId>
+    <version>${axon.version}</version>
+</dependency>
+
+```
 
 ## Development
 

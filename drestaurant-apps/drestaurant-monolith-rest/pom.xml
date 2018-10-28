@@ -7,8 +7,8 @@
     <artifactId>drestaurant-monolith-rest</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-monolith-rest</name>
-    <description>d-restaurant monolithic application - REST</description>
+    <name>apps-monolith-rest</name>
+    <description>Monolith - REST</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

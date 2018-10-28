@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-command-restaurant</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-microservices-command-restaurant</name>
-    <description>d-restaurant microservice - restaurant</description>
+    <name>apps-microservices-command-restaurant</name>
+    <description>Microservice - Restaurant</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

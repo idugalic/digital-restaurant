@@ -6,8 +6,8 @@
     <artifactId>drestaurant-apps</artifactId>
     <packaging>pom</packaging>
 
-    <name>drestaurant-apps (parent)</name>
-    <description>d-restaurant backend applications</description>
+    <name>apps (parent)</name>
+    <description>Applications parent pom</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices</artifactId>
     <packaging>pom</packaging>
 
-    <name>drestaurant-apps-microservices (parent)</name>
-    <description>d-restaurant microservices</description>
+    <name>apps-microservices (parent)</name>
+    <description>Microservices - HTTP/WEB SOCKETS</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>
@@ -23,5 +23,4 @@
         <module>drestaurant-microservices-query</module>
         <module>drestaurant-microservices-discovery-server</module>
     </modules>
-
 </project>

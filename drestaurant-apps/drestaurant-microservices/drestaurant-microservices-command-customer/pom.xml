@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-command-customer</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-microservices-command-customer</name>
-    <description>d-restaurant microservice - customer</description>
+    <name>apps-microservices-command-customer</name>
+    <description>Microservice - Customer</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

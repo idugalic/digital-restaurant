@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-websockets-command-courier</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-microservices-websockets-command-courier</name>
-    <description>d-restaurant microservice websockets - courier (command)</description>
+    <name>apps-microservices-websockets-command-courier</name>
+    <description>Microservice Websockets - Courier (command)</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

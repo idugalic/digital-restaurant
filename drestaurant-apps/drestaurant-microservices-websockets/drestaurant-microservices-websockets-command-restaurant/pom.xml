@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-websockets-command-restaurant</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-microservices-websockets-command-restaurant</name>
-    <description>d-restaurant microservice websockets - restaurant (command)</description>
+    <name>apps-microservices-websockets-command-restaurant</name>
+    <description>Microservice Websockets - Restaurant (command)</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

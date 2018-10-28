@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-websockets-query</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-microservices-websockets-query</name>
-    <description>d-restaurant microservice websockets - query</description>
+    <name>apps-microservices-websockets-query</name>
+    <description>Microservice Websockets - Query</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

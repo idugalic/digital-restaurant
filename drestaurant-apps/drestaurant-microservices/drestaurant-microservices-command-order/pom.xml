@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-command-order</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-microservices-command-order</name>
-    <description>d-restaurant microservice - order</description>
+    <name>apps-microservices-command-order</name>
+    <description>Microservice - Order</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

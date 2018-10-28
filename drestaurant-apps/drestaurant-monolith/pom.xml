@@ -7,8 +7,8 @@
     <artifactId>drestaurant-monolith</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-monolith</name>
-    <description>d-restaurant monolithic application</description>
+    <name>apps-monolith</name>
+    <description>Monolith - HTTP / WEB SOCKETS</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>

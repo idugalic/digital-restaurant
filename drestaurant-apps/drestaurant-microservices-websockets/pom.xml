@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-websockets</artifactId>
     <packaging>pom</packaging>
 
-    <name>drestaurant-apps-microservices-websockets (parent)</name>
-    <description>d-restaurant microservices websockets</description>
+    <name>apps-microservices-websockets (parent)</name>
+    <description>Microservices -  Web sockets</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>
@@ -22,5 +22,4 @@
         <module>drestaurant-microservices-websockets-command-order</module>
         <module>drestaurant-microservices-websockets-query</module>
     </modules>
-
 </project>

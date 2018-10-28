@@ -6,13 +6,12 @@
     <artifactId>drestaurant-accounting</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-libs-accounting</name>
-    <description>d-restaurant accounting lib</description>
+    <name>libs-accounting</name>
+    <description>Module for managing courier, customer and restaurants accounts</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>
         <artifactId>drestaurant-libs</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-
 </project>

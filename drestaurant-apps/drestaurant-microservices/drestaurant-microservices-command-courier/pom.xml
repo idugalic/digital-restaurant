@@ -6,8 +6,8 @@
     <artifactId>drestaurant-microservices-command-courier</artifactId>
     <packaging>jar</packaging>
 
-    <name>drestaurant-apps-microservices-command-courier</name>
-    <description>d-restaurant microservice - courier</description>
+    <name>apps-microservices-command-courier</name>
+    <description>Microservice - Courier</description>
 
     <parent>
         <groupId>com.drestaurant</groupId>
