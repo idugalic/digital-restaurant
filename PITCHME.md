@@ -293,9 +293,10 @@ Generic subdomains facilitate the business, but are not core to the business. In
 @ul
 
 - [Sagas](http://www.amundsen.com/downloads/sagas.pdf) are used to manage business transactions
+- The saga transaction model is `ACD`. It lack of `Isolation`
 - They respond on Events and may dispatch Commands, invoke external applications, ...
-- It is a finite state machine
-- Its goal is to bring you to a final state, where you know that your transaction has succeeded or failed
+- Orchestration vs. Choreography
+- Saga orchestrators as state machines
 
 @ulend
 
