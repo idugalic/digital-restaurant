@@ -1,19 +1,19 @@
 package com.drestaurant.web
 
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.Money
-import com.drestaurant.common.domain.model.PersonName
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.Money
+import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.courier.domain.api.AssignCourierOrderToCourierCommand
 import com.drestaurant.courier.domain.api.CreateCourierCommand
 import com.drestaurant.courier.domain.api.MarkCourierOrderAsDeliveredCommand
 import com.drestaurant.customer.domain.api.CreateCustomerCommand
 import com.drestaurant.order.domain.api.CreateOrderCommand
-import com.drestaurant.order.domain.model.OrderInfo
-import com.drestaurant.order.domain.model.OrderLineItem
+import com.drestaurant.order.domain.api.model.OrderInfo
+import com.drestaurant.order.domain.api.model.OrderLineItem
 import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand
 import com.drestaurant.restaurant.domain.api.MarkRestaurantOrderAsPreparedCommand
-import com.drestaurant.restaurant.domain.model.MenuItem
-import com.drestaurant.restaurant.domain.model.RestaurantMenu
+import com.drestaurant.restaurant.domain.api.model.MenuItem
+import com.drestaurant.restaurant.domain.api.model.RestaurantMenu
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.springframework.http.HttpStatus

@@ -1,6 +1,6 @@
 package com.drestaurant.query.model
 
-import com.drestaurant.courier.domain.model.CourierOrderState
+import com.drestaurant.courier.domain.api.model.CourierOrderState
 import javax.persistence.*
 
 @Entity

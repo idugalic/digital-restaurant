@@ -1,8 +1,8 @@
 package com.drestaurant.courier.domain.api
 
-import com.drestaurant.common.domain.event.AuditableAbstractEvent
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.PersonName
+import com.drestaurant.common.domain.api.AuditableAbstractEvent
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.PersonName
 
 /**
  * An event, noting that courier has been created

@@ -1,7 +1,7 @@
 package com.drestaurant.query.handler
 
 import com.drestaurant.order.domain.api.*
-import com.drestaurant.order.domain.model.OrderState
+import com.drestaurant.order.domain.api.model.OrderState
 import com.drestaurant.query.FindAllOrdersQuery
 import com.drestaurant.query.FindOrderQuery
 import com.drestaurant.query.model.OrderEntity

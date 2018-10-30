@@ -1,11 +1,11 @@
 package com.drestaurant.order.domain
 
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.Money
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.Money
 import com.drestaurant.order.domain.api.*
-import com.drestaurant.order.domain.model.OrderDetails
-import com.drestaurant.order.domain.model.OrderInfo
-import com.drestaurant.order.domain.model.OrderLineItem
+import com.drestaurant.order.domain.api.model.OrderDetails
+import com.drestaurant.order.domain.api.model.OrderInfo
+import com.drestaurant.order.domain.api.model.OrderLineItem
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor
 import org.axonframework.test.aggregate.AggregateTestFixture
 import org.axonframework.test.aggregate.FixtureConfiguration

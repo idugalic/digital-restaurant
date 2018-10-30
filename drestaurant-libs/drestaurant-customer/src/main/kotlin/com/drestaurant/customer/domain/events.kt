@@ -1,8 +1,8 @@
 package com.drestaurant.customer.domain
 
-import com.drestaurant.common.domain.event.AuditableAbstractEvent
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.Money
+import com.drestaurant.common.domain.api.AuditableAbstractEvent
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.Money
 
 /**
  * Internal events, scoped to 'customer' bounded context only

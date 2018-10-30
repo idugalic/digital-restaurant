@@ -1,6 +1,6 @@
 package com.drestaurant.query.model
 
-import com.drestaurant.restaurant.domain.model.RestaurantOrderState
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderState
 import javax.persistence.*
 
 @Entity

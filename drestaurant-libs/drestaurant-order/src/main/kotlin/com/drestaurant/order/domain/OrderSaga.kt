@@ -9,13 +9,13 @@ import com.drestaurant.customer.domain.api.CustomerOrderRejectedEvent
 import com.drestaurant.order.domain.api.OrderCreationInitiatedEvent
 import com.drestaurant.order.domain.api.OrderPreparedEvent
 import com.drestaurant.order.domain.api.OrderVerifiedByCustomerEvent
-import com.drestaurant.order.domain.model.OrderDetails
+import com.drestaurant.order.domain.api.model.OrderDetails
 import com.drestaurant.restaurant.domain.api.CreateRestaurantOrderCommand
 import com.drestaurant.restaurant.domain.api.RestaurantOrderCreatedEvent
 import com.drestaurant.restaurant.domain.api.RestaurantOrderPreparedEvent
 import com.drestaurant.restaurant.domain.api.RestaurantOrderRejectedEvent
-import com.drestaurant.restaurant.domain.model.RestaurantOrderDetails
-import com.drestaurant.restaurant.domain.model.RestaurantOrderLineItem
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderDetails
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderLineItem
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.config.ProcessingGroup

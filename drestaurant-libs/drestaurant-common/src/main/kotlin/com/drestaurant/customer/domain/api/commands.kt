@@ -1,9 +1,9 @@
 package com.drestaurant.customer.domain.api
 
-import com.drestaurant.common.domain.command.AuditableAbstractCommand
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.Money
-import com.drestaurant.common.domain.model.PersonName
+import com.drestaurant.common.domain.api.AuditableAbstractCommand
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.Money
+import com.drestaurant.common.domain.api.model.PersonName
 import org.axonframework.modelling.command.TargetAggregateIdentifier
 import java.util.*
 import javax.validation.Valid

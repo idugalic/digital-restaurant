@@ -1,6 +1,6 @@
 package com.drestaurant.courier.domain
 
-import com.drestaurant.common.domain.model.AuditEntry
+import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.courier.domain.api.*
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor
 import org.axonframework.test.aggregate.AggregateTestFixture

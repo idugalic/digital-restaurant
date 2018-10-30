@@ -1,7 +1,7 @@
 package com.drestaurant.courier.domain
 
 import com.drestaurant.courier.domain.api.*
-import com.drestaurant.courier.domain.model.CourierOrderState
+import com.drestaurant.courier.domain.api.model.CourierOrderState
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder

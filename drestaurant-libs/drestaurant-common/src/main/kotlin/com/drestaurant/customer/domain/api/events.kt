@@ -1,9 +1,9 @@
 package com.drestaurant.customer.domain.api
 
-import com.drestaurant.common.domain.event.AuditableAbstractEvent
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.Money
-import com.drestaurant.common.domain.model.PersonName
+import com.drestaurant.common.domain.api.AuditableAbstractEvent
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.Money
+import com.drestaurant.common.domain.api.model.PersonName
 
 /**
  * An event, noting that 'customer' has been created

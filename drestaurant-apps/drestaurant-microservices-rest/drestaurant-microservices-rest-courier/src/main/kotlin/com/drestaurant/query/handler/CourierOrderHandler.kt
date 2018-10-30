@@ -4,7 +4,7 @@ import com.drestaurant.courier.domain.api.CourierOrderAssignedEvent
 import com.drestaurant.courier.domain.api.CourierOrderCreatedEvent
 import com.drestaurant.courier.domain.api.CourierOrderDeliveredEvent
 import com.drestaurant.courier.domain.api.CourierOrderNotAssignedEvent
-import com.drestaurant.courier.domain.model.CourierOrderState
+import com.drestaurant.courier.domain.api.model.CourierOrderState
 import com.drestaurant.query.FindAllCourierOrdersQuery
 import com.drestaurant.query.FindCourierOrderQuery
 import com.drestaurant.query.model.CourierOrderEntity

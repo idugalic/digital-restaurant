@@ -1,7 +1,7 @@
 package com.drestaurant.web
 
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.PersonName
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.courier.domain.api.AssignCourierOrderToCourierCommand
 import com.drestaurant.courier.domain.api.CreateCourierCommand
 import com.drestaurant.courier.domain.api.MarkCourierOrderAsDeliveredCommand

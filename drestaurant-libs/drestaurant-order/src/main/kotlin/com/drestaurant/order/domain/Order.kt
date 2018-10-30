@@ -1,10 +1,10 @@
 package com.drestaurant.order.domain
 
-import com.drestaurant.common.domain.model.Money
+import com.drestaurant.common.domain.api.model.Money
 import com.drestaurant.order.domain.api.*
-import com.drestaurant.order.domain.model.OrderDetails
-import com.drestaurant.order.domain.model.OrderLineItem
-import com.drestaurant.order.domain.model.OrderState
+import com.drestaurant.order.domain.api.model.OrderDetails
+import com.drestaurant.order.domain.api.model.OrderLineItem
+import com.drestaurant.order.domain.api.model.OrderState
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder

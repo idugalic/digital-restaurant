@@ -1,7 +1,7 @@
 package com.drestaurant.courier.domain
 
-import com.drestaurant.common.domain.command.AuditableAbstractCommand
-import com.drestaurant.common.domain.model.AuditEntry
+import com.drestaurant.common.domain.api.AuditableAbstractCommand
+import com.drestaurant.common.domain.api.model.AuditEntry
 import org.axonframework.modelling.command.TargetAggregateIdentifier
 
 /**

@@ -1,11 +1,11 @@
 package com.drestaurant.restaurant.domain
 
-import com.drestaurant.common.domain.model.AuditEntry
+import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand
 import com.drestaurant.restaurant.domain.api.RestaurantCreatedEvent
-import com.drestaurant.restaurant.domain.model.RestaurantMenu
-import com.drestaurant.restaurant.domain.model.RestaurantOrderLineItem
-import com.drestaurant.restaurant.domain.model.RestaurantState
+import com.drestaurant.restaurant.domain.api.model.RestaurantMenu
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderLineItem
+import com.drestaurant.restaurant.domain.api.model.RestaurantState
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder

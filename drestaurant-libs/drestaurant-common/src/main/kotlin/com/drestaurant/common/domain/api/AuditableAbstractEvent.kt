@@ -1,6 +1,6 @@
-package com.drestaurant.common.domain.event
+package com.drestaurant.common.domain.api
 
-import com.drestaurant.common.domain.model.AuditEntry
+import com.drestaurant.common.domain.api.model.AuditEntry
 
 import java.io.Serializable
 

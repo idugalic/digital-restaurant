@@ -1,11 +1,11 @@
 package com.drestaurant.web
 
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.Money
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.Money
 import com.drestaurant.order.domain.api.CreateOrderCommand
-import com.drestaurant.order.domain.model.OrderInfo
-import com.drestaurant.order.domain.model.OrderLineItem
-import com.drestaurant.order.domain.model.OrderState
+import com.drestaurant.order.domain.api.model.OrderInfo
+import com.drestaurant.order.domain.api.model.OrderLineItem
+import com.drestaurant.order.domain.api.model.OrderState
 import com.drestaurant.query.FindOrderQuery
 import com.drestaurant.query.model.OrderEntity
 import com.drestaurant.query.repository.OrderRepository

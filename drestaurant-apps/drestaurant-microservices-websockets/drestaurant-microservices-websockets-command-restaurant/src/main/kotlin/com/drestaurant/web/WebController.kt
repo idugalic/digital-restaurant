@@ -1,11 +1,11 @@
 package com.drestaurant.web
 
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.Money
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.Money
 import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand
 import com.drestaurant.restaurant.domain.api.MarkRestaurantOrderAsPreparedCommand
-import com.drestaurant.restaurant.domain.model.MenuItem
-import com.drestaurant.restaurant.domain.model.RestaurantMenu
+import com.drestaurant.restaurant.domain.api.model.MenuItem
+import com.drestaurant.restaurant.domain.api.model.RestaurantMenu
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.springframework.messaging.handler.annotation.MessageMapping

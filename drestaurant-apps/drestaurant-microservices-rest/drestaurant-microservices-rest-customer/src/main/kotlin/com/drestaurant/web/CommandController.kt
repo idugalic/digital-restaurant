@@ -1,8 +1,8 @@
 package com.drestaurant.web
 
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.Money
-import com.drestaurant.common.domain.model.PersonName
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.Money
+import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.customer.domain.api.CreateCustomerCommand
 import com.drestaurant.query.FindCustomerQuery
 import com.drestaurant.query.model.CustomerEntity

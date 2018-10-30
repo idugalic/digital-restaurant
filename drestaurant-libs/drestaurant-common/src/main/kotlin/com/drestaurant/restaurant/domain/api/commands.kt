@@ -1,9 +1,9 @@
 package com.drestaurant.restaurant.domain.api
 
-import com.drestaurant.common.domain.command.AuditableAbstractCommand
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.restaurant.domain.model.RestaurantMenu
-import com.drestaurant.restaurant.domain.model.RestaurantOrderDetails
+import com.drestaurant.common.domain.api.AuditableAbstractCommand
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.restaurant.domain.api.model.RestaurantMenu
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderDetails
 import org.axonframework.modelling.command.TargetAggregateIdentifier
 import java.util.*
 import javax.validation.Valid

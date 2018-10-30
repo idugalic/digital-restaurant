@@ -1,6 +1,6 @@
 package com.drestaurant.courier.domain
 
-import com.drestaurant.common.domain.model.AuditEntry
+import com.drestaurant.common.domain.api.model.AuditEntry
 import org.axonframework.test.saga.FixtureConfiguration
 import org.axonframework.test.saga.SagaTestFixture
 import org.junit.Before

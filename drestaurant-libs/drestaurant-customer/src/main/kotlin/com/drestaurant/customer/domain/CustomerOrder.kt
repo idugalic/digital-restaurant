@@ -1,8 +1,8 @@
 package com.drestaurant.customer.domain
 
-import com.drestaurant.common.domain.model.Money
+import com.drestaurant.common.domain.api.model.Money
 import com.drestaurant.customer.domain.api.*
-import com.drestaurant.customer.domain.model.CustomerOrderState
+import com.drestaurant.customer.domain.api.model.CustomerOrderState
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder

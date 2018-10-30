@@ -1,9 +1,9 @@
 package com.drestaurant.restaurant.domain
 
-import com.drestaurant.common.domain.model.AuditEntry
+import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.restaurant.domain.api.*
-import com.drestaurant.restaurant.domain.model.RestaurantOrderDetails
-import com.drestaurant.restaurant.domain.model.RestaurantOrderLineItem
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderDetails
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderLineItem
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor
 import org.axonframework.test.aggregate.AggregateTestFixture
 import org.axonframework.test.aggregate.FixtureConfiguration

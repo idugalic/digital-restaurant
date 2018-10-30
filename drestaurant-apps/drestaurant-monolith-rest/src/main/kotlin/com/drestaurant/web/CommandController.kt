@@ -1,17 +1,17 @@
 package com.drestaurant.web
 
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.Money
-import com.drestaurant.common.domain.model.PersonName
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.Money
+import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.courier.domain.api.AssignCourierOrderToCourierCommand
 import com.drestaurant.courier.domain.api.CreateCourierCommand
 import com.drestaurant.courier.domain.api.MarkCourierOrderAsDeliveredCommand
-import com.drestaurant.courier.domain.model.CourierOrderState
+import com.drestaurant.courier.domain.api.model.CourierOrderState
 import com.drestaurant.customer.domain.api.CreateCustomerCommand
 import com.drestaurant.order.domain.api.CreateOrderCommand
-import com.drestaurant.order.domain.model.OrderInfo
-import com.drestaurant.order.domain.model.OrderLineItem
-import com.drestaurant.order.domain.model.OrderState
+import com.drestaurant.order.domain.api.model.OrderInfo
+import com.drestaurant.order.domain.api.model.OrderLineItem
+import com.drestaurant.order.domain.api.model.OrderState
 import com.drestaurant.query.*
 import com.drestaurant.query.model.*
 import com.drestaurant.query.repository.CourierRepository
@@ -20,9 +20,9 @@ import com.drestaurant.query.repository.OrderRepository
 import com.drestaurant.query.repository.RestaurantRepository
 import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand
 import com.drestaurant.restaurant.domain.api.MarkRestaurantOrderAsPreparedCommand
-import com.drestaurant.restaurant.domain.model.MenuItem
-import com.drestaurant.restaurant.domain.model.RestaurantMenu
-import com.drestaurant.restaurant.domain.model.RestaurantOrderState
+import com.drestaurant.restaurant.domain.api.model.MenuItem
+import com.drestaurant.restaurant.domain.api.model.RestaurantMenu
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderState
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.messaging.responsetypes.ResponseTypes
 import org.axonframework.queryhandling.QueryGateway

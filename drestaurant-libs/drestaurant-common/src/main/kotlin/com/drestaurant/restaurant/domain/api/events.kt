@@ -1,9 +1,9 @@
 package com.drestaurant.restaurant.domain.api
 
-import com.drestaurant.common.domain.event.AuditableAbstractEvent
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.restaurant.domain.model.RestaurantMenu
-import com.drestaurant.restaurant.domain.model.RestaurantOrderLineItem
+import com.drestaurant.common.domain.api.AuditableAbstractEvent
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.restaurant.domain.api.model.RestaurantMenu
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderLineItem
 
 /**
  * An event, noting that restaurant has been created

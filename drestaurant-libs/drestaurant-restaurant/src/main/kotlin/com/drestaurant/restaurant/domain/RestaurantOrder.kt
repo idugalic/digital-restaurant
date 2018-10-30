@@ -1,9 +1,9 @@
 package com.drestaurant.restaurant.domain
 
 import com.drestaurant.restaurant.domain.api.*
-import com.drestaurant.restaurant.domain.model.RestaurantOrderDetails
-import com.drestaurant.restaurant.domain.model.RestaurantOrderLineItem
-import com.drestaurant.restaurant.domain.model.RestaurantOrderState
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderDetails
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderLineItem
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderState
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder

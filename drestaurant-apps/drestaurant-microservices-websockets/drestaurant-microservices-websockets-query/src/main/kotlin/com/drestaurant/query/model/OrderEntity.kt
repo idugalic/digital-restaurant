@@ -1,6 +1,6 @@
 package com.drestaurant.query.model
 
-import com.drestaurant.order.domain.model.OrderState
+import com.drestaurant.order.domain.api.model.OrderState
 import java.math.BigDecimal
 
 import javax.persistence.*

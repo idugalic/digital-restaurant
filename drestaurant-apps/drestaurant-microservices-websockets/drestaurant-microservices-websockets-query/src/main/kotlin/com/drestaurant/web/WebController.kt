@@ -1,6 +1,6 @@
 package com.drestaurant.web
 
-import com.drestaurant.common.domain.model.AuditEntry
+import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.query.model.*
 import com.drestaurant.query.repository.*
 import org.axonframework.commandhandling.gateway.CommandGateway

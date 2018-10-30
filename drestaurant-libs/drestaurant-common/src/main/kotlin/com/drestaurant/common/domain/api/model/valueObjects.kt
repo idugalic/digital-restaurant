@@ -1,6 +1,17 @@
-package com.drestaurant.common.domain.model
+package com.drestaurant.common.domain.api.model
 
 import java.math.BigDecimal
+import java.util.*
+
+/**
+ * Audit entry holds the information of 'who' and 'when' performed the commands/actions
+ */
+data class AuditEntry(val who: String, val `when`: Date)
+
+/**
+ * First name and last name
+ */
+data class PersonName(val firstName: String, val lastName: String)
 
 /**
  * A simple abstraction of the 'money' concept

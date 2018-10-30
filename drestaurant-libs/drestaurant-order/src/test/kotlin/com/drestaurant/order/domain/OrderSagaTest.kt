@@ -1,7 +1,7 @@
 package com.drestaurant.order.domain
 
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.Money
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.Money
 import com.drestaurant.courier.domain.api.CourierOrderCreatedEvent
 import com.drestaurant.courier.domain.api.CourierOrderDeliveredEvent
 import com.drestaurant.courier.domain.api.CreateCourierOrderCommand
@@ -11,15 +11,15 @@ import com.drestaurant.customer.domain.api.CustomerOrderRejectedEvent
 import com.drestaurant.order.domain.api.OrderCreationInitiatedEvent
 import com.drestaurant.order.domain.api.OrderPreparedEvent
 import com.drestaurant.order.domain.api.OrderVerifiedByCustomerEvent
-import com.drestaurant.order.domain.model.OrderDetails
-import com.drestaurant.order.domain.model.OrderInfo
-import com.drestaurant.order.domain.model.OrderLineItem
+import com.drestaurant.order.domain.api.model.OrderDetails
+import com.drestaurant.order.domain.api.model.OrderInfo
+import com.drestaurant.order.domain.api.model.OrderLineItem
 import com.drestaurant.restaurant.domain.api.CreateRestaurantOrderCommand
 import com.drestaurant.restaurant.domain.api.RestaurantOrderCreatedEvent
 import com.drestaurant.restaurant.domain.api.RestaurantOrderPreparedEvent
 import com.drestaurant.restaurant.domain.api.RestaurantOrderRejectedEvent
-import com.drestaurant.restaurant.domain.model.RestaurantOrderDetails
-import com.drestaurant.restaurant.domain.model.RestaurantOrderLineItem
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderDetails
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderLineItem
 import org.axonframework.test.saga.FixtureConfiguration
 import org.axonframework.test.saga.SagaTestFixture
 import org.junit.Before

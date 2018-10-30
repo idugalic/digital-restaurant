@@ -1,8 +1,8 @@
 package com.drestaurant.customer.domain
 
-import com.drestaurant.common.domain.model.AuditEntry
-import com.drestaurant.common.domain.model.Money
-import com.drestaurant.common.domain.model.PersonName
+import com.drestaurant.common.domain.api.model.AuditEntry
+import com.drestaurant.common.domain.api.model.Money
+import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.customer.domain.api.CreateCustomerCommand
 import com.drestaurant.customer.domain.api.CustomerCreatedEvent
 import org.apache.commons.lang.builder.EqualsBuilder
