@@ -2,7 +2,9 @@ package com.drestaurant.restaurant.domain
 
 import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.restaurant.domain.api.*
+import com.drestaurant.restaurant.domain.api.model.RestaurantId
 import com.drestaurant.restaurant.domain.api.model.RestaurantOrderDetails
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderId
 import com.drestaurant.restaurant.domain.api.model.RestaurantOrderLineItem
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor
 import org.axonframework.test.aggregate.AggregateTestFixture
@@ -14,8 +16,8 @@ import java.util.*
 class RestaurantOrderAggregateTest {
 
     private lateinit var fixture: FixtureConfiguration<RestaurantOrder>
-    private var orderId: String = "orderId"
-    private var restuarantId: String = "restuarantId"
+    private var orderId: RestaurantOrderId = RestaurantOrderId("orderId")
+    private var restuarantId: RestaurantId = RestaurantId("restuarantId")
     private val lineItem: RestaurantOrderLineItem = RestaurantOrderLineItem(1, "menuItemId", "name")
     private var lineItems: MutableList<RestaurantOrderLineItem> = ArrayList()
     private var orderDetails: RestaurantOrderDetails = RestaurantOrderDetails(lineItems)

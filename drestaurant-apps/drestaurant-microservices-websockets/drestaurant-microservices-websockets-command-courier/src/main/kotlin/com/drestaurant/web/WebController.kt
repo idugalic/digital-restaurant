@@ -5,6 +5,8 @@ import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.courier.domain.api.AssignCourierOrderToCourierCommand
 import com.drestaurant.courier.domain.api.CreateCourierCommand
 import com.drestaurant.courier.domain.api.MarkCourierOrderAsDeliveredCommand
+import com.drestaurant.courier.domain.api.model.CourierId
+import com.drestaurant.courier.domain.api.model.CourierOrderId
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -31,10 +33,10 @@ class WebController(private val commandGateway: CommandGateway) {
 
     // COURIER ORDERS
     @MessageMapping(value = ["/couriers/orders/assigncommand"])
-    fun assignOrderToCourier(request: AssignOrderToCourierDTO) = commandGateway.send(AssignCourierOrderToCourierCommand(request.courierOrderId, request.courierId, auditEntry), LoggingCallback.INSTANCE)
+    fun assignOrderToCourier(request: AssignOrderToCourierDTO) = commandGateway.send(AssignCourierOrderToCourierCommand(CourierOrderId(request.courierOrderId), CourierId(request.courierId), auditEntry), LoggingCallback.INSTANCE)
 
     @MessageMapping(value = ["/couriers/orders/markdeliveredcommand"])
-    fun markCourierOrderAsDelivered(id: String) = commandGateway.send(MarkCourierOrderAsDeliveredCommand(id, auditEntry), LoggingCallback.INSTANCE)
+    fun markCourierOrderAsDelivered(id: String) = commandGateway.send(MarkCourierOrderAsDeliveredCommand(CourierOrderId(id), auditEntry), LoggingCallback.INSTANCE)
 }
 
 /**

@@ -11,8 +11,8 @@ internal open class RestaurantCommandHandler(private val repository: Repository<
 
     @CommandHandler
     fun handle(command: ValidateOrderByRestaurantInternalCommand) = try {
-        repository.load(command.restaurantId).execute { it.validateOrder(command.orderId, command.lineItems, command.auditEntry) }
+        repository.load(command.restaurantId.identifier).execute { it.validateOrder(command.targetAggregateIdentifier, command.lineItems, command.auditEntry) }
     } catch (exception: AggregateNotFoundException) {
-        eventBus.publish(asEventMessage<Any>(RestaurantNotFoundForOrderInternalEvent(command.restaurantId, command.orderId, command.auditEntry)))
+        eventBus.publish(asEventMessage<Any>(RestaurantNotFoundForOrderInternalEvent(command.restaurantId, command.targetAggregateIdentifier, command.auditEntry)))
     }
 }

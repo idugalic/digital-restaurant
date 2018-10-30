@@ -38,7 +38,7 @@ class CommandController(private val commandGateway: CommandGateway) {
             val item = OrderLineItem(id, name, Money(price), quantity)
             lineItems.add(item)
         }
-        val orderInfo = OrderInfo(request.customerId!!, request.restaurantId!!, lineItems)
+        val orderInfo = OrderInfo(request.customerId, request.restaurantId, lineItems)
         val command = CreateOrderCommand(orderInfo, auditEntry)
         commandGateway.sendAndWait<CreateOrderCommand>(command)
     }
@@ -48,7 +48,7 @@ class CommandController(private val commandGateway: CommandGateway) {
 /**
  * A request for creating a Restaurant
  */
-data class CreateOrderRequest(val customerId: String?, val restaurantId: String?, val orderItems: List<OrderItemRequest>)
+data class CreateOrderRequest(val customerId: String, val restaurantId: String, val orderItems: List<OrderItemRequest>)
 
 /**
  * An Order item request

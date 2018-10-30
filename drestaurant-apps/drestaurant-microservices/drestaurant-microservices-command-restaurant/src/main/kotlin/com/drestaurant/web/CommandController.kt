@@ -6,6 +6,7 @@ import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand
 import com.drestaurant.restaurant.domain.api.MarkRestaurantOrderAsPreparedCommand
 import com.drestaurant.restaurant.domain.api.model.MenuItem
 import com.drestaurant.restaurant.domain.api.model.RestaurantMenu
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderId
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.springframework.http.HttpStatus
@@ -48,7 +49,7 @@ class CommandController(private val commandGateway: CommandGateway) {
 
     @RequestMapping(value = ["/restaurant/order/{id}/markpreparedcommand"], method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(value = HttpStatus.CREATED)
-    fun markRestaurantOrderAsPrepared(@PathVariable id: String, response: HttpServletResponse) = commandGateway.send(MarkRestaurantOrderAsPreparedCommand(id, auditEntry), LoggingCallback.INSTANCE)
+    fun markRestaurantOrderAsPrepared(@PathVariable id: String, response: HttpServletResponse) = commandGateway.send(MarkRestaurantOrderAsPreparedCommand(RestaurantOrderId(id), auditEntry), LoggingCallback.INSTANCE)
 
 }
 

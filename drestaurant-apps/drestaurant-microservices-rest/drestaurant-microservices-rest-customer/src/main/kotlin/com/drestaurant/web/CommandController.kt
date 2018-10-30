@@ -4,6 +4,7 @@ import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.common.domain.api.model.Money
 import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.customer.domain.api.CreateCustomerCommand
+import com.drestaurant.customer.domain.api.model.CustomerId
 import com.drestaurant.query.FindCustomerQuery
 import com.drestaurant.query.model.CustomerEntity
 import com.drestaurant.query.repository.CustomerRepository
@@ -46,7 +47,7 @@ class CommandController(private val commandGateway: CommandGateway, private val 
         val command = CreateCustomerCommand(PersonName(request.firstName, request.lastName), orderLimit, auditEntry)
         queryGateway.subscriptionQuery(FindCustomerQuery(command.targetAggregateIdentifier), ResponseTypes.instanceOf<CustomerEntity>(CustomerEntity::class.java), ResponseTypes.instanceOf<CustomerEntity>(CustomerEntity::class.java))
                 .use {
-                    val commandResult: String = commandGateway.sendAndWait(command)
+                    val commandResult: CustomerId? = commandGateway.sendAndWait(command)
                     /* Returning the first update sent to our find customer query. */
                     val customerEntity = it.updates().blockFirst()
                     return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(CustomerRepository::class.java, customerEntity?.id).href)).build()

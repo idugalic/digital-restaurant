@@ -10,8 +10,8 @@ internal open class CustomerCommandHandler(private val repository: Repository<Cu
 
     @CommandHandler
     fun handle(command: ValidateOrderByCustomerInternalCommand) = try {
-        repository.load(command.customerId).execute { it.validateOrder(command.orderId, command.orderTotal, command.auditEntry) }
+        repository.load(command.customerId.identifier).execute { it.validateOrder(command.targetAggregateIdentifier, command.orderTotal, command.auditEntry) }
     } catch (exception: AggregateNotFoundException) {
-        eventBus.publish(asEventMessage<Any>(CustomerNotFoundForOrderInternalEvent(command.customerId, command.orderId, command.orderTotal, command.auditEntry)))
+        eventBus.publish(asEventMessage<Any>(CustomerNotFoundForOrderInternalEvent(command.customerId, command.targetAggregateIdentifier, command.orderTotal, command.auditEntry)))
     }
 }

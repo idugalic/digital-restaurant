@@ -3,9 +3,7 @@ package com.drestaurant.restaurant.domain
 import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand
 import com.drestaurant.restaurant.domain.api.RestaurantCreatedEvent
-import com.drestaurant.restaurant.domain.api.model.RestaurantMenu
-import com.drestaurant.restaurant.domain.api.model.RestaurantOrderLineItem
-import com.drestaurant.restaurant.domain.api.model.RestaurantState
+import com.drestaurant.restaurant.domain.api.model.*
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
@@ -31,7 +29,7 @@ internal class Restaurant {
      * annotation 'AggregateIdentifier' identifies the id field as such.
      */
     @AggregateIdentifier
-    private lateinit var id: String
+    private lateinit var id: RestaurantId
     private lateinit var name: String
     private lateinit var menu: RestaurantMenu
     private lateinit var state: RestaurantState
@@ -83,7 +81,7 @@ internal class Restaurant {
      * @param lineItems
      * @param auditEntry
      */
-    fun validateOrder(orderId: String, lineItems: List<RestaurantOrderLineItem>, auditEntry: AuditEntry) {
+    fun validateOrder(orderId: RestaurantOrderId, lineItems: List<RestaurantOrderLineItem>, auditEntry: AuditEntry) {
         if (menu.menuItems.stream().map { mi -> mi.id }.collect(Collectors.toList()).containsAll(lineItems.stream().map { li -> li.menuItemId }.collect(Collectors.toList()))) {
             apply(RestaurantValidatedOrderWithSuccessInternalEvent(id, orderId, auditEntry))
 

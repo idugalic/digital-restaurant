@@ -10,8 +10,8 @@ internal open class CourierCommandHandler(private val repository: Repository<Cou
 
     @CommandHandler
     fun handle(command: ValidateOrderByCourierInternalCommand) = try {
-        repository.load(command.courierId).execute { it.validateOrder(command.orderId, command.auditEntry) }
+        repository.load(command.courierId.identifier).execute { it.validateOrder(command.targetAggregateIdentifier, command.auditEntry) }
     } catch (exception: AggregateNotFoundException) {
-        eventBus.publish(asEventMessage<Any>(CourierNotFoundForOrderInternalEvent(command.courierId, command.orderId, command.auditEntry)))
+        eventBus.publish(asEventMessage<Any>(CourierNotFoundForOrderInternalEvent(command.courierId, command.targetAggregateIdentifier, command.auditEntry)))
     }
 }

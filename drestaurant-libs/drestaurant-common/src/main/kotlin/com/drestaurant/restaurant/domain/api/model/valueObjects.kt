@@ -1,6 +1,7 @@
 package com.drestaurant.restaurant.domain.api.model
 
 import com.drestaurant.common.domain.api.model.Money
+import java.util.*
 import javax.validation.Valid
 import javax.validation.constraints.NotEmpty
 
@@ -31,4 +32,14 @@ enum class RestaurantOrderState {
 enum class RestaurantState {
     OPEN,
     CLOSED
+}
+
+data class RestaurantId(val identifier: String) {
+    constructor() : this(UUID.randomUUID().toString())
+    override fun toString(): String = identifier
+}
+
+data class RestaurantOrderId(val identifier: String) {
+    constructor() : this(UUID.randomUUID().toString())
+    override fun toString(): String = identifier
 }

@@ -6,6 +6,8 @@ import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.courier.domain.api.AssignCourierOrderToCourierCommand
 import com.drestaurant.courier.domain.api.CreateCourierCommand
 import com.drestaurant.courier.domain.api.MarkCourierOrderAsDeliveredCommand
+import com.drestaurant.courier.domain.api.model.CourierId
+import com.drestaurant.courier.domain.api.model.CourierOrderId
 import com.drestaurant.customer.domain.api.CreateCustomerCommand
 import com.drestaurant.order.domain.api.CreateOrderCommand
 import com.drestaurant.order.domain.api.model.OrderInfo
@@ -16,6 +18,7 @@ import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand
 import com.drestaurant.restaurant.domain.api.MarkRestaurantOrderAsPreparedCommand
 import com.drestaurant.restaurant.domain.api.model.MenuItem
 import com.drestaurant.restaurant.domain.api.model.RestaurantMenu
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderId
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.springframework.messaging.handler.annotation.DestinationVariable
@@ -99,7 +102,7 @@ class WebController(private val commandGateway: CommandGateway, private val cust
 
     // RESTAURANT ORDERS
     @MessageMapping(value = ["/restaurants/orders/markpreparedcommand"])
-    fun markRestaurantOrderAsPrepared(id: String) = commandGateway.send(MarkRestaurantOrderAsPreparedCommand(id, auditEntry), LoggingCallback.INSTANCE)
+    fun markRestaurantOrderAsPrepared(id: String) = commandGateway.send(MarkRestaurantOrderAsPreparedCommand(RestaurantOrderId(id), auditEntry), LoggingCallback.INSTANCE)
 
     @SubscribeMapping("/restaurants/orders")
     fun allRestaurantOrders(): Iterable<RestaurantOrderEntity> = restaurantOrderRepository.findAll()
@@ -109,10 +112,10 @@ class WebController(private val commandGateway: CommandGateway, private val cust
 
     // COURIER ORDERS
     @MessageMapping(value = ["/couriers/orders/assigncommand"])
-    fun assignOrderToCourier(request: AssignOrderToCourierDTO) = commandGateway.send(AssignCourierOrderToCourierCommand(request.courierOrderId, request.courierId, auditEntry), LoggingCallback.INSTANCE)
+    fun assignOrderToCourier(request: AssignOrderToCourierDTO) = commandGateway.send(AssignCourierOrderToCourierCommand(CourierOrderId(request.courierOrderId), CourierId(request.courierId), auditEntry), LoggingCallback.INSTANCE)
 
     @MessageMapping(value = ["/couriers/orders/markdeliveredcommand"])
-    fun markCourierOrderAsDelivered(id: String) = commandGateway.send(MarkCourierOrderAsDeliveredCommand(id, auditEntry), LoggingCallback.INSTANCE)
+    fun markCourierOrderAsDelivered(id: String) = commandGateway.send(MarkCourierOrderAsDeliveredCommand(CourierOrderId(id), auditEntry), LoggingCallback.INSTANCE)
 
     @SubscribeMapping("/couriers/orders")
     fun allCourierOrders(): Iterable<CourierOrderEntity> = courierOrderRepository.findAll()

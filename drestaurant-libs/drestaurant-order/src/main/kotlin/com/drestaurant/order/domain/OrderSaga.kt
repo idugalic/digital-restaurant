@@ -3,18 +3,24 @@ package com.drestaurant.order.domain
 import com.drestaurant.courier.domain.api.CourierOrderCreatedEvent
 import com.drestaurant.courier.domain.api.CourierOrderDeliveredEvent
 import com.drestaurant.courier.domain.api.CreateCourierOrderCommand
+import com.drestaurant.courier.domain.api.model.CourierOrderId
 import com.drestaurant.customer.domain.api.CreateCustomerOrderCommand
 import com.drestaurant.customer.domain.api.CustomerOrderCreatedEvent
 import com.drestaurant.customer.domain.api.CustomerOrderRejectedEvent
+import com.drestaurant.customer.domain.api.model.CustomerId
+import com.drestaurant.customer.domain.api.model.CustomerOrderId
 import com.drestaurant.order.domain.api.OrderCreationInitiatedEvent
 import com.drestaurant.order.domain.api.OrderPreparedEvent
 import com.drestaurant.order.domain.api.OrderVerifiedByCustomerEvent
 import com.drestaurant.order.domain.api.model.OrderDetails
+import com.drestaurant.order.domain.api.model.OrderId
 import com.drestaurant.restaurant.domain.api.CreateRestaurantOrderCommand
 import com.drestaurant.restaurant.domain.api.RestaurantOrderCreatedEvent
 import com.drestaurant.restaurant.domain.api.RestaurantOrderPreparedEvent
 import com.drestaurant.restaurant.domain.api.RestaurantOrderRejectedEvent
+import com.drestaurant.restaurant.domain.api.model.RestaurantId
 import com.drestaurant.restaurant.domain.api.model.RestaurantOrderDetails
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderId
 import com.drestaurant.restaurant.domain.api.model.RestaurantOrderLineItem
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
@@ -37,21 +43,21 @@ internal class OrderSaga {
     @Autowired
     @Transient
     private lateinit var commandGateway: CommandGateway
-    private lateinit var restaurantId: String
-    private lateinit var customerId: String
+    private lateinit var restaurantId: RestaurantId
+    private lateinit var customerId: CustomerId
     private lateinit var orderDetails: OrderDetails
-    private lateinit var orderId: String
+    private lateinit var orderId: OrderId
 
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
     fun on(event: OrderCreationInitiatedEvent) {
         orderId = event.aggregateIdentifier
-        restaurantId = event.orderDetails.restaurantId
-        customerId = event.orderDetails.consumerId
+        restaurantId = RestaurantId(event.orderDetails.restaurantId)
+        customerId = CustomerId(event.orderDetails.consumerId)
         orderDetails = event.orderDetails
 
-        val customerOrderId = "customerOrder_$orderId"
-        associateWith("customerOrderId", customerOrderId)
+        val customerOrderId = CustomerOrderId("customerOrder_$orderId")
+        associateWith("customerOrderId", customerOrderId.toString())
 
         commandGateway.send(CreateCustomerOrderCommand(customerOrderId, orderDetails.orderTotal, customerId, event.auditEntry), LoggingCallback.INSTANCE)
     }
@@ -61,8 +67,8 @@ internal class OrderSaga {
 
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
     fun on(event: OrderVerifiedByCustomerEvent) {
-        val restaurantOrderId = "restaurantOrder_$orderId"
-        associateWith("restaurantOrderId", restaurantOrderId)
+        val restaurantOrderId = RestaurantOrderId("restaurantOrder_$orderId")
+        associateWith("restaurantOrderId", restaurantOrderId.toString())
 
         val restaurantLineItems = ArrayList<RestaurantOrderLineItem>()
         for (oli in orderDetails.lineItems) {
@@ -81,8 +87,8 @@ internal class OrderSaga {
 
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
     fun on(event: OrderPreparedEvent) {
-        val courierOrderId = "courierOrder_$orderId"
-        associateWith("courierOrderId", courierOrderId)
+        val courierOrderId = CourierOrderId("courierOrder_$orderId")
+        associateWith("courierOrderId", courierOrderId.toString())
         commandGateway.send(CreateCourierOrderCommand(courierOrderId, event.auditEntry), LoggingCallback.INSTANCE)
     }
 

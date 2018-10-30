@@ -29,7 +29,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
             val orderItem = OrderItemEmbedable(item.menuItemId, item.name, item.price.amount, item.quantity)
             orderItems.add(orderItem)
         }
-        orderRepository.save(OrderEntity(event.aggregateIdentifier, aggregateVersion, orderItems, null, null, null, OrderState.CREATE_PENDING))
+        orderRepository.save(OrderEntity(event.aggregateIdentifier.identifier, aggregateVersion, orderItems, null, null, null, OrderState.CREATE_PENDING))
         broadcastUpdates()
 
     }
@@ -37,8 +37,8 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     @EventHandler
     @AllowReplay(true)
     fun handle(event: OrderVerifiedByCustomerEvent, @SequenceNumber aggregateVersion: Long) {
-        val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
-        val customerEntity = customerRepository.findById(event.customerId).get()
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier.identifier).get()
+        val customerEntity = customerRepository.findById(event.customerId.identifier).get()
         orderEntity.customer = customerEntity
         orderEntity.state = OrderState.VERIFIED_BY_CUSTOMER
         orderEntity.aggregateVersion = aggregateVersion
@@ -49,8 +49,8 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     @EventHandler
     @AllowReplay(true)
     fun handle(event: OrderVerifiedByRestaurantEvent, @SequenceNumber aggregateVersion: Long) {
-        val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
-        val restaurantEntity = restaurantRepository.findById(event.restaurantId).get()
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier.identifier).get()
+        val restaurantEntity = restaurantRepository.findById(event.restaurantId.identifier).get()
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.restaurant = restaurantEntity
         orderEntity.state = OrderState.VERIFIED_BY_RESTAURANT
@@ -61,7 +61,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     @EventHandler
     @AllowReplay(true)
     fun handle(event: OrderPreparedEvent, @SequenceNumber aggregateVersion: Long) {
-        val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier.identifier).get()
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.PREPARED
         orderRepository.save(orderEntity)
@@ -71,7 +71,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     @EventHandler
     @AllowReplay(true)
     fun handle(event: OrderReadyForDeliveryEvent, @SequenceNumber aggregateVersion: Long) {
-        val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier.identifier).get()
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.READY_FOR_DELIVERY
         orderRepository.save(orderEntity)
@@ -81,7 +81,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     @EventHandler
     @AllowReplay(true)
     fun handle(event: OrderDeliveredEvent, @SequenceNumber aggregateVersion: Long) {
-        val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier.identifier).get()
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.DELIVERED
         orderRepository.save(orderEntity)
@@ -91,7 +91,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     @EventHandler
     @AllowReplay(true)
     fun handle(event: OrderRejectedEvent, @SequenceNumber aggregateVersion: Long) {
-        val orderEntity = orderRepository.findById(event.aggregateIdentifier).get()
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier.identifier).get()
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.REJECTED
         orderRepository.save(orderEntity)

@@ -4,6 +4,8 @@ import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.courier.domain.api.CourierCreatedEvent
 import com.drestaurant.courier.domain.api.CreateCourierCommand
+import com.drestaurant.courier.domain.api.model.CourierId
+import com.drestaurant.courier.domain.api.model.CourierOrderId
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
@@ -25,7 +27,7 @@ internal class Courier {
      * annotation 'AggregateIdentifier' identifies the id field as such.
      */
     @AggregateIdentifier
-    private lateinit var id: String
+    private lateinit var id: CourierId
     private lateinit var name: PersonName
     private var maxNumberOfActiveOrders: Int = 5
     private var numberOfActiveOrders: Int = 0
@@ -60,7 +62,7 @@ internal class Courier {
         numberOfActiveOrders += 1
     }
 
-    fun validateOrder(orderId: String, auditEntry: AuditEntry) {
+    fun validateOrder(orderId: CourierOrderId, auditEntry: AuditEntry) {
         if (numberOfActiveOrders + 1 > maxNumberOfActiveOrders) {
             apply(CourierValidatedOrderWithErrorInternalEvent(id, orderId, auditEntry))
 

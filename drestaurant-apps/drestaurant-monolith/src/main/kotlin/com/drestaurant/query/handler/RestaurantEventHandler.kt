@@ -28,7 +28,7 @@ internal class RestaurantEventHandler(private val repository: RestaurantReposito
             menuItems.add(menuItem)
         }
         val menu = RestaurantMenuEmbedable(menuItems, event.menu.menuVersion)
-        repository.save(RestaurantEntity(event.aggregateIdentifier, aggregateVersion, event.name, menu))
+        repository.save(RestaurantEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name, menu))
         messagingTemplate.convertAndSend("/topic/restaurants.updates", event)
     }
 

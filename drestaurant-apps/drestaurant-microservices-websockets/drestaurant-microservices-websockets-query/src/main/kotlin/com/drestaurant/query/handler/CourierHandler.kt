@@ -21,7 +21,7 @@ internal class CourierHandler(private val repository: CourierRepository, private
     @AllowReplay(true)
     fun handle(event: CourierCreatedEvent, @SequenceNumber aggregateVersion: Long) {
         /* saving the record in our read/query model. */
-        repository.save(CourierEntity(event.aggregateIdentifier, aggregateVersion, event.name.firstName, event.name.lastName, event.maxNumberOfActiveOrders, Collections.emptyList()))
+        repository.save(CourierEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name.firstName, event.name.lastName, event.maxNumberOfActiveOrders, Collections.emptyList()))
         /* sending message to the topic */
         broadcastUpdates()
     }

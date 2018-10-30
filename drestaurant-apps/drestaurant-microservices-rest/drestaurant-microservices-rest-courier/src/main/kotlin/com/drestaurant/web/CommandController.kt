@@ -5,6 +5,8 @@ import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.courier.domain.api.AssignCourierOrderToCourierCommand
 import com.drestaurant.courier.domain.api.CreateCourierCommand
 import com.drestaurant.courier.domain.api.MarkCourierOrderAsDeliveredCommand
+import com.drestaurant.courier.domain.api.model.CourierId
+import com.drestaurant.courier.domain.api.model.CourierOrderId
 import com.drestaurant.courier.domain.api.model.CourierOrderState
 import com.drestaurant.query.FindCourierOrderQuery
 import com.drestaurant.query.FindCourierQuery
@@ -50,7 +52,7 @@ class CommandController(private val commandGateway: CommandGateway, private val 
         val command = CreateCourierCommand(PersonName(request.firstName, request.lastName), request.maxNumberOfActiveOrders, auditEntry)
         queryGateway.subscriptionQuery(FindCourierQuery(command.targetAggregateIdentifier), ResponseTypes.instanceOf<CourierEntity>(CourierEntity::class.java), ResponseTypes.instanceOf<CourierEntity>(CourierEntity::class.java))
                 .use {
-                    val commandResult: String = commandGateway.sendAndWait(command)
+                    val commandResult: CourierId? = commandGateway.sendAndWait(command)
                     val courierEntity = it.updates().blockFirst()
                     return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(CourierRepository::class.java, courierEntity?.id).href)).build()
                 }
@@ -58,10 +60,10 @@ class CommandController(private val commandGateway: CommandGateway, private val 
 
     @RequestMapping(value = ["/couriers/{cid}/orders/{coid}/assign"], method = [RequestMethod.PUT], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun assignOrderToCourier(@PathVariable cid: String, @PathVariable coid: String, response: HttpServletResponse): ResponseEntity<CourierOrderEntity> {
-        val command = AssignCourierOrderToCourierCommand(coid, cid, auditEntry)
+        val command = AssignCourierOrderToCourierCommand(CourierOrderId(coid), CourierId(cid), auditEntry)
         queryGateway.subscriptionQuery(FindCourierOrderQuery(command.targetAggregateIdentifier), ResponseTypes.instanceOf<CourierOrderEntity>(CourierOrderEntity::class.java), ResponseTypes.instanceOf<CourierOrderEntity>(CourierOrderEntity::class.java))
                 .use {
-                    val commandResult: String? = commandGateway.sendAndWait(command)
+                    val commandResult: CourierOrderId? = commandGateway.sendAndWait(command)
                     val courierOrderEntity = it.updates().blockFirst()
                     return if (CourierOrderState.ASSIGNED == courierOrderEntity?.state) ResponseEntity.ok().build() else ResponseEntity.badRequest().build()
                 }
@@ -69,10 +71,10 @@ class CommandController(private val commandGateway: CommandGateway, private val 
 
     @RequestMapping(value = ["/couriers/{cid}/orders/{coid}/markdelivered"], method = [RequestMethod.PUT], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun markCourierOrderAsDelivered(@PathVariable cid: String, @PathVariable coid: String, response: HttpServletResponse): ResponseEntity<CourierOrderEntity> {
-        val command = MarkCourierOrderAsDeliveredCommand(coid, auditEntry)
+        val command = MarkCourierOrderAsDeliveredCommand(CourierOrderId(coid), auditEntry)
         queryGateway.subscriptionQuery(FindCourierOrderQuery(command.targetAggregateIdentifier), ResponseTypes.instanceOf<CourierOrderEntity>(CourierOrderEntity::class.java), ResponseTypes.instanceOf<CourierOrderEntity>(CourierOrderEntity::class.java))
                 .use {
-                    val commandResult: String? = commandGateway.sendAndWait(command)
+                    val commandResult: CourierOrderId? = commandGateway.sendAndWait(command)
                     val courierOrderEntity = it.updates().blockFirst()
                     return if (CourierOrderState.DELIVERED == courierOrderEntity?.state) ResponseEntity.ok().build() else ResponseEntity.badRequest().build()
                 }

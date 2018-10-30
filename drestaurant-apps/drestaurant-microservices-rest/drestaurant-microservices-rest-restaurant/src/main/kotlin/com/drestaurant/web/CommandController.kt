@@ -9,9 +9,7 @@ import com.drestaurant.query.model.RestaurantOrderEntity
 import com.drestaurant.query.repository.RestaurantRepository
 import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand
 import com.drestaurant.restaurant.domain.api.MarkRestaurantOrderAsPreparedCommand
-import com.drestaurant.restaurant.domain.api.model.MenuItem
-import com.drestaurant.restaurant.domain.api.model.RestaurantMenu
-import com.drestaurant.restaurant.domain.api.model.RestaurantOrderState
+import com.drestaurant.restaurant.domain.api.model.*
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.messaging.responsetypes.ResponseTypes
 import org.axonframework.queryhandling.QueryGateway
@@ -58,7 +56,7 @@ class CommandController(private val commandGateway: CommandGateway, private val 
         val command = CreateRestaurantCommand(request.name, menu, auditEntry)
         queryGateway.subscriptionQuery(FindRestaurantQuery(command.targetAggregateIdentifier), ResponseTypes.instanceOf<RestaurantEntity>(RestaurantEntity::class.java), ResponseTypes.instanceOf<RestaurantEntity>(RestaurantEntity::class.java))
                 .use {
-                    val commandResult: String = commandGateway.sendAndWait(command)
+                    val commandResult: RestaurantId? = commandGateway.sendAndWait(command)
                     val restaurantEntity = it.updates().blockFirst()
                     return ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(RestaurantRepository::class.java, restaurantEntity?.id).href)).build()
                 }
@@ -66,10 +64,10 @@ class CommandController(private val commandGateway: CommandGateway, private val 
 
     @RequestMapping(value = ["/restaurants/{rid}/orders/{roid}/markprepared"], method = [RequestMethod.PUT], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun markRestaurantOrderAsPrepared(@PathVariable rid: String, @PathVariable roid: String, response: HttpServletResponse): ResponseEntity<RestaurantOrderEntity> {
-        val command = MarkRestaurantOrderAsPreparedCommand(roid, auditEntry)
+        val command = MarkRestaurantOrderAsPreparedCommand(RestaurantOrderId(roid), auditEntry)
         queryGateway.subscriptionQuery(FindRestaurantOrderQuery(command.targetAggregateIdentifier), ResponseTypes.instanceOf<RestaurantOrderEntity>(RestaurantOrderEntity::class.java), ResponseTypes.instanceOf<RestaurantOrderEntity>(RestaurantOrderEntity::class.java))
                 .use {
-                    val commandResult: String? = commandGateway.sendAndWait(command)
+                    val commandResult: RestaurantOrderId? = commandGateway.sendAndWait(command)
                     val restaurantOrderEntity = it.updates().blockFirst()
                     return if (RestaurantOrderState.PREPARED == restaurantOrderEntity?.state) ResponseEntity.ok().build() else ResponseEntity.badRequest().build()
                 }

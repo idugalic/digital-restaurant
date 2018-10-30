@@ -31,7 +31,7 @@ internal class RestaurantHandler(private val repository: RestaurantRepository, p
         }
         val menu = RestaurantMenuEmbedable(menuItems, event.menu.menuVersion)
 
-        val record = RestaurantEntity(event.aggregateIdentifier, aggregateVersion, event.name, menu, Collections.emptyList())
+        val record = RestaurantEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name, menu, Collections.emptyList())
         repository.save(record)
 
         /* sending it to subscription queries of type FindRestaurantQuery, but only if the restaurant id matches. */
@@ -54,7 +54,7 @@ internal class RestaurantHandler(private val repository: RestaurantRepository, p
     fun onReset() = repository.deleteAll()
 
     @QueryHandler
-    fun handle(query: FindRestaurantQuery): RestaurantEntity = repository.findById(query.restaurantId).orElseThrow { UnsupportedOperationException("Restaurant with id '" + query.restaurantId + "' not found") }
+    fun handle(query: FindRestaurantQuery): RestaurantEntity = repository.findById(query.restaurantId.identifier).orElseThrow { UnsupportedOperationException("Restaurant with id '" + query.restaurantId + "' not found") }
 
     @QueryHandler
     fun handle(query: FindAllRestaurantsQuery): MutableIterable<RestaurantEntity> = repository.findAll()

@@ -27,7 +27,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
             val orderItem = OrderItemEmbedable(item.menuItemId, item.name, item.price.amount, item.quantity)
             orderItems.add(orderItem)
         }
-        val record = OrderEntity(event.aggregateIdentifier, aggregateVersion, orderItems, OrderState.CREATE_PENDING)
+        val record = OrderEntity(event.aggregateIdentifier.identifier, aggregateVersion, orderItems, OrderState.CREATE_PENDING)
         orderRepository.save(record)
 
         /* sending it to subscription queries of type FindOrderQuery, but only if the order id matches. */
@@ -49,7 +49,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     @EventHandler
     @AllowReplay(false)
     fun handle(event: OrderVerifiedByCustomerEvent, @SequenceNumber aggregateVersion: Long) {
-        val orderEntity = orderRepository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Order with id '${event.aggregateIdentifier}' not found") }
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier.identifier).orElseThrow { UnsupportedOperationException("Order with id '${event.aggregateIdentifier}' not found") }
         orderEntity.state = OrderState.VERIFIED_BY_CUSTOMER
         orderEntity.aggregateVersion = aggregateVersion
         orderRepository.save(orderEntity)
@@ -72,7 +72,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     @EventHandler
     @AllowReplay(false)
     fun handle(event: OrderVerifiedByRestaurantEvent, @SequenceNumber aggregateVersion: Long) {
-        val orderEntity = orderRepository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Order with id '${event.aggregateIdentifier}' not found") }
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier.identifier).orElseThrow { UnsupportedOperationException("Order with id '${event.aggregateIdentifier}' not found") }
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.VERIFIED_BY_RESTAURANT
         orderRepository.save(orderEntity)
@@ -95,7 +95,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     @EventHandler
     @AllowReplay(false)
     fun handle(event: OrderPreparedEvent, @SequenceNumber aggregateVersion: Long) {
-        val orderEntity = orderRepository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Order with id '${event.aggregateIdentifier}' not found") }
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier.identifier).orElseThrow { UnsupportedOperationException("Order with id '${event.aggregateIdentifier}' not found") }
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.PREPARED
         orderRepository.save(orderEntity)
@@ -118,7 +118,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     @EventHandler
     @AllowReplay(false)
     fun handle(event: OrderReadyForDeliveryEvent, @SequenceNumber aggregateVersion: Long) {
-        val orderEntity = orderRepository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Order with id '${event.aggregateIdentifier}' not found") }
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier.identifier).orElseThrow { UnsupportedOperationException("Order with id '${event.aggregateIdentifier}' not found") }
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.READY_FOR_DELIVERY
         orderRepository.save(orderEntity)
@@ -141,7 +141,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     @EventHandler
     @AllowReplay(false)
     fun handle(event: OrderDeliveredEvent, @SequenceNumber aggregateVersion: Long) {
-        val orderEntity = orderRepository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Order with id '${event.aggregateIdentifier}' not found") }
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier.identifier).orElseThrow { UnsupportedOperationException("Order with id '${event.aggregateIdentifier}' not found") }
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.DELIVERED
         orderRepository.save(orderEntity)
@@ -164,7 +164,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     @EventHandler
     @AllowReplay(false)
     fun handle(event: OrderRejectedEvent, @SequenceNumber aggregateVersion: Long) {
-        val orderEntity = orderRepository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Order with id '${event.aggregateIdentifier}' not found") }
+        val orderEntity = orderRepository.findById(event.aggregateIdentifier.identifier).orElseThrow { UnsupportedOperationException("Order with id '${event.aggregateIdentifier}' not found") }
         orderEntity.aggregateVersion = aggregateVersion
         orderEntity.state = OrderState.REJECTED
         orderRepository.save(orderEntity)
@@ -185,7 +185,7 @@ internal class OrderHandler(private val orderRepository: OrderRepository, privat
     }
 
     @QueryHandler
-    fun handle(query: FindOrderQuery): OrderEntity = orderRepository.findById(query.orderId).orElseThrow { UnsupportedOperationException("Order with id '${query.orderId}' not found") }
+    fun handle(query: FindOrderQuery): OrderEntity = orderRepository.findById(query.orderId.identifier).orElseThrow { UnsupportedOperationException("Order with id '${query.orderId}' not found") }
 
     @QueryHandler
     fun handle(query: FindAllOrdersQuery): MutableIterable<OrderEntity> = orderRepository.findAll()

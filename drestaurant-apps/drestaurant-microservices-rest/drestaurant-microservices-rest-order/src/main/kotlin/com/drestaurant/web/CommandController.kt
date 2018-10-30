@@ -3,6 +3,7 @@ package com.drestaurant.web
 import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.common.domain.api.model.Money
 import com.drestaurant.order.domain.api.CreateOrderCommand
+import com.drestaurant.order.domain.api.model.OrderId
 import com.drestaurant.order.domain.api.model.OrderInfo
 import com.drestaurant.order.domain.api.model.OrderLineItem
 import com.drestaurant.order.domain.api.model.OrderState
@@ -54,7 +55,7 @@ class CommandController(private val commandGateway: CommandGateway, private val 
         val command = CreateOrderCommand(orderInfo, auditEntry)
         queryGateway.subscriptionQuery(FindOrderQuery(command.targetAggregateIdentifier), ResponseTypes.instanceOf<OrderEntity>(OrderEntity::class.java), ResponseTypes.instanceOf<OrderEntity>(OrderEntity::class.java))
                 .use {
-                    val commandResult: String = commandGateway.sendAndWait(command)
+                    val commandResult: OrderId? = commandGateway.sendAndWait(command)
                     val orderEntity: OrderEntity? = it.updates().filter { OrderState.VERIFIED_BY_RESTAURANT == it.state || OrderState.REJECTED == it.state }.blockFirst()
                     return if (OrderState.VERIFIED_BY_RESTAURANT == orderEntity?.state) ResponseEntity.created(URI.create(entityLinks.linkToSingleResource(OrderRepository::class.java, orderEntity.id).href)).build() else ResponseEntity.badRequest().build()
                 }

@@ -31,8 +31,8 @@ internal class RestaurantOrderHandler(private val repository: RestaurantOrderRep
             val restaurantOrderItem = RestaurantOrderItemEmbedable(item.menuItemId, item.name, item.quantity)
             restaurantOrderItems.add(restaurantOrderItem)
         }
-        val restaurantEntity = restaurantRepository.findById(event.restaurantId).orElseThrow { UnsupportedOperationException("Restaurant with id '" + event.restaurantId + "' not found") }
-        val record = RestaurantOrderEntity(event.aggregateIdentifier, aggregateVersion, restaurantOrderItems, restaurantEntity, RestaurantOrderState.CREATED)
+        val restaurantEntity = restaurantRepository.findById(event.restaurantId.identifier).orElseThrow { UnsupportedOperationException("Restaurant with id '" + event.restaurantId + "' not found") }
+        val record = RestaurantOrderEntity(event.aggregateIdentifier.identifier, aggregateVersion, restaurantOrderItems, restaurantEntity, RestaurantOrderState.CREATED)
         repository.save(record)
     }
 
@@ -40,7 +40,7 @@ internal class RestaurantOrderHandler(private val repository: RestaurantOrderRep
     /* It is possible to allow or prevent some handlers from being replayed/reset */
     @AllowReplay(true)
     fun handle(event: RestaurantOrderPreparedEvent, @SequenceNumber aggregateVersion: Long) {
-        val record = repository.findById(event.aggregateIdentifier).orElseThrow { UnsupportedOperationException("Restaurant order with id '" + event.aggregateIdentifier + "' not found") }
+        val record = repository.findById(event.aggregateIdentifier.identifier).orElseThrow { UnsupportedOperationException("Restaurant order with id '" + event.aggregateIdentifier + "' not found") }
         record.state = RestaurantOrderState.PREPARED
         repository.save(record)
 
@@ -64,7 +64,7 @@ internal class RestaurantOrderHandler(private val repository: RestaurantOrderRep
     fun onReset() = repository.deleteAll()
 
     @QueryHandler
-    fun handle(query: FindRestaurantOrderQuery): RestaurantOrderEntity = repository.findById(query.restaurantOrderId).orElseThrow { UnsupportedOperationException("Restaurant order with id '" + query.restaurantOrderId + "' not found") }
+    fun handle(query: FindRestaurantOrderQuery): RestaurantOrderEntity = repository.findById(query.restaurantOrderId.identifier).orElseThrow { UnsupportedOperationException("Restaurant order with id '" + query.restaurantOrderId + "' not found") }
 
     @QueryHandler
     fun handle(query: FindAllRestaurantOrdersQuery): MutableIterable<RestaurantOrderEntity> = repository.findAll()

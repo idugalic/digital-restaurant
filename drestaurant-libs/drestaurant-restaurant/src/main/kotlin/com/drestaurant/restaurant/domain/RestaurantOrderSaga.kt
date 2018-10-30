@@ -5,7 +5,6 @@ import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.config.ProcessingGroup
 import org.axonframework.modelling.saga.EndSaga
 import org.axonframework.modelling.saga.SagaEventHandler
-import org.axonframework.modelling.saga.SagaLifecycle.associateWith
 import org.axonframework.modelling.saga.StartSaga
 import org.axonframework.spring.stereotype.Saga
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,25 +19,20 @@ class RestaurantOrderSaga {
     @Autowired
     @Transient
     private lateinit var commandGateway: CommandGateway
-    private lateinit var orderId: String
 
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    internal fun on(event: RestaurantOrderCreationInitiatedInternalEvent) {
-        orderId = event.aggregateIdentifier
-        associateWith("orderId", orderId)
-        commandGateway.send(ValidateOrderByRestaurantInternalCommand(orderId, event.restaurantId, event.orderDetails.lineItems, event.auditEntry), LoggingCallback.INSTANCE)
-    }
+    internal fun on(event: RestaurantOrderCreationInitiatedInternalEvent) = commandGateway.send(ValidateOrderByRestaurantInternalCommand(event.aggregateIdentifier, event.restaurantId, event.orderDetails.lineItems, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
-    @SagaEventHandler(associationProperty = "orderId")
+    @SagaEventHandler(associationProperty = "orderId", keyName = "aggregateIdentifier")
     internal fun on(event: RestaurantNotFoundForOrderInternalEvent) = commandGateway.send(MarkRestaurantOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
-    @SagaEventHandler(associationProperty = "orderId")
+    @SagaEventHandler(associationProperty = "orderId", keyName = "aggregateIdentifier")
     internal fun on(event: RestaurantValidatedOrderWithSuccessInternalEvent) = commandGateway.send(MarkRestaurantOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
-    @SagaEventHandler(associationProperty = "orderId")
+    @SagaEventHandler(associationProperty = "orderId", keyName = "aggregateIdentifier")
     internal fun on(event: RestaurantValidatedOrderWithErrorInternalEvent) = commandGateway.send(MarkRestaurantOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 }

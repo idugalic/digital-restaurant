@@ -5,6 +5,8 @@ import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.courier.domain.api.AssignCourierOrderToCourierCommand
 import com.drestaurant.courier.domain.api.CreateCourierCommand
 import com.drestaurant.courier.domain.api.MarkCourierOrderAsDeliveredCommand
+import com.drestaurant.courier.domain.api.model.CourierId
+import com.drestaurant.courier.domain.api.model.CourierOrderId
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.springframework.http.HttpStatus
@@ -37,11 +39,11 @@ class CommandController(private val commandGateway: CommandGateway) {
 
     @RequestMapping(value = ["/{cid}/order/{oid}/assigncommand"], method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(value = HttpStatus.CREATED)
-    fun assignOrderToCourier(@PathVariable cid: String, @PathVariable oid: String, response: HttpServletResponse) = commandGateway.send(AssignCourierOrderToCourierCommand(oid, cid, auditEntry), LoggingCallback.INSTANCE)
+    fun assignOrderToCourier(@PathVariable cid: String, @PathVariable oid: String, response: HttpServletResponse) = commandGateway.send(AssignCourierOrderToCourierCommand(CourierOrderId(oid), CourierId(cid), auditEntry), LoggingCallback.INSTANCE)
 
     @RequestMapping(value = ["/order/{id}/markdeliveredcommand"], method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(value = HttpStatus.CREATED)
-    fun markCourierOrderAsDelivered(@PathVariable id: String, response: HttpServletResponse) = commandGateway.send(MarkCourierOrderAsDeliveredCommand(id, auditEntry), LoggingCallback.INSTANCE)
+    fun markCourierOrderAsDelivered(@PathVariable id: String, response: HttpServletResponse) = commandGateway.send(MarkCourierOrderAsDeliveredCommand(CourierOrderId(id), auditEntry), LoggingCallback.INSTANCE)
 }
 
 /**

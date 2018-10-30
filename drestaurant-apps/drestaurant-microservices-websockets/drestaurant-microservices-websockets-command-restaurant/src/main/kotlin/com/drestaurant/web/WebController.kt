@@ -6,6 +6,7 @@ import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand
 import com.drestaurant.restaurant.domain.api.MarkRestaurantOrderAsPreparedCommand
 import com.drestaurant.restaurant.domain.api.model.MenuItem
 import com.drestaurant.restaurant.domain.api.model.RestaurantMenu
+import com.drestaurant.restaurant.domain.api.model.RestaurantOrderId
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -39,7 +40,7 @@ class WebController(private val commandGateway: CommandGateway) {
     }
 
     @MessageMapping(value = ["/restaurants/orders/markpreparedcommand"])
-    fun markRestaurantOrderAsPrepared(id: String) = commandGateway.send(MarkRestaurantOrderAsPreparedCommand(id, auditEntry), LoggingCallback.INSTANCE)
+    fun markRestaurantOrderAsPrepared(id: String) = commandGateway.send(MarkRestaurantOrderAsPreparedCommand(RestaurantOrderId(id), auditEntry), LoggingCallback.INSTANCE)
 }
 
 /**

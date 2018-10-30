@@ -20,25 +20,21 @@ internal class CustomerOrderSaga {
     @Autowired
     @Transient
     private lateinit var commandGateway: CommandGateway
-    private lateinit var orderId: String
+
 
     @StartSaga
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
-    fun on(event: CustomerOrderCreationInitiatedInternalEvent) {
-        orderId = event.aggregateIdentifier
-        associateWith("orderId", orderId)
-        commandGateway.send(ValidateOrderByCustomerInternalCommand(orderId, event.customerId, event.orderTotal, event.auditEntry), LoggingCallback.INSTANCE)
-    }
+    fun on(event: CustomerOrderCreationInitiatedInternalEvent) = commandGateway.send(ValidateOrderByCustomerInternalCommand(event.aggregateIdentifier, event.customerId, event.orderTotal, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
-    @SagaEventHandler(associationProperty = "orderId")
+    @SagaEventHandler(associationProperty = "orderId", keyName = "aggregateIdentifier")
     fun on(event: CustomerNotFoundForOrderInternalEvent) = commandGateway.send(MarkCustomerOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
-    @SagaEventHandler(associationProperty = "orderId")
+    @SagaEventHandler(associationProperty = "orderId", keyName = "aggregateIdentifier")
     fun on(event: CustomerValidatedOrderWithSuccessInternalEvent) = commandGateway.send(MarkCustomerOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
-    @SagaEventHandler(associationProperty = "orderId")
+    @SagaEventHandler(associationProperty = "orderId", keyName = "aggregateIdentifier")
     fun on(event: CustomerValidatedOrderWithErrorInternalEvent) = commandGateway.send(MarkCustomerOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 }

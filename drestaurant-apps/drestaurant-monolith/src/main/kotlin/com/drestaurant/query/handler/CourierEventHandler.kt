@@ -18,7 +18,7 @@ internal class CourierEventHandler(private val repository: CourierRepository, pr
     @EventHandler
     @AllowReplay(true)
     fun handle(event: CourierCreatedEvent, @SequenceNumber aggregateVersion: Long) {
-        repository.save(CourierEntity(event.aggregateIdentifier, aggregateVersion, event.name.firstName, event.name.lastName, event.maxNumberOfActiveOrders))
+        repository.save(CourierEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name.firstName, event.name.lastName, event.maxNumberOfActiveOrders))
         messagingTemplate.convertAndSend("/topic/couriers.updates", event)
     }
 

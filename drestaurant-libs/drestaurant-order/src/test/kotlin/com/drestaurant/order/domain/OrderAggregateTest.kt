@@ -2,10 +2,13 @@ package com.drestaurant.order.domain
 
 import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.common.domain.api.model.Money
+import com.drestaurant.customer.domain.api.model.CustomerId
 import com.drestaurant.order.domain.api.*
 import com.drestaurant.order.domain.api.model.OrderDetails
+import com.drestaurant.order.domain.api.model.OrderId
 import com.drestaurant.order.domain.api.model.OrderInfo
 import com.drestaurant.order.domain.api.model.OrderLineItem
+import com.drestaurant.restaurant.domain.api.model.RestaurantId
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor
 import org.axonframework.test.aggregate.AggregateTestFixture
 import org.axonframework.test.aggregate.FixtureConfiguration
@@ -27,7 +30,7 @@ class OrderAggregateTest {
     private val lineItem2: OrderLineItem = OrderLineItem("menuItemId2", "name2", Money(BigDecimal.valueOf(22)), 3)
     private var orderInfo: OrderInfo = OrderInfo("consumerId", "restaurantId", lineItems)
     private var orderDetails: OrderDetails = OrderDetails(orderInfo, lineItems.stream().map(OrderLineItem::total).reduce(Money(BigDecimal.ZERO), Money::add))
-    private val orderId: String = "orderId"
+    private val orderId: OrderId = OrderId("orderId")
 
     @Before
     fun setUp() {
@@ -54,8 +57,8 @@ class OrderAggregateTest {
     @Test
     fun markOrderAsVerifiedByCustomerCommandTest() {
         val orderCreationInitiatedEvent = OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
-        val markOrderAsVerifiedByCustomerCommand = MarkOrderAsVerifiedByCustomerInternalCommand(orderCreationInitiatedEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.consumerId, auditEntry)
-        val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.consumerId, auditEntry)
+        val markOrderAsVerifiedByCustomerCommand = MarkOrderAsVerifiedByCustomerInternalCommand(orderCreationInitiatedEvent.aggregateIdentifier, CustomerId(orderCreationInitiatedEvent.orderDetails.consumerId), auditEntry)
+        val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier,CustomerId(orderCreationInitiatedEvent.orderDetails.consumerId), auditEntry)
         fixture
                 .given(orderCreationInitiatedEvent)
                 .`when`(markOrderAsVerifiedByCustomerCommand)
@@ -65,9 +68,9 @@ class OrderAggregateTest {
     @Test
     fun markOrderAsVerifiedByRestaurantCommandTest() {
         val orderCreationInitiatedEvent = OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
-        val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.consumerId, auditEntry)
-        val markOrderAsVerifiedByRestaurantCommand = MarkOrderAsVerifiedByRestaurantInternalCommand(orderVerifiedByCustomerEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.restaurantId, auditEntry)
-        val orderVerifiedByRestaurantEvent = OrderVerifiedByRestaurantEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.restaurantId, auditEntry)
+        val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier, CustomerId(orderCreationInitiatedEvent.orderDetails.consumerId), auditEntry)
+        val markOrderAsVerifiedByRestaurantCommand = MarkOrderAsVerifiedByRestaurantInternalCommand(orderVerifiedByCustomerEvent.aggregateIdentifier, RestaurantId(orderCreationInitiatedEvent.orderDetails.restaurantId), auditEntry)
+        val orderVerifiedByRestaurantEvent = OrderVerifiedByRestaurantEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, RestaurantId(orderCreationInitiatedEvent.orderDetails.restaurantId), auditEntry)
         fixture
                 .given(orderCreationInitiatedEvent, orderVerifiedByCustomerEvent)
                 .`when`(markOrderAsVerifiedByRestaurantCommand)
@@ -77,8 +80,8 @@ class OrderAggregateTest {
     @Test
     fun markOrderAsPreparedByRestaurantCommandTest() {
         val orderCreationInitiatedEvent = OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
-        val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.consumerId, auditEntry)
-        val orderVerifiedByRestaurantEvent = OrderVerifiedByRestaurantEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.restaurantId, auditEntry)
+        val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier, CustomerId(orderCreationInitiatedEvent.orderDetails.consumerId), auditEntry)
+        val orderVerifiedByRestaurantEvent = OrderVerifiedByRestaurantEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, RestaurantId(orderCreationInitiatedEvent.orderDetails.restaurantId), auditEntry)
         val markOrderAsPreparedCommand = MarkOrderAsPreparedInternalCommand(orderVerifiedByRestaurantEvent.aggregateIdentifier, auditEntry)
         val orderPreparedEvent = OrderPreparedEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, auditEntry)
         fixture
@@ -90,8 +93,8 @@ class OrderAggregateTest {
     @Test
     fun markOrderAsReadyForDeliveryTest() {
         val orderCreationInitiatedEvent = OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
-        val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.consumerId, auditEntry)
-        val orderVerifiedByRestaurantEvent = OrderVerifiedByRestaurantEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.restaurantId, auditEntry)
+        val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier, CustomerId(orderCreationInitiatedEvent.orderDetails.consumerId), auditEntry)
+        val orderVerifiedByRestaurantEvent = OrderVerifiedByRestaurantEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, RestaurantId(orderCreationInitiatedEvent.orderDetails.restaurantId), auditEntry)
         val orderPreparedEvent = OrderPreparedEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, auditEntry)
         val markOrderAsReadyForDeliveryCommand = MarkOrderAsReadyForDeliveryInternalCommand(orderPreparedEvent.aggregateIdentifier, auditEntry)
         val orderReadyForDeliveryEvent = OrderReadyForDeliveryEvent(orderPreparedEvent.aggregateIdentifier, auditEntry)
@@ -105,8 +108,8 @@ class OrderAggregateTest {
     @Test
     fun markOrderAsDeliveredTest() {
         val orderCreationInitiatedEvent = OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
-        val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.consumerId, auditEntry)
-        val orderVerifiedByRestaurantEvent = OrderVerifiedByRestaurantEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, orderCreationInitiatedEvent.orderDetails.restaurantId, auditEntry)
+        val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier, CustomerId(orderCreationInitiatedEvent.orderDetails.consumerId), auditEntry)
+        val orderVerifiedByRestaurantEvent = OrderVerifiedByRestaurantEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, RestaurantId(orderCreationInitiatedEvent.orderDetails.restaurantId), auditEntry)
         val orderPreparedEvent = OrderPreparedEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, auditEntry)
         val orderReadyForDeliveryEvent = OrderReadyForDeliveryEvent(orderVerifiedByCustomerEvent.aggregateIdentifier, auditEntry)
         val markOrderAsDeliveredCommand = MarkOrderAsDeliveredInternalCommand(orderReadyForDeliveryEvent.aggregateIdentifier, auditEntry)

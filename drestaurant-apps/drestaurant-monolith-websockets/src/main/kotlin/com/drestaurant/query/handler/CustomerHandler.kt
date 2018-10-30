@@ -18,7 +18,7 @@ internal class CustomerHandler(private val repository: CustomerRepository, priva
     @EventHandler
     @AllowReplay(true)
     fun handle(event: CustomerCreatedEvent, @SequenceNumber aggregateVersion: Long) {
-        repository.save(CustomerEntity(event.aggregateIdentifier, aggregateVersion, event.name.firstName, event.name.lastName, event.orderLimit.amount))
+        repository.save(CustomerEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name.firstName, event.name.lastName, event.orderLimit.amount))
         broadcastUpdates()
     }
 

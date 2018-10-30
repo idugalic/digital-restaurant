@@ -23,7 +23,7 @@ internal class CustomerHandler(private val repository: CustomerRepository, priva
     @AllowReplay(true)
     fun handle(event: CustomerCreatedEvent, @SequenceNumber aggregateVersion: Long) {
         /* saving the record in our read/query model. */
-        val record = CustomerEntity(event.aggregateIdentifier, aggregateVersion, event.name.firstName, event.name.lastName, event.orderLimit.amount)
+        val record = CustomerEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name.firstName, event.name.lastName, event.orderLimit.amount)
         repository.save(record)
 
         /* sending it to subscription queries of type FindCustomerQuery, but only if the customer id matches. */
@@ -46,7 +46,7 @@ internal class CustomerHandler(private val repository: CustomerRepository, priva
     fun onReset() = repository.deleteAll()
 
     @QueryHandler
-    fun handle(query: FindCustomerQuery): CustomerEntity = repository.findById(query.customerId).orElseThrow { UnsupportedOperationException("Customer with id '" + query.customerId + "' not found") }
+    fun handle(query: FindCustomerQuery): CustomerEntity = repository.findById(query.customerId.identifier).orElseThrow { UnsupportedOperationException("Customer with id '" + query.customerId + "' not found") }
 
     @QueryHandler
     fun handle(query: FindAllCustomersQuery): MutableIterable<CustomerEntity> = repository.findAll()

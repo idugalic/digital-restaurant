@@ -1,10 +1,13 @@
 package com.drestaurant.order.domain
 
 import com.drestaurant.common.domain.api.model.Money
+import com.drestaurant.customer.domain.api.model.CustomerId
 import com.drestaurant.order.domain.api.*
 import com.drestaurant.order.domain.api.model.OrderDetails
+import com.drestaurant.order.domain.api.model.OrderId
 import com.drestaurant.order.domain.api.model.OrderLineItem
 import com.drestaurant.order.domain.api.model.OrderState
+import com.drestaurant.restaurant.domain.api.model.RestaurantId
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
@@ -30,11 +33,11 @@ internal class Order {
      * identifies the id field as such.
      */
     @AggregateIdentifier
-    private var id: String? = null
+    private lateinit var id: OrderId
 
     private lateinit var lineItems: List<OrderLineItem>
-    private lateinit var restaurantId: String
-    private lateinit var consumerId: String
+    private lateinit var restaurantId: RestaurantId
+    private lateinit var consumerId: CustomerId
     private lateinit var state: OrderState
 
     val orderTotal: Money get() = calculateOrderTotal(lineItems)
@@ -73,8 +76,8 @@ internal class Order {
     @EventSourcingHandler
     fun on(event: OrderCreationInitiatedEvent) {
         id = event.aggregateIdentifier
-        consumerId = event.orderDetails.consumerId
-        restaurantId = event.orderDetails.restaurantId
+        consumerId = CustomerId(event.orderDetails.consumerId)
+        restaurantId = RestaurantId(event.orderDetails.restaurantId)
         lineItems = event.orderDetails.lineItems
         state = OrderState.CREATE_PENDING
     }

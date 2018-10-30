@@ -4,6 +4,7 @@ import com.drestaurant.common.domain.api.model.Money
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
+import java.util.*
 import javax.validation.Valid
 
 /**
@@ -45,4 +46,9 @@ enum class OrderState {
     REJECTED,
     CANCEL_PENDING,
     CANCELLED
+}
+
+data class OrderId(val identifier: String) {
+    constructor() : this(UUID.randomUUID().toString())
+    override fun toString(): String = identifier
 }

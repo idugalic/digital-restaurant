@@ -1,6 +1,8 @@
 package com.drestaurant.courier.domain
 
 import com.drestaurant.courier.domain.api.*
+import com.drestaurant.courier.domain.api.model.CourierId
+import com.drestaurant.courier.domain.api.model.CourierOrderId
 import com.drestaurant.courier.domain.api.model.CourierOrderState
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
@@ -15,8 +17,8 @@ import org.axonframework.spring.stereotype.Aggregate
 internal class CourierOrder {
 
     @AggregateIdentifier
-    private lateinit var id: String
-    private lateinit var cuourierId: String
+    private lateinit var id: CourierOrderId
+    private lateinit var cuourierId: CourierId
     private lateinit var state: CourierOrderState
 
     constructor()

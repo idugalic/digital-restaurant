@@ -2,6 +2,8 @@ package com.drestaurant.courier.domain
 
 import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.courier.domain.api.*
+import com.drestaurant.courier.domain.api.model.CourierId
+import com.drestaurant.courier.domain.api.model.CourierOrderId
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor
 import org.axonframework.test.aggregate.AggregateTestFixture
 import org.axonframework.test.aggregate.FixtureConfiguration
@@ -14,8 +16,8 @@ class CourierOrderAggregateTest {
     private lateinit var fixture: FixtureConfiguration<CourierOrder>
     private lateinit var auditEntry: AuditEntry
 
-    private lateinit var orderId: String
-    private lateinit var courierId: String
+    private lateinit var orderId: CourierOrderId
+    private lateinit var courierId: CourierId
     
     private val who = "johndoe"
 
@@ -24,8 +26,8 @@ class CourierOrderAggregateTest {
         fixture = AggregateTestFixture(CourierOrder::class.java)
         fixture.registerCommandDispatchInterceptor(BeanValidationInterceptor())
         auditEntry = AuditEntry(who, Calendar.getInstance().time)
-        orderId = "orderId"
-        courierId = "courierId"
+        orderId = CourierOrderId("orderId")
+        courierId = CourierId("courierId")
     }
 
     @Test

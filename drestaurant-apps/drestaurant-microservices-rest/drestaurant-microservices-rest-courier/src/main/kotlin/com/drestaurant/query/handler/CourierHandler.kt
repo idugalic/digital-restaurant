@@ -23,7 +23,7 @@ internal class CourierHandler(private val repository: CourierRepository, private
     @AllowReplay(false)
     fun handle(event: CourierCreatedEvent, @SequenceNumber aggregateVersion: Long) {
         /* saving the record in our read/query model. */
-        val record = CourierEntity(event.aggregateIdentifier, aggregateVersion, event.name.firstName, event.name.lastName, event.maxNumberOfActiveOrders, Collections.emptyList())
+        val record = CourierEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name.firstName, event.name.lastName, event.maxNumberOfActiveOrders, Collections.emptyList())
         repository.save(record)
 
         /* sending it to subscription queries of type FindCourierQuery, but only if the courier id matches. */
@@ -43,7 +43,7 @@ internal class CourierHandler(private val repository: CourierRepository, private
 
     @QueryHandler
     fun handle(query: FindCourierQuery): CourierEntity {
-        return repository.findById(query.courierId).orElseThrow { UnsupportedOperationException("Courier with id '${query.courierId}' not found") }
+        return repository.findById(query.courierId.identifier).orElseThrow { UnsupportedOperationException("Courier with id '${query.courierId}' not found") }
     }
 
     @QueryHandler

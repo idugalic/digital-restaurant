@@ -5,6 +5,8 @@ import com.drestaurant.common.domain.api.model.Money
 import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.customer.domain.api.CreateCustomerCommand
 import com.drestaurant.customer.domain.api.CustomerCreatedEvent
+import com.drestaurant.customer.domain.api.model.CustomerId
+import com.drestaurant.customer.domain.api.model.CustomerOrderId
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
@@ -29,7 +31,7 @@ internal class Customer {
      * annotation 'AggregateIdentifier' identifies the id field as such.
      */
     @AggregateIdentifier
-    private lateinit var id: String
+    private lateinit var id: CustomerId
     private lateinit var name: PersonName
     private lateinit var orderLimit: Money
 
@@ -55,7 +57,7 @@ internal class Customer {
         apply(CustomerCreatedEvent(command.name, command.orderLimit, command.targetAggregateIdentifier, command.auditEntry))
     }
 
-    fun validateOrder(orderId: String, orderTotal: Money, auditEntry: AuditEntry) {
+    fun validateOrder(orderId: CustomerOrderId, orderTotal: Money, auditEntry: AuditEntry) {
         if (orderTotal.isGreaterThanOrEqual(orderLimit)) {
             apply(CustomerValidatedOrderWithErrorInternalEvent(id, orderId, orderTotal, auditEntry))
 

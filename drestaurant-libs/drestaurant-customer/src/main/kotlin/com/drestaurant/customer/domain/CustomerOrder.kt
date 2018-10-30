@@ -2,6 +2,8 @@ package com.drestaurant.customer.domain
 
 import com.drestaurant.common.domain.api.model.Money
 import com.drestaurant.customer.domain.api.*
+import com.drestaurant.customer.domain.api.model.CustomerId
+import com.drestaurant.customer.domain.api.model.CustomerOrderId
 import com.drestaurant.customer.domain.api.model.CustomerOrderState
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
@@ -16,8 +18,8 @@ import org.axonframework.spring.stereotype.Aggregate
 internal class CustomerOrder {
 
     @AggregateIdentifier
-    private lateinit var id: String
-    private lateinit var customerId: String
+    private lateinit var id: CustomerOrderId
+    private lateinit var customerId: CustomerId
     private lateinit var state: CustomerOrderState
     private lateinit var orderTotal: Money
 

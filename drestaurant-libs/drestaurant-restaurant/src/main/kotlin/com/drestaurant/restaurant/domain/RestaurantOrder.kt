@@ -1,9 +1,7 @@
 package com.drestaurant.restaurant.domain
 
 import com.drestaurant.restaurant.domain.api.*
-import com.drestaurant.restaurant.domain.api.model.RestaurantOrderDetails
-import com.drestaurant.restaurant.domain.api.model.RestaurantOrderLineItem
-import com.drestaurant.restaurant.domain.api.model.RestaurantOrderState
+import com.drestaurant.restaurant.domain.api.model.*
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
@@ -17,8 +15,8 @@ import org.axonframework.spring.stereotype.Aggregate
 internal class RestaurantOrder {
 
     @AggregateIdentifier
-    private lateinit var id: String
-    private lateinit var restaurantId: String
+    private lateinit var id: RestaurantOrderId
+    private lateinit var restaurantId: RestaurantId
     private lateinit var state: RestaurantOrderState
     private lateinit var lineItems: List<RestaurantOrderLineItem>
 

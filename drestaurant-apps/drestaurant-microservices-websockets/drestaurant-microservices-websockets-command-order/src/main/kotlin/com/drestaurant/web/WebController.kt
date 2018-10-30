@@ -34,7 +34,7 @@ class WebController(private val commandGateway: CommandGateway) {
             val item = OrderLineItem(id, name, Money(price), quantity)
             lineItems.add(item)
         }
-        val orderInfo = OrderInfo(request.customerId!!, request.restaurantId!!, lineItems)
+        val orderInfo = OrderInfo(request.customerId, request.restaurantId, lineItems)
         val command = CreateOrderCommand(orderInfo, auditEntry)
         commandGateway.send(command, LoggingCallback.INSTANCE)
     }
@@ -43,7 +43,7 @@ class WebController(private val commandGateway: CommandGateway) {
 /**
  * A request for creating a Restaurant
  */
-data class CreateOrderDTO(val customerId: String?, val restaurantId: String?, val orderItems: List<OrderItemDTO>)
+data class CreateOrderDTO(val customerId: String, val restaurantId: String, val orderItems: List<OrderItemDTO>)
 
 /**
  * An Order item request

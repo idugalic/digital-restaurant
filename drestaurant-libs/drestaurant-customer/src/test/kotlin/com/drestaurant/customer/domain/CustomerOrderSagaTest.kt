@@ -2,6 +2,8 @@ package com.drestaurant.customer.domain
 
 import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.common.domain.api.model.Money
+import com.drestaurant.customer.domain.api.model.CustomerId
+import com.drestaurant.customer.domain.api.model.CustomerOrderId
 import org.axonframework.test.saga.FixtureConfiguration
 import org.axonframework.test.saga.SagaTestFixture
 import org.junit.Before
@@ -14,8 +16,8 @@ class CustomerOrderSagaTest {
     private lateinit var testFixture: FixtureConfiguration
     private val who = "johndoe"
     private val auditEntry: AuditEntry = AuditEntry(who, Calendar.getInstance().time)
-    private val orderId: String = "orderId"
-    private val customerId: String = "customerId"
+    private val orderId: CustomerOrderId = CustomerOrderId("orderId")
+    private val customerId: CustomerId = CustomerId("customerId")
     private val orderTotal: Money = Money(BigDecimal.valueOf(100))
 
     @Before
@@ -27,7 +29,7 @@ class CustomerOrderSagaTest {
     fun customerOrderCreationInitiatedTest2() {
 
         testFixture.givenNoPriorActivity()
-                .whenAggregate(orderId)
+                .whenAggregate(orderId.toString())
                 .publishes(CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry))
                 .expectActiveSagas(1)
                 .expectDispatchedCommands(ValidateOrderByCustomerInternalCommand(orderId, customerId, orderTotal, auditEntry))
@@ -36,7 +38,7 @@ class CustomerOrderSagaTest {
     @Test
     fun customerNotFoundTest() {
 
-        testFixture.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId.toString())
                 .published(CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry))
                 .whenPublishingA(CustomerNotFoundForOrderInternalEvent(customerId, orderId, orderTotal, auditEntry))
                 .expectActiveSagas(0)
@@ -46,7 +48,7 @@ class CustomerOrderSagaTest {
     @Test
     fun customerOrderNotValidAndRejected() {
 
-        testFixture.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId.toString())
                 .published(CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry))
                 .whenPublishingA(CustomerValidatedOrderWithErrorInternalEvent(customerId, orderId, orderTotal, auditEntry))
                 .expectActiveSagas(0)
@@ -56,7 +58,7 @@ class CustomerOrderSagaTest {
     @Test
     fun customerOrderValidAndCreated() {
 
-        testFixture.givenAggregate(orderId)
+        testFixture.givenAggregate(orderId.toString())
                 .published(CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry))
                 .whenPublishingA(CustomerValidatedOrderWithSuccessInternalEvent(customerId, orderId, orderTotal, auditEntry))
                 .expectActiveSagas(0)
