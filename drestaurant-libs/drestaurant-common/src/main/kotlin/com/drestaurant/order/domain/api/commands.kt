@@ -10,7 +10,7 @@ import javax.validation.Valid
 /**
  * This command is used to construct/place new order
  */
-class CreateOrderCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, @field:Valid val orderInfo: OrderInfo, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
+data class CreateOrderCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, @field:Valid val orderInfo: OrderInfo, override val auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
 
     constructor(orderInfo: OrderInfo, auditEntry: AuditEntry) : this(UUID.randomUUID().toString(), orderInfo, auditEntry)
 }

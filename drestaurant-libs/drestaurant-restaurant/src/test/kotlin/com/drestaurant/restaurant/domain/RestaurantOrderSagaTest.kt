@@ -54,7 +54,7 @@ class RestaurantOrderSagaTest {
 
         testFixture.givenAggregate(orderId)
                 .published(RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
-                .whenPublishingA(OrderValidatedWithErrorByRestaurantInternalEvent(restuarantId, orderId, auditEntry))
+                .whenPublishingA(RestaurantValidatedOrderWithErrorInternalEvent(restuarantId, orderId, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkRestaurantOrderAsRejectedInternalCommand(orderId, auditEntry))
     }
@@ -64,7 +64,7 @@ class RestaurantOrderSagaTest {
 
         testFixture.givenAggregate(orderId)
                 .published(RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry))
-                .whenPublishingA(OrderValidatedWithSuccessByRestaurantInternalEvent(restuarantId, orderId, auditEntry))
+                .whenPublishingA(RestaurantValidatedOrderWithSuccessInternalEvent(restuarantId, orderId, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkRestaurantOrderAsCreatedInternalCommand(orderId, auditEntry))
     }

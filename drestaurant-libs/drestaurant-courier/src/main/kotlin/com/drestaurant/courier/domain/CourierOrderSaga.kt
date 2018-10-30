@@ -36,9 +36,9 @@ internal class CourierOrderSaga {
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    fun on(event: OrderValidatedWithSuccessByCourierInternalEvent) = commandGateway.send(MarkCourierOrderAsAssignedInternalCommand(event.orderId, event.courierId, event.auditEntry), LoggingCallback.INSTANCE)
+    fun on(event: CourierValidatedOrderWithSuccessInternalEvent) = commandGateway.send(MarkCourierOrderAsAssignedInternalCommand(event.orderId, event.aggregateIdentifier, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    fun on(event: OrderValidatedWithErrorByCourierInternalEvent) = commandGateway.send(MarkCourierOrderAsNotAssignedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
+    fun on(event: CourierValidatedOrderWithErrorInternalEvent) = commandGateway.send(MarkCourierOrderAsNotAssignedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 }

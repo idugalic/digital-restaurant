@@ -48,7 +48,7 @@ class CourierOrderSagaTest {
 
         testFixture.givenAggregate(orderId)
                 .published(CourierOrderAssigningInitiatedInternalEvent(courierId, orderId, auditEntry))
-                .whenPublishingA(OrderValidatedWithErrorByCourierInternalEvent(courierId, orderId, auditEntry))
+                .whenPublishingA(CourierValidatedOrderWithErrorInternalEvent(courierId, orderId, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkCourierOrderAsNotAssignedInternalCommand(orderId, auditEntry))
     }
@@ -58,7 +58,7 @@ class CourierOrderSagaTest {
 
         testFixture.givenAggregate(orderId)
                 .published(CourierOrderAssigningInitiatedInternalEvent(courierId, orderId, auditEntry))
-                .whenPublishingA(OrderValidatedWithSuccessByCourierInternalEvent(courierId, orderId, auditEntry))
+                .whenPublishingA(CourierValidatedOrderWithSuccessInternalEvent(courierId, orderId, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkCourierOrderAsAssignedInternalCommand(orderId, courierId, auditEntry))
     }

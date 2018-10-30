@@ -48,7 +48,7 @@ class CustomerOrderSagaTest {
 
         testFixture.givenAggregate(orderId)
                 .published(CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry))
-                .whenPublishingA(OrderValidatedWithErrorByCustomerInternalEvent(customerId, orderId, orderTotal, auditEntry))
+                .whenPublishingA(CustomerValidatedOrderWithErrorInternalEvent(customerId, orderId, orderTotal, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkCustomerOrderAsRejectedInternalCommand(orderId, auditEntry))
     }
@@ -58,7 +58,7 @@ class CustomerOrderSagaTest {
 
         testFixture.givenAggregate(orderId)
                 .published(CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry))
-                .whenPublishingA(OrderValidatedWithSuccessByCustomerInternalEvent(customerId, orderId, orderTotal, auditEntry))
+                .whenPublishingA(CustomerValidatedOrderWithSuccessInternalEvent(customerId, orderId, orderTotal, auditEntry))
                 .expectActiveSagas(0)
                 .expectDispatchedCommands(MarkCustomerOrderAsCreatedInternalCommand(orderId, auditEntry))
     }

@@ -11,7 +11,7 @@ import javax.validation.Valid
 /**
  * This command is used to construct/register new customer
  */
-class CreateCustomerCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, @field:Valid val name: PersonName, val orderLimit: Money, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
+data class CreateCustomerCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, @field:Valid val name: PersonName, val orderLimit: Money, override val auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
 
     constructor(name: PersonName, orderLimit: Money, auditEntry: AuditEntry) : this(UUID.randomUUID().toString(), name, orderLimit, auditEntry)
 }
@@ -19,7 +19,7 @@ class CreateCustomerCommand(@TargetAggregateIdentifier val targetAggregateIdenti
 /**
  * This command is used to construct new customer order
  */
-class CreateCustomerOrderCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, @field:Valid val orderTotal: Money, val customerId: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
+data class CreateCustomerOrderCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, @field:Valid val orderTotal: Money, val customerId: String, override val auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
 
     constructor(orderTotal: Money, customerId: String, auditEntry: AuditEntry) : this(UUID.randomUUID().toString(), orderTotal, customerId, auditEntry)
 }
@@ -27,4 +27,4 @@ class CreateCustomerOrderCommand(@TargetAggregateIdentifier val targetAggregateI
 /**
  * This command is used to mark customer order (targetAggregateIdentifier) as delivered
  */
-class MarkCustomerOrderAsDeliveredCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
+data class MarkCustomerOrderAsDeliveredCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, override val auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)

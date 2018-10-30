@@ -11,7 +11,7 @@ import javax.validation.Valid
 /**
  * This command is used to construct new restaurant
  */
-class CreateRestaurantCommand(val name: String, @field:Valid val menu: RestaurantMenu, @TargetAggregateIdentifier val targetAggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
+data class CreateRestaurantCommand(val name: String, @field:Valid val menu: RestaurantMenu, @TargetAggregateIdentifier val targetAggregateIdentifier: String, override val auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
 
     constructor(name: String, menu: RestaurantMenu, auditEntry: AuditEntry) : this(name, menu, UUID.randomUUID().toString(), auditEntry)
 }
@@ -19,7 +19,7 @@ class CreateRestaurantCommand(val name: String, @field:Valid val menu: Restauran
 /**
  * This command is used to construct new order in restaurant
  */
-class CreateRestaurantOrderCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, @field:Valid val orderDetails: RestaurantOrderDetails, val restaurantId: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
+data class CreateRestaurantOrderCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, @field:Valid val orderDetails: RestaurantOrderDetails, val restaurantId: String, override val auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry) {
 
     constructor(orderDetails: RestaurantOrderDetails, restaurantId: String, auditEntry: AuditEntry) : this(UUID.randomUUID().toString(), orderDetails, restaurantId, auditEntry)
 }
@@ -27,4 +27,4 @@ class CreateRestaurantOrderCommand(@TargetAggregateIdentifier val targetAggregat
 /**
  * This command is used to mark restaurant order (targetAggregateIdentifier) as prepared
  */
-class MarkRestaurantOrderAsPreparedCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
+data class MarkRestaurantOrderAsPreparedCommand(@TargetAggregateIdentifier val targetAggregateIdentifier: String, override val auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)

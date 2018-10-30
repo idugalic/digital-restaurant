@@ -21,7 +21,6 @@ internal class SpringCourierConfiguration {
     @Value("\${axon.snapshot.trigger.treshold.courierorder}")
     private val snapshotTriggerTresholdCourierOrder: Int = 100
 
-
     @Bean("courierSnapshotTriggerDefinition")
     fun courierSnapshotTriggerDefinition(snapshotter: Snapshotter) = EventCountSnapshotTriggerDefinition(snapshotter, snapshotTriggerTresholdCourier)
 

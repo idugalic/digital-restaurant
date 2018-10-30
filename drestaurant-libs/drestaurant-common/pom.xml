@@ -9,10 +9,6 @@
     <name>libs-common</name>
     <description>Common - Events, Commands, Queries - API</description>
 
-    <properties>
-        <kotlin.version>1.2.41</kotlin.version>
-    </properties>
-
     <parent>
         <groupId>com.drestaurant</groupId>
         <artifactId>drestaurant-libs</artifactId>

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse
  * REST Controller for handling 'commands'
  */
 @RestController
-@RequestMapping(value = "/api/command")
+@RequestMapping(value = ["/api/command"])
 class CommandController(private val commandGateway: CommandGateway) {
 
     private val currentUser: String

@@ -36,9 +36,9 @@ internal class CustomerOrderSaga {
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    fun on(event: OrderValidatedWithSuccessByCustomerInternalEvent) = commandGateway.send(MarkCustomerOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
+    fun on(event: CustomerValidatedOrderWithSuccessInternalEvent) = commandGateway.send(MarkCustomerOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    fun on(event: OrderValidatedWithErrorByCustomerInternalEvent) = commandGateway.send(MarkCustomerOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
+    fun on(event: CustomerValidatedOrderWithErrorInternalEvent) = commandGateway.send(MarkCustomerOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 }

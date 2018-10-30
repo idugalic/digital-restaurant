@@ -36,9 +36,9 @@ class RestaurantOrderSaga {
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithSuccessByRestaurantInternalEvent) = commandGateway.send(MarkRestaurantOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
+    internal fun on(event: RestaurantValidatedOrderWithSuccessInternalEvent) = commandGateway.send(MarkRestaurantOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
-    internal fun on(event: OrderValidatedWithErrorByRestaurantInternalEvent) = commandGateway.send(MarkRestaurantOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
+    internal fun on(event: RestaurantValidatedOrderWithErrorInternalEvent) = commandGateway.send(MarkRestaurantOrderAsRejectedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 }

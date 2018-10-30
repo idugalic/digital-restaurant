@@ -85,10 +85,10 @@ internal class Restaurant {
      */
     fun validateOrder(orderId: String, lineItems: List<RestaurantOrderLineItem>, auditEntry: AuditEntry) {
         if (menu.menuItems.stream().map { mi -> mi.id }.collect(Collectors.toList()).containsAll(lineItems.stream().map { li -> li.menuItemId }.collect(Collectors.toList()))) {
-            apply(OrderValidatedWithSuccessByRestaurantInternalEvent(id, orderId, auditEntry))
+            apply(RestaurantValidatedOrderWithSuccessInternalEvent(id, orderId, auditEntry))
 
         } else {
-            apply(OrderValidatedWithErrorByRestaurantInternalEvent(id, orderId, auditEntry))
+            apply(RestaurantValidatedOrderWithErrorInternalEvent(id, orderId, auditEntry))
         }
     }
 
