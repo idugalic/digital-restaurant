@@ -1,4 +1,5 @@
-### Microservices / HTTP & Websockets / Apache Kafka
+## Microservices / HTTP & Websockets / Apache Kafka
+#### :octocat: [digital-restaurant](https://github.com/idugalic/digital-restaurant)/drestaurant-apps/drestaurant-microservices :octocat:
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
@@ -162,27 +163,10 @@ $ mvn spring-boot:run
 ```
 
 
-## Continuous delivery
-
-We have one deployment pipeline for all applications and libraries within this repository. In addition, all projects in the repository share the same dependencies. Hence, there are no version conflicts because everyone has to use the same/the latest (SNAPSHOTS) version. And you don't need to deal with a private NPM (JavaScript) or Maven (Java) registry when you just want to use your own libraries.
-This setup and project structure is usually addressed as a [monorepo](https://medium.com/@maoberlehner/monorepos-in-the-wild-33c6eb246cb9).
-
-## Technology
-
-### Language
-- [Kotlin][kotlin]
-
-### Frameworks and Platforms
-- [Spring (SpringBoot, SpringCloud, SpringData, SpringDataRest)][spring]
-- [AxonFramework][axonframework]
-
-### Continuous Integration and Delivery 
-- Travis
-
 ### Infrastructure and Platform (As A Service)
 - [H2 - java SQL databse][h2]
 - [Apache Kafka][kafka]
- 
+
 
 [mvn]: https://maven.apache.org/
 [kotlin]: https://kotlinlang.org/

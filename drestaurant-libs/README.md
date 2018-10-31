@@ -1,4 +1,5 @@
 ## Domain layer
+#### :octocat: [digital-restaurant](https://github.com/idugalic/digital-restaurant)/drestaurant-libs :octocat:
 
 This layer contains information about the domain. This is the heart of the business software. The state of business objects is held here. Persistence of the business objects and possibly their state is delegated to the infrastructure layer.
 
@@ -104,38 +105,6 @@ Kotlin language doesn't have 'package' modifer as Java has. It has 'internal' mo
 For example, our [Customer component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer) classes are placed in one `com.drestaurant.customer.domain` package, with all classes marked as 'internal'.
 Public classes are placed in `com.drestaurant.customer.domain.api` and they are forming an API for this component. This API consist of [commands and events](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-common/src/main/kotlin/com/drestaurant/customer/domain/api) only.
 
-
-## Continuous delivery
-
-We have one deployment pipeline for all applications and libraries within this repository. In addition, all projects in the repository share the same dependencies. Hence, there are no version conflicts because everyone has to use the same/the latest (SNAPSHOTS) version. And you don't need to deal with a private NPM (JavaScript) or Maven (Java) registry when you just want to use your own libraries.
-This setup and project structure is usually addressed as a [monorepo](https://medium.com/@maoberlehner/monorepos-in-the-wild-33c6eb246cb9).
-
-## Technology
-
-### Language
-- [Kotlin][kotlin]
-
-### Frameworks and Platforms
-- [Spring (spring boot, spring cloud, spring data, spring data rest)][spring]
-- [Axonframework (eventsourcing, CQRS)][axonframework]
-
-### Continuous Integration and Delivery 
-- Travis
-
-### Infrastructure and Platform (As A Service)
-- [H2, MySQL (event store, materialized views)][mysql]
-- [Apache Kafka][kafka]
-- [RabbitMQ][rabbitMQ]
-
-## References and further reading
-**Inspired by the book "Microservices Patterns" - Chris Richardson**
-
-  - https://github.com/microservice-patterns/ftgo-application
-  - https://docs.axonframework.org/
-  - https://spring.io/blog/2018/04/11/event-storming-and-spring-with-a-splash-of-ddd
-  - http://www.codingthearchitecture.com/2016/04/25/layers_hexagons_features_and_components.html
-  
- 
 
 [mvn]: https://maven.apache.org/
 [kotlin]: https://kotlinlang.org/
