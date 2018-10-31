@@ -10,7 +10,6 @@ import org.axonframework.eventhandling.ResetHandler
 import org.axonframework.eventhandling.SequenceNumber
 import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Component
-import java.util.*
 
 
 @Component
@@ -21,7 +20,7 @@ internal class CourierHandler(private val repository: CourierRepository, private
     @AllowReplay(true)
     fun handle(event: CourierCreatedEvent, @SequenceNumber aggregateVersion: Long) {
         /* saving the record in our read/query model. */
-        repository.save(CourierEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name.firstName, event.name.lastName, event.maxNumberOfActiveOrders, Collections.emptyList()))
+        repository.save(CourierEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name.firstName, event.name.lastName, event.maxNumberOfActiveOrders, emptyList()))
         /* sending message to the topic */
         broadcastUpdates()
     }

@@ -29,7 +29,7 @@ internal class RestaurantHandler(private val repository: RestaurantRepository, p
             menuItems.add(menuItem)
         }
         val menu = RestaurantMenuEmbedable(menuItems, event.menu.menuVersion)
-        repository.save(RestaurantEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name, menu, Collections.emptyList()))
+        repository.save(RestaurantEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name, menu, emptyList()))
         broadcastUpdates()
     }
 
