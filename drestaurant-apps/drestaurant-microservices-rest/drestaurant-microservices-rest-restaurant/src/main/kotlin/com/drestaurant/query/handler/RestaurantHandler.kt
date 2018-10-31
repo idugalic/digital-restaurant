@@ -34,7 +34,7 @@ internal class RestaurantHandler(private val repository: RestaurantRepository, p
         }
         val menu = RestaurantMenuEmbedable(menuItems, event.menu.menuVersion)
 
-        val record = RestaurantEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name, menu, Collections.emptyList())
+        val record = RestaurantEntity(event.aggregateIdentifier.identifier, aggregateVersion, event.name, menu, emptyList())
         repository.save(record)
 
         /* sending it to subscription queries of type FindRestaurantQuery, but only if the restaurant id matches. */

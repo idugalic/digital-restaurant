@@ -25,7 +25,7 @@ class AxonAdministration(private val eventProcessingConfiguration: EventProcessi
     // Returns a map where the key is the segment identifier, and the value is the event processing status. Based on this status we can determine whether the Processor is caught up and/or is replaying
     fun getTrackingEventProcessorStatus(processingGroup: String): Map<Int, EventTrackerStatus> {
         val trackingEventProcessor: Optional<TrackingEventProcessor> = eventProcessingConfiguration.eventProcessorByProcessingGroup(processingGroup)
-        return trackingEventProcessor.map { it.processingStatus() }.orElseGet { Collections.emptyMap() }
+        return trackingEventProcessor.map { it.processingStatus() }.orElseGet { emptyMap() }
     }
 
 }
