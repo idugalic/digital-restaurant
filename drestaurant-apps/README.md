@@ -3,7 +3,7 @@
 
 This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects
 
-We have created more 'web' applications (standalone Spring Boot applications) to demonstrate the use of different architectural styles, API designs and deployment strategies by utilizing components from the domain layer in a different way:
+We have created more 'web' applications (standalone Spring Boot applications) to demonstrate the use of different architectural styles, API designs and deployment strategies by utilizing [components from the domain layer](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a different way:
 
 **Monolithic**
 
