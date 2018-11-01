@@ -3,6 +3,8 @@
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
+*We are utilizing [components from the domain layer](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs). This layer contains information about the domain. This is the heart of the business software.*
+
 This application is utilizing STOMP over Websockets protocol to expose capabilities of our 'domain' via components:
  
  - [WebController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets/src/main/kotlin/com/drestaurant/web/WebController.kt)

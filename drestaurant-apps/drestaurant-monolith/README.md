@@ -3,6 +3,8 @@
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
+*We are utilizing [components from the domain layer](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs). This layer contains information about the domain. This is the heart of the business software.*
+
 A recurring question with CQRS and EventSourcing is how to put a synchronous HTTP front-end on top of an asynchronous CQRS back-end.
 
 In general there are two approaches:
