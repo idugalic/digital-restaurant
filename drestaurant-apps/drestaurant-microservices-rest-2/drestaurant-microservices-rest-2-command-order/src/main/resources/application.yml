@@ -1,0 +1,10 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: command-order
+axon:
+  snapshot:
+    trigger:
+      treshold:
+        order: 100

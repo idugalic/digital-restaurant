@@ -245,9 +245,10 @@ We have created more 'web' applications (standalone Spring Boot applications) to
     - we use H2 SQL database as event store
     - we use H2 SQL database to store materialized views (query side)
 
-**Microservices**
+**Microservices (decomposed monoliths)**
 
  - [Microservices 1](#microservices-1-http-websockets-apache-kafka)
+    - Monolith 1 decomposed
     - **HTTP and WebSockets API** by segregating Command and Query
     - [Monolith 1](#monolith-1-http-and-websockets-api-by-segregating-command-and-query) as a monolithic version
     - we don't synchronize on the backend
@@ -258,6 +259,7 @@ We have created more 'web' applications (standalone Spring Boot applications) to
     - we use H2 SQL database to store materialized views (query side)
 
  - [Microservices 2](#microservices-2-rest-rabbitmq)
+    - Monolith 2 decomposed
     - **REST API** by not segregating Command and Query
     - [Monolith 2](#monolith-2-rest-api-by-not-segregating-command-and-query) as a monolithic version
     - we synchronize on the backend side
@@ -265,8 +267,10 @@ We have created more 'web' applications (standalone Spring Boot applications) to
     - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
     - we use H2 SQL database as event store
     - we use H2 SQL database to store materialized views (query side)
+    - [version 2](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest-2) is available, utilizing [AxonServer](https://axoniq.io/product-overview/axon-server) -> we distribute queries as well -> independent `query` microservice -> scales better
     
  - [Microservices 3](#microservices-3-websockets-axondb-and-axonhub)
+    - Monolith 3 decomposed
     - **WebSockets API**
     - [Monolith 3](#monolith-3-stomp-over-websockets-api-we-are-async-all-the-way) as a monolithic version
     - we are async all the way
@@ -762,6 +766,9 @@ Having one exchange bind to every service queue covered our scenario, but you ca
 The [Spring Cloud connector](https://docs.axoniq.io/reference-guide/1.3-infrastructure-components/command-dispatching#spring-cloud-connector) setup uses the service registration and discovery mechanism described by Spring Cloud for distributing the command bus (`commands`).
 You are thus left free to choose which Spring Cloud implementation to use to distribute your commands.
 An example implementation is the Eureka Discovery/Eureka Server combination.
+
+NOTE: [version 2](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest-2) is available, utilizing [AxonServer](https://axoniq.io/product-overview/axon-server).We distribute `queries` now, out of the box, and we extract independent `query` microservice.
+
 
 #### Restaurant management
 

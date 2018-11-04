@@ -18,7 +18,7 @@ We have created more 'web' applications (standalone Spring Boot applications) to
     - **WebSockets API**
     - we are async all the way
 
-**Microservices**
+**Microservices (decomposed monoliths)**
 
  - [Microservices 1](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices)
     - Monolith 1 decomposed
@@ -27,12 +27,21 @@ We have created more 'web' applications (standalone Spring Boot applications) to
     - we provide WebSockets for the frontend to handle async nature of the backend
     - we use Apache Kafka to distribute events between services
     - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
- - [Microservices 2](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest)
-    - Monolith 2 decomposed
-    - **REST API** by not segregating Command and Query
-    - we synchronize on the backend side
-    - we use RabbitMQ to distribute events between services (bounded contexts)
-    - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
+ - Microservices 2
+
+    - [Version 1](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest)
+      - Monolith 2 decomposed
+      - **REST API** by not segregating Command and Query
+      - we synchronize on the backend side
+      - we use RabbitMQ to distribute events between services (bounded contexts)
+      - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
+      - **each micorservice has `command` and `query` side components included -> there is NO standalone `query` microservice**
+    - [Version 2](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest-2)
+      - Monolith 2 decomposed
+      - **REST API** by not segregating Command and Query
+      - we synchronize on the backend side
+      - we use [AxonServer](https://axoniq.io/product-overview/axon-server) to route and distribute all type of messages (commands, events and **queries**) between services (bounded contexts)
+      - **each micorservice has `command` side component included only -> there is standalone `query` microservice -> we can scale better**
  - [Microservices 3](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets)
     - Monolith 3 decomposed
     - **WebSockets API**
