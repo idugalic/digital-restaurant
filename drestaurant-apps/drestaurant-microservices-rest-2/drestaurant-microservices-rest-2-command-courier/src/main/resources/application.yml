@@ -1,0 +1,11 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: command-courier
+axon:
+  snapshot:
+    trigger:
+      treshold:
+        courier: 100
+        courierorder: 100

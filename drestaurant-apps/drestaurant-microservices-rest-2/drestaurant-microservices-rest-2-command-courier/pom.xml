@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>drestaurant-microservices-rest-2-command-courier</artifactId>
+    <packaging>jar</packaging>
+
+    <name>apps-microservices-rest-2-command-courier</name>
+    <description>Microservice REST - 2 - Courier</description>
+
+    <parent>
+        <groupId>com.drestaurant</groupId>
+        <artifactId>drestaurant-microservices-rest-2</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <dependencies>
+        <dependency>
+            <groupId>com.drestaurant</groupId>
+            <artifactId>drestaurant-microservices-rest-2-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.drestaurant</groupId>
+            <artifactId>drestaurant-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <!--
+               reactor-core is needed for subscription queries
+               when using Spring Boot 2.0, you'll automatically get reactor-core 3.1, which is fine
+               if you're on Spring Boot 1.5, you would get 2.x, which doesn't work, so you would have to manually set version 3.1
+             -->
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.drestaurant</groupId>
+            <artifactId>drestaurant-courier</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+        </dependency>
+    </dependencies>
+</project>

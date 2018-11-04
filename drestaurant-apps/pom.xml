@@ -21,6 +21,7 @@
         <module>drestaurant-monolith-websockets</module>
         <module>drestaurant-microservices</module>
         <module>drestaurant-microservices-rest</module>
+        <module>drestaurant-microservices-rest-2</module>
         <module>drestaurant-microservices-websockets</module>
     </modules>
 
