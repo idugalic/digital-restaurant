@@ -177,19 +177,18 @@ $ mvn clean install
 
 ### Run microservices
 
-NOTE: Docker is required. We use it to start RabbitMQ
+NOTE: [AxonServer](https://axoniq.io/product-overview/axon-server) is required.
 
 ```bash
-$ docker run -d --hostname my-rabbit --name some-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
-$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-courier
+$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-2-query
 $ mvn spring-boot:run
-$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-discovery-server
+$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-2-command-courier
 $ mvn spring-boot:run
-$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-customer
+$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-2-command-customer
 $ mvn spring-boot:run
-$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-restaurant
+$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-2-command-restaurant
 $ mvn spring-boot:run
-$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-order
+$ cd digital-restaurant/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-2-command-order
 $ mvn spring-boot:run
 ```
 

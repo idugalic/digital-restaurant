@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse
  *
  */
 @RestController
-class CommandController(private val commandGateway: CommandGateway, private val queryGateway: QueryGateway, private val entityLinks: RepositoryEntityLinks) {
+class CommandController(private val commandGateway: CommandGateway, private val queryGateway: QueryGateway) {
 
     private val currentUser: String
         get() = if (SecurityContextHolder.getContext().authentication != null) {
