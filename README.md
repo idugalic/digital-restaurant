@@ -220,6 +220,26 @@ Kotlin language doesn't have 'package' modifier as Java has. It has 'internal' m
 For example, our [Customer component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer) classes are placed in one `com.drestaurant.customer.domain` package, with all classes marked as 'internal'.
 Public classes are placed in `com.drestaurant.customer.domain.api` and they are forming an API for this component. This API consist of [commands and events](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-common/src/main/kotlin/com/drestaurant/customer/domain/api).
 
+### Context Mapping
+
+Bounded contexts (and teams that produce them) can be in different relationships:
+
+ - partnership (two contexts/teams succeed or fail together)
+ - customer-supplier (two teams in upstream/downstream relationship - upstream can succeed interdependently of downstream team)
+ - conformist (two teams in upstream/downstream relationship - upstream has no motivation to provide to downstream, and downstream team does not put effort in translation)
+ - shared kernel (sharing a part of the model - must be kept small)
+ - separate ways (cut them loose)
+ - anticorruption layer
+
+
+You may be wondering how Domain Events can be consumed by another Bounded Context and not force that consuming Bounded Context into a Conformist relationship. 
+
+Consumers should not use the [event types (e.g., classes)](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-common/src/main/kotlin/com/drestaurant/customer/domain/api) of an event publisher. Rather, they should depend only on the schema of the events, that is, their *Published Language*. This generally means that if the events are published as JSON, or perhaps a more economical object format, the consumer should consume the events by parsing them to obtain their data attributes. This rise complexity (consider [consumer driven contracts](https://www.martinfowler.com/articles/consumerDrivenContracts.html) testing), but enables loose coupling. 
+
+Our demo application demonstrate `conformist` pattern, as we are using [strongly typed events](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-common/src/main/kotlin/com/drestaurant).
+
+As our application evolve from monolithic to microservices we should consider diverging from `conformist` and converging to `customer-supplier` bounded context relationship depending only on the schema of the events (with consumer driven contracts included).
+
 ## Application/s layer
 
 This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects
