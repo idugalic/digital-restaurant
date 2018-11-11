@@ -14,6 +14,7 @@ It is built using [Axon](https://axoniq.io/product-overview/axon), which is end-
         * [Snapshoting](#snapshoting)
      * [Generic subdomains](#generic-subdomains)
      * [Organisation vs encapsulation](#organisation-vs-encapsulation)
+     * [Context mapping](#context-mapping)
   * [Application/s layer](#applications-layer)
      * [Monolith 1 (HTTP and WebSockets API by segregating Command and Query)](#monolith-1-http-and-websockets-api-by-segregating-command-and-query)
         * ['Command' HTTP API](#command-http-api)
@@ -234,7 +235,7 @@ Bounded contexts (and teams that produce them) can be in different relationships
 
 You may be wondering how Domain Events can be consumed by another Bounded Context and not force that consuming Bounded Context into a Conformist relationship. 
 
-Consumers should not use the [event types (e.g., classes)](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-common/src/main/kotlin/com/drestaurant/customer/domain/api) of an event publisher. Rather, they should depend only on the schema of the events, that is, their *Published Language*. This generally means that if the events are published as JSON, or perhaps a more economical object format, the consumer should consume the events by parsing them to obtain their data attributes. This rise complexity (consider [consumer driven contracts](https://www.martinfowler.com/articles/consumerDrivenContracts.html) testing), but enables loose coupling. 
+Consumers should not use the [event types (e.g., classes)](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-common/src/main/kotlin/com/drestaurant) of an event publisher. Rather, they should depend only on the schema of the events, that is, their *Published Language*. This generally means that if the events are published as JSON, or perhaps a more economical object format, the consumer should consume the events by parsing them to obtain their data attributes. This rise complexity (consider [consumer driven contracts](https://www.martinfowler.com/articles/consumerDrivenContracts.html) testing), but enables loose coupling. 
 
 Our demo application demonstrate `conformist` pattern, as we are using [strongly typed events](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-common/src/main/kotlin/com/drestaurant).
 
