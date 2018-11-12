@@ -21,7 +21,7 @@
         <module>drestaurant-customer</module>
         <module>drestaurant-order</module>
         <module>drestaurant-accounting</module>
-        <module>drestaurant-common</module>
+        <module>drestaurant-core-api</module>
     </modules>
 
 </project>

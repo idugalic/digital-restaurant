@@ -36,7 +36,7 @@
         </dependency>
         <dependency>
             <groupId>com.drestaurant</groupId>
-            <artifactId>drestaurant-common</artifactId>
+            <artifactId>drestaurant-core-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
