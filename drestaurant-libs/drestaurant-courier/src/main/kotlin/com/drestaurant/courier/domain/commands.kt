@@ -1,6 +1,5 @@
 package com.drestaurant.courier.domain
 
-import com.drestaurant.common.domain.api.AuditableAbstractCommand
 import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.courier.domain.api.CourierOrderCommand
 import com.drestaurant.courier.domain.api.model.CourierId

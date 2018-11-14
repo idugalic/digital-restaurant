@@ -124,6 +124,12 @@
                 <artifactId>axon-jgroups-spring-boot-starter</artifactId>
                 <version>${axon.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.tngtech.archunit</groupId>
+                <artifactId>archunit-junit4</artifactId>
+                <version>0.9.2</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>
