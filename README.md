@@ -216,11 +216,16 @@ As Eric puts it into numbers, the 'core domain' should deliver about 20% of the 
 When you make all types in your application public, the packages are simply an organisation mechanism (a grouping, like folders) rather than being used for encapsulation. Since public types can be used from anywhere in a codebase, you can effectively ignore the packages.
 
 The way Java types are placed into packages (components) can actually make a huge difference to how accessible (or inaccessible) those types can be when Java's access modifiers are applied appropriately. Bundling the types into a smaller number of packages allows for something a little more radical. Since there are fewer inter-package dependencies, you can start to restrict the access modifiers.
-Kotlin language doesn't have 'package' modifier as Java has. It has 'internal' modifier which restricts accessiblity of the class to the whole module (compile unit, jar file...). This makes a difference, and you have more freedom to structure your source code, and provide good public API of the component.
+Kotlin language doesn't have 'package' modifier as Java has. It has 'internal' modifier which restricts accessiblity of the class to the whole module (compile unit, jar file...) which can hold many packages.
 
+The goal (maybe it is a rule) is to bundle all of the functionality related to a single component into a single Java/Kotlin package, and restrict accessiblity of the classes to `package`, were possible.
 For example, our [Customer component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer) classes are placed in one `com.drestaurant.customer.domain` package, with all classes marked as 'internal'.
-Additionally we provide an [ArchUnit test](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-libs/drestaurant-customer/src/test/kotlin/com/drestaurant/CustomerModuleTest.kt) to force 'package' scope of the classes.
 Public classes are placed in `com.drestaurant.customer.domain.api` and they are forming an API for this component. This API consist of [commands and events](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-core-api/src/main/kotlin/com/drestaurant/customer/domain/api).
+As we have one maven module holding one package/component we are using Kotlin `internal` modifier as an encapsulation mechanism on the package level as well. This rule is handled by the compiler, which is good, and we can achieve loose coupling and high cohesion effectively.
+
+If you prefer to organize more packages/components into one maven module (maybe use single maven module for all components, and not multi maven module by component as we have now) you should use different encapsulation mechanism because Kotlin is lacking of `package` modifier.
+
+We use an [ArchUnit test](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-libs/drestaurant-customer/src/test/kotlin/com/drestaurant/CustomerModuleTest.kt) to *force* 'package' scope of the Kotlin classes. This rule is handled on the Unit test level, which is not perfect, but still valuable.
 
 ### Context Mapping
 
