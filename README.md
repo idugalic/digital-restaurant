@@ -219,6 +219,7 @@ The way Java types are placed into packages (components) can actually make a hug
 Kotlin language doesn't have 'package' modifier as Java has. It has 'internal' modifier which restricts accessiblity of the class to the whole module (compile unit, jar file...). This makes a difference, and you have more freedom to structure your source code, and provide good public API of the component.
 
 For example, our [Customer component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer) classes are placed in one `com.drestaurant.customer.domain` package, with all classes marked as 'internal'.
+Additionally we provide an [ArchUnit test](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-libs/drestaurant-customer/src/test/kotlin/com/drestaurant/CustomerModuleTest.kt) to force 'package' scope of the classes.
 Public classes are placed in `com.drestaurant.customer.domain.api` and they are forming an API for this component. This API consist of [commands and events](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-core-api/src/main/kotlin/com/drestaurant/customer/domain/api).
 
 ### Context Mapping
