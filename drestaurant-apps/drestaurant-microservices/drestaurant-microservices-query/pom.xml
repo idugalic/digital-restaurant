@@ -28,6 +28,12 @@
             <groupId>org.axonframework.extensions.kafka</groupId>
             <artifactId>axon-kafka-spring-boot-starter</artifactId>
             <version>4.0-RC2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.axonframework</groupId>
+                    <artifactId>axon-messaging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
