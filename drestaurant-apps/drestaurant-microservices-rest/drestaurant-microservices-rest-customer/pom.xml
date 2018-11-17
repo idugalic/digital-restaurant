@@ -15,10 +15,13 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <dependencies>
+        <!-- drestaurant -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <groupId>com.drestaurant</groupId>
+            <artifactId>drestaurant-customer</artifactId>
+            <version>${project.version}</version>
         </dependency>
+        <!-- Axon -->
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-spring-boot-starter</artifactId>
@@ -28,6 +31,19 @@
                     <artifactId>axon-server-connector</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.axonframework.extensions.amqp</groupId>
+            <artifactId>axon-amqp-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.axonframework.extensions.springcloud</groupId>
+            <artifactId>axon-springcloud-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -51,15 +67,20 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.pivotal.spring.cloud</groupId>
+            <artifactId>spring-cloud-services-starter-service-registry</artifactId>
+        </dependency>
+        <!-- SQL -->
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>com.drestaurant</groupId>
-            <artifactId>drestaurant-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        <!-- Reactor -->
         <dependency>
             <!--
                reactor-core is needed for subscription queries
@@ -69,42 +90,10 @@
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.drestaurant</groupId>
-            <artifactId>drestaurant-customer</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        <!-- Kotlin -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.axonframework.extensions.amqp</groupId>
-            <artifactId>axon-amqp-spring-boot-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.axonframework</groupId>
-                    <artifactId>axon-messaging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.axonframework.extensions.springcloud</groupId>
-            <artifactId>axon-springcloud-spring-boot-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.axonframework</groupId>
-                    <artifactId>axon-messaging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.pivotal.spring.cloud</groupId>
-            <artifactId>spring-cloud-services-starter-service-registry</artifactId>
         </dependency>
     </dependencies>
 </project>

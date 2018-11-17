@@ -14,19 +14,28 @@
         <artifactId>drestaurant-microservices-rest-2</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+    
     <dependencies>
+        <!-- drestaurant -->
+        <dependency>
+            <groupId>com.drestaurant</groupId>
+            <artifactId>drestaurant-restaurant</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.drestaurant</groupId>
             <artifactId>drestaurant-microservices-rest-2-common</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
+        <!-- Axon -->
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -49,11 +58,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.drestaurant</groupId>
-            <artifactId>drestaurant-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        <!-- Reactor -->
         <dependency>
             <!--
                reactor-core is needed for subscription queries
@@ -63,11 +68,7 @@
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.drestaurant</groupId>
-            <artifactId>drestaurant-restaurant</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        <!-- Kotlin -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>

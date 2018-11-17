@@ -15,13 +15,21 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <dependencies>
+        <!-- drestaurant -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <groupId>com.drestaurant</groupId>
+            <artifactId>drestaurant-order</artifactId>
+            <version>${project.version}</version>
         </dependency>
+        <!-- Axon -->
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -41,22 +49,14 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.drestaurant</groupId>
-            <artifactId>drestaurant-common</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.drestaurant</groupId>
-            <artifactId>drestaurant-order</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        <!-- Kotlin -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-        </dependency>
+
     </dependencies>
 </project>
