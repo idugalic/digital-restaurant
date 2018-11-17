@@ -7,7 +7,6 @@ import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.customer.domain.api.model.CustomerId
 import com.drestaurant.customer.domain.api.model.CustomerOrderId
 import org.axonframework.modelling.command.TargetAggregateIdentifier
-import java.util.*
 import javax.validation.Valid
 
 /**

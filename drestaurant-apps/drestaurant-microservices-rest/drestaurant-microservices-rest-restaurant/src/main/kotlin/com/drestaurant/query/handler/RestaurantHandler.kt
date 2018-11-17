@@ -15,8 +15,6 @@ import org.axonframework.eventhandling.SequenceNumber
 import org.axonframework.queryhandling.QueryHandler
 import org.axonframework.queryhandling.QueryUpdateEmitter
 import org.springframework.stereotype.Component
-import java.util.*
-import kotlin.collections.ArrayList
 
 @Component
 @ProcessingGroup("restaurant")

@@ -18,7 +18,7 @@ class CourierOrderAggregateTest {
 
     private lateinit var orderId: CourierOrderId
     private lateinit var courierId: CourierId
-    
+
     private val who = "johndoe"
 
     @Before

@@ -18,7 +18,7 @@ axon:
       treshold:
         order: 100
   kafka:
-#    client-id: order-command
+    #    client-id: order-command
     default-topic: axon-events
     producer:
       retries: 5

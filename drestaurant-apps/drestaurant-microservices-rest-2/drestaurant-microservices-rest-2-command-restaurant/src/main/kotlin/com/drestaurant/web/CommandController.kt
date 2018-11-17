@@ -12,7 +12,6 @@ import com.drestaurant.restaurant.query.api.FindRestaurantQuery
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.messaging.responsetypes.ResponseTypes
 import org.axonframework.queryhandling.QueryGateway
-import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder

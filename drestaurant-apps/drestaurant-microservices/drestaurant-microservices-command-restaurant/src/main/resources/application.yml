@@ -19,7 +19,7 @@ axon:
         restaurant: 100
         restaurantorder: 100
   kafka:
-#    client-id: restaurant-command
+    #    client-id: restaurant-command
     default-topic: axon-events
     producer:
       retries: 5

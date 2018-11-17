@@ -19,7 +19,7 @@ axon:
         courier: 100
         courierorder: 100
   kafka:
-#    client-id: courier-command
+    #    client-id: courier-command
     default-topic: axon-events
     producer:
       retries: 5

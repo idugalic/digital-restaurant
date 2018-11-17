@@ -9,12 +9,12 @@ import com.drestaurant.courier.domain.api.model.CourierOrderId
 /**
  * Abstract Courier event
  */
-abstract class CourierEvent(open val aggregateIdentifier: CourierId, override val auditEntry: AuditEntry): AuditableAbstractEvent(auditEntry)
+abstract class CourierEvent(open val aggregateIdentifier: CourierId, override val auditEntry: AuditEntry) : AuditableAbstractEvent(auditEntry)
 
 /**
  * Abstract CourierOrder event
  */
-abstract class CourierOrderEvent(open val aggregateIdentifier: CourierOrderId, override val auditEntry: AuditEntry): AuditableAbstractEvent(auditEntry)
+abstract class CourierOrderEvent(open val aggregateIdentifier: CourierOrderId, override val auditEntry: AuditEntry) : AuditableAbstractEvent(auditEntry)
 
 /**
  * An event, noting that courier has been created

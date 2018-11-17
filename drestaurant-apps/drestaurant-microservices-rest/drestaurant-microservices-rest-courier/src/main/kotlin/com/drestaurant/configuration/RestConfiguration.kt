@@ -1,6 +1,7 @@
 package com.drestaurant.configuration
 
-import com.drestaurant.query.model.*
+import com.drestaurant.query.model.CourierEntity
+import com.drestaurant.query.model.CourierOrderEntity
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter

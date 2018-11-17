@@ -3,20 +3,20 @@ services:
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
-      - "2181:2181"
+    - "2181:2181"
     networks:
-      - custom
+    - custom
 
   kafka:
     image: wurstmeister/kafka
     ports:
-      - "9092:9092"
+    - "9092:9092"
     environment:
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_CREATE_TOPICS: "axon-events:1:1"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     networks:
-      - custom
+    - custom
 
 networks:
   custom:
@@ -24,4 +24,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 10.66.81.0/24
+      - subnet: 10.66.81.0/24

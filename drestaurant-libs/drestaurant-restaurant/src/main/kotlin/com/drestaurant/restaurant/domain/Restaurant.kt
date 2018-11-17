@@ -52,7 +52,8 @@ internal class Restaurant {
      *
      * @param command
      */
-    @CommandHandler constructor(command: CreateRestaurantCommand) {
+    @CommandHandler
+    constructor(command: CreateRestaurantCommand) {
         apply(RestaurantCreatedEvent(command.name, command.menu, command.targetAggregateIdentifier, command.auditEntry))
     }
 

@@ -19,7 +19,7 @@ axon:
         customer: 100
         customerorder: 100
   kafka:
-#    client-id: customer-command
+    #    client-id: customer-command
     default-topic: axon-events
     producer:
       retries: 5

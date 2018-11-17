@@ -58,7 +58,7 @@ class OrderAggregateTest {
     fun markOrderAsVerifiedByCustomerCommandTest() {
         val orderCreationInitiatedEvent = OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
         val markOrderAsVerifiedByCustomerCommand = MarkOrderAsVerifiedByCustomerInternalCommand(orderCreationInitiatedEvent.aggregateIdentifier, CustomerId(orderCreationInitiatedEvent.orderDetails.consumerId), auditEntry)
-        val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier,CustomerId(orderCreationInitiatedEvent.orderDetails.consumerId), auditEntry)
+        val orderVerifiedByCustomerEvent = OrderVerifiedByCustomerEvent(orderCreationInitiatedEvent.aggregateIdentifier, CustomerId(orderCreationInitiatedEvent.orderDetails.consumerId), auditEntry)
         fixture
                 .given(orderCreationInitiatedEvent)
                 .`when`(markOrderAsVerifiedByCustomerCommand)

@@ -11,16 +11,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
-@Configuration public class AMQPMessageSourceConfiguration {
+@Configuration
+public class AMQPMessageSourceConfiguration {
 
-	@Bean @Qualifier("amqpMessageSource") public SpringAMQPMessageSource amqpMessageSource(@NotNull final Serializer serializer) {
-		return new SpringAMQPMessageSource(serializer) {
-			@RabbitListener(queues = "${spring.application.sagaqueue}")
-			@Transactional
-			@Override
-			public void onMessage(Message message, Channel channel) {
-				super.onMessage(message, channel);
-			}
-		};
-	}
+    @Bean
+    @Qualifier("amqpMessageSource")
+    public SpringAMQPMessageSource amqpMessageSource(@NotNull final Serializer serializer) {
+        return new SpringAMQPMessageSource(serializer) {
+            @RabbitListener(queues = "${spring.application.sagaqueue}")
+            @Transactional
+            @Override
+            public void onMessage(Message message, Channel channel) {
+                super.onMessage(message, channel);
+            }
+        };
+    }
 }

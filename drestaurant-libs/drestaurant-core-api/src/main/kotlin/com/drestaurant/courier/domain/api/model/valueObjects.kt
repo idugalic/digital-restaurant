@@ -8,10 +8,12 @@ enum class CourierOrderState {
 
 data class CourierId(val identifier: String) {
     constructor() : this(UUID.randomUUID().toString())
+
     override fun toString(): String = identifier
 }
 
 data class CourierOrderId(val identifier: String) {
     constructor() : this(UUID.randomUUID().toString())
+
     override fun toString(): String = identifier
 }

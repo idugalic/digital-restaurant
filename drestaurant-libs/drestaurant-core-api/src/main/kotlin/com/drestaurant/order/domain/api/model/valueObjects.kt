@@ -50,5 +50,6 @@ enum class OrderState {
 
 data class OrderId(val identifier: String) {
     constructor() : this(UUID.randomUUID().toString())
+
     override fun toString(): String = identifier
 }

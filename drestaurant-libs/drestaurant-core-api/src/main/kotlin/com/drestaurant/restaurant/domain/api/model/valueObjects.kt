@@ -36,10 +36,12 @@ enum class RestaurantState {
 
 data class RestaurantId(val identifier: String) {
     constructor() : this(UUID.randomUUID().toString())
+
     override fun toString(): String = identifier
 }
 
 data class RestaurantOrderId(val identifier: String) {
     constructor() : this(UUID.randomUUID().toString())
+
     override fun toString(): String = identifier
 }
