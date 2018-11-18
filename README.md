@@ -262,7 +262,7 @@ Adapters are adapting the HTTP and/or WebSocket interfaces to the domain interfa
 
 
 Our Driven Adapters **are implementations of domain interfaces (ports)** that are responsible for persisting (e.g event sourced aggregates), publishing and handling domain events.
-Event handlers are materializing the views in the JPA repositories, forming the query (read) side.
+Event handlers are creating read only projections that are persisted in JPA repositories, forming the query (read) side.
 These interfaces (ports) and their implementations are provided by Axon platform
  - `evensourcing repository`
  - `event bus`

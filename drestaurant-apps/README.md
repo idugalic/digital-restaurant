@@ -6,7 +6,6 @@ We have created more 'web' applications (standalone Spring Boot applications) to
 This is a thin layer of [adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together) that surrounds our domain layer, and exposes it to the outside world. It does not contain business logic. It does not hold the state of the business objects.
 
 Our Driving Adapters are mostly Controllers (REST and/or WebSockets) who are **injected in their constructor with the concrete implementation of the interface (port) from the Domain layer**.
-Event handlers are materializing the views in the JPA repositories, forming the query (read) side.
 These interfaces (ports) and their implementations are provided by Axon platform:
  - `command bus` (`command gataway` as an convenient facade)
  - `query bus` (`query gataway` as an convenient facade)
@@ -15,6 +14,7 @@ Adapters are adapting the HTTP and/or WebSocket interfaces to the domain interfa
 
 
 Our Driven Adapters **are implementations of domain interfaces (ports)** that are responsible for persisting (e.g event sourced aggregates), publishing and handling domain events mostly.
+Event handlers are creating read only projections that are persisted in JPA repositories, forming the query (read) side.
 These interfaces (ports) and their implementations are provided by Axon platform
  - `evensourcing repository`
  - `event bus`
