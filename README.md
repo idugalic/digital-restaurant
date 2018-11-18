@@ -115,9 +115,9 @@ It is built using [Axon](https://axoniq.io/product-overview/axon), which is end-
 
 
 
-## Domain layer
+## Domain
 
-This layer contains information about the domain. This is the heart of the business software. The state of business objects is held here. Persistence of the business objects and possibly their state is delegated to the infrastructure layer
+This layer contains information about the domain. This is the heart of the business software. The state of business objects is held here.
 
 Business capabilities of 'Digital Restaurant' include:
 - [Courier component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier) 
@@ -247,11 +247,26 @@ Our demo application demonstrate `conformist` pattern, as we are using [strongly
 
 As our application evolve from monolithic to microservices we should consider diverging from `conformist` and converging to `customer-supplier` bounded context relationship depending only on the schema of the events (with consumer driven contracts included).
 
-## Application/s layer
+## Applications
 
-This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects
+We have created more 'web' applications (standalone Spring Boot applications) to demonstrate the use of different architectural styles, API designs (adapters) and deployment strategies by utilizing components from the domain layer in different way.
 
-We have created more 'web' applications (standalone Spring Boot applications) to demonstrate the use of different architectural styles, API designs and deployment strategies by utilizing components from the domain layer in different way:
+This is a thin layer of [adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together) that surrounds our domain layer, and exposes it to the outside world. It does not contain business logic. It does not hold the state of the business objects.
+
+Our Driving Adapters are mostly Controllers (REST and/or WebSockets) who are **injected in their constructor with the concrete implementation of the interface (port) from the Domain layer**.
+These interfaces (ports) and their implementations are provided by Axon platform:
+ - `command bus` (`command gataway` as an convenient facade)
+ - `query bus` (`query gataway` as an convenient facade)
+
+Adapters are adapting the HTTP and/or WebSocket interfaces to the domain interfaces (ports) by converting requests to messages/domain API (commands, queries) and publishing them on the bus.
+
+
+Our Driven Adapters **are implementations of domain interfaces (ports)** that are responsible for persisting (e.g event sourced aggregates), publishing and handling domain events.
+Event handlers are materializing the views in the JPA repositories, forming the query (read) side.
+These interfaces (ports) and their implementations are provided by Axon platform
+ - `evensourcing repository`
+ - `event bus`
+ - ...
 
 **Monolithic**
 
@@ -1115,6 +1130,7 @@ This setup and project structure is usually addressed as a [monorepo](https://me
   - https://www.manning.com/books/microservices-patterns
   - https://docs.axoniq.io/reference-guide/
   - http://www.codingthearchitecture.com/2016/04/25/layers_hexagons_features_and_components.html
+  - https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together
  
 
 [mvn]: https://maven.apache.org/

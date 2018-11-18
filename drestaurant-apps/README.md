@@ -1,9 +1,24 @@
 ## Application/s layer
 #### :octocat: [digital-restaurant](https://github.com/idugalic/digital-restaurant)/drestaurant-apps :octocat:
 
-This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects
+We have created more 'web' applications (standalone Spring Boot applications) to demonstrate the use of different architectural styles, API designs (adapters) and deployment strategies by utilizing components from the domain layer in different way.
 
-We have created more 'web' applications (standalone Spring Boot applications) to demonstrate the use of different architectural styles, API designs and deployment strategies by utilizing [components from the domain layer](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a different way:
+This is a thin layer of [adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together) that surrounds our domain layer, and exposes it to the outside world. It does not contain business logic. It does not hold the state of the business objects.
+
+Our Driving Adapters are mostly Controllers (REST and/or WebSockets) who are **injected in their constructor with the concrete implementation of the interface (port) from the Domain layer**.
+Event handlers are materializing the views in the JPA repositories, forming the query (read) side.
+These interfaces (ports) and their implementations are provided by Axon platform:
+ - `command bus` (`command gataway` as an convenient facade)
+ - `query bus` (`query gataway` as an convenient facade)
+
+Adapters are adapting the HTTP and/or WebSocket interfaces to the domain interfaces (ports) by converting requests to messages/domain API (commands, queries) and publishing them on the bus.
+
+
+Our Driven Adapters **are implementations of domain interfaces (ports)** that are responsible for persisting (e.g event sourced aggregates), publishing and handling domain events mostly.
+These interfaces (ports) and their implementations are provided by Axon platform
+ - `evensourcing repository`
+ - `event bus`
+ - ...
 
 **Monolithic**
 
