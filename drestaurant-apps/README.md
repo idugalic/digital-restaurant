@@ -1,4 +1,4 @@
-## Application/s layer
+## Applications
 #### :octocat: [digital-restaurant](https://github.com/idugalic/digital-restaurant)/drestaurant-apps :octocat:
 
 We have created more 'web' applications (standalone Spring Boot applications) to demonstrate the use of different architectural styles, API designs (adapters) and deployment strategies by utilizing components from the domain layer in different way.

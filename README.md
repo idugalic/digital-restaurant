@@ -8,14 +8,14 @@ It is built using [Axon](https://axoniq.io/product-overview/axon), which is end-
 
 ## Table of Contents
 
-  * [Domain layer](#domain-layer)
+  * [Domain](#domain)
      * [Core subdomains](#core-subdomains)
         * [Event sourcing](#event-sourcing)
         * [Snapshoting](#snapshoting)
      * [Generic subdomains](#generic-subdomains)
      * [Organisation vs encapsulation](#organisation-vs-encapsulation)
      * [Context mapping](#context-mapping)
-  * [Application/s layer](#applications-layer)
+  * [Applications](#applications)
      * [Monolith 1 (HTTP and WebSockets API by segregating Command and Query)](#monolith-1-http-and-websockets-api-by-segregating-command-and-query)
         * ['Command' HTTP API](#command-http-api)
            * [Create new Restaurant](#create-new-restaurant)

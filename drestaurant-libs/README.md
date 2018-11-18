@@ -1,4 +1,4 @@
-## Domain layer
+## Domain
 #### :octocat: [digital-restaurant](https://github.com/idugalic/digital-restaurant)/drestaurant-libs :octocat:
 
 This layer contains information about the domain. This is the heart of the business software. The state of business objects is held here. Persistence of the business objects and possibly their state is delegated to the infrastructure layer.
