@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired
 
 /**
  * Managing invariants (business transaction) of [CourierOrder] and [Courier] aggregates within 'Courier' bounded context
+ *
+ * Alternatively, you could choose to spawn [CourierOrder] aggregate from [Courier] aggregate directly (Axon provides this functionality), and not use saga.
+ * Benefits are that you check invariants internally, and you can do this with less internal (internal to the Kotlin module) events.
+ * Consequences are that you will introduce more coupling between this aggregates, which is fine as long as they belong to the same bounded context.
  */
 @Saga
 @ProcessingGroup("courierordersaga")

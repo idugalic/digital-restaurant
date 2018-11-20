@@ -34,7 +34,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.util.*
 
 /**
- * Managing invariants (business transaction) of different orders (CustomerOrder, RestaurantOrder and CourierOrder)
+ * Managing invariants (business transaction) of different orders that belong to other bounded contexts (CustomerOrder, RestaurantOrder and CourierOrder)
+ *
+ * We must maintain consistency between these different 'order' aggregates in different bounded contexts.
+ * For example, once the Order saga has initiated order creation it must trigger the creation of CustomerOrder ('Customer' bounded context) and RestaurantOrder ('Restaurant' bounded context)
+ * The creation is triggered by publishing commands, e.g [CreateCustomerOrderCommand], [CreateRestaurantOrderCommand]
  */
 @Saga
 @ProcessingGroup("ordersaga")

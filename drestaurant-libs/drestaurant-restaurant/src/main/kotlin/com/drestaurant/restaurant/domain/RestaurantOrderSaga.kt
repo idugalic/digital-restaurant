@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired
 
 /**
  * Managing invariants (business transaction) of [RestaurantOrder] and [Restaurant]
+ *
+ * Alternatively, you could choose to spawn [RestaurantOrder] aggregate from [Restaurant] aggregate directly (Axon provides this functionality), and not use saga.
+ * Benefits are that you check invariants internally, and you can do this with less internal (internal to the Kotlin module) events.
+ * Consequences are that you will introduce more coupling between this aggregates, which is fine as long as they belong to the same bounded context.
  */
 @Saga
 @ProcessingGroup("restaurantordersaga")

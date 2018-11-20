@@ -11,16 +11,27 @@ import javax.validation.Valid
 
 /**
  * Abstract Restaurant command
+ *
+ * @property targetAggregateIdentifier target aggregate identifier
+ * @property auditEntry audit entry holds the information of 'who' and 'when' performed the command
  */
 abstract class RestaurantCommand(open val targetAggregateIdentifier: RestaurantId, override val auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
 
 /**
  * Abstract RestaurantOrder command
+ *
+ * @property targetAggregateIdentifier target aggregate identifier
+ * @property auditEntry audit entry holds the information of 'who' and 'when' performed the command
  */
 abstract class RestaurantOrderCommand(open val targetAggregateIdentifier: RestaurantOrderId, override val auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
 
 /**
- * This command is used to construct new restaurant
+ * A command to create new 'restaurant'
+ *
+ * @property name name of the restaurant
+ * @property menu menu of the restaurant
+ * @property targetAggregateIdentifier target aggregate identifier
+ * @property auditEntry audit entry holds the information of 'who' and 'when' performed the command
  */
 data class CreateRestaurantCommand(val name: String, @field:Valid val menu: RestaurantMenu, @TargetAggregateIdentifier override val targetAggregateIdentifier: RestaurantId, override val auditEntry: AuditEntry) : RestaurantCommand(targetAggregateIdentifier, auditEntry) {
 
@@ -28,7 +39,11 @@ data class CreateRestaurantCommand(val name: String, @field:Valid val menu: Rest
 }
 
 /**
- * This command is used to construct new order in restaurant
+ * A command to crete new 'restaurant order'
+ *
+ * @property targetAggregateIdentifier target aggregate identifier
+ * @property orderDetails order details holds the order line items
+ * @property restaurantId identifier of the restaurant to which the order is created
  */
 data class CreateRestaurantOrderCommand(@TargetAggregateIdentifier override val targetAggregateIdentifier: RestaurantOrderId, @field:Valid val orderDetails: RestaurantOrderDetails, val restaurantId: RestaurantId, override val auditEntry: AuditEntry) : RestaurantOrderCommand(targetAggregateIdentifier, auditEntry) {
 
@@ -36,6 +51,9 @@ data class CreateRestaurantOrderCommand(@TargetAggregateIdentifier override val 
 }
 
 /**
- * This command is used to mark restaurant order (targetAggregateIdentifier) as prepared
+ * A command to mark 'restaurant order' ([targetAggregateIdentifier]) as prepared
+ *
+ * @property targetAggregateIdentifier target aggregate identifier
+ * @property auditEntry audit entry holds the information of 'who' and 'when' performed the command
  */
 data class MarkRestaurantOrderAsPreparedCommand(@TargetAggregateIdentifier override val targetAggregateIdentifier: RestaurantOrderId, override val auditEntry: AuditEntry) : RestaurantOrderCommand(targetAggregateIdentifier, auditEntry)

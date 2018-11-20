@@ -11,16 +11,27 @@ import javax.validation.Valid
 
 /**
  * Abstract Customer command
+ *
+ * @property targetAggregateIdentifier target aggregate identifier
+ * @property auditEntry audit entry holds the information of 'who' and 'when' performed the command
  */
 abstract class CustomerCommand(open val targetAggregateIdentifier: CustomerId, override val auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
 
 /**
  * Abstract CustomerOrder command
+ *
+ * @property targetAggregateIdentifier target aggregate identifier
+ * @property auditEntry audit entry holds the information of 'who' and 'when' performed the command
  */
 abstract class CustomerOrderCommand(open val targetAggregateIdentifier: CustomerOrderId, override val auditEntry: AuditEntry) : AuditableAbstractCommand(auditEntry)
 
 /**
- * This command is used to construct/register new customer
+ * A command to create/register new 'customer'
+ *
+ * @property targetAggregateIdentifier target aggregate identifier
+ * @property name full name of the person/customer
+ * @property orderLimit order limit of the customer
+ * @property auditEntry audit entry holds the information of 'who' and 'when' performed the command
  */
 data class CreateCustomerCommand(@TargetAggregateIdentifier override val targetAggregateIdentifier: CustomerId, @field:Valid val name: PersonName, val orderLimit: Money, override val auditEntry: AuditEntry) : CustomerCommand(targetAggregateIdentifier, auditEntry) {
 
@@ -28,7 +39,12 @@ data class CreateCustomerCommand(@TargetAggregateIdentifier override val targetA
 }
 
 /**
- * This command is used to construct new customer order
+ * A command to create new 'customer order' for the customer ([customerId])
+ *
+ * @property targetAggregateIdentifier target aggregate identifier
+ * @property orderTotal order total price amount
+ * @property customerId identifier of the customer for whom we create the order
+ * @property auditEntry audit entry holds the information of 'who' and 'when' performed the command
  */
 data class CreateCustomerOrderCommand(@TargetAggregateIdentifier override val targetAggregateIdentifier: CustomerOrderId, @field:Valid val orderTotal: Money, val customerId: CustomerId, override val auditEntry: AuditEntry) : CustomerOrderCommand(targetAggregateIdentifier, auditEntry) {
 
@@ -36,6 +52,9 @@ data class CreateCustomerOrderCommand(@TargetAggregateIdentifier override val ta
 }
 
 /**
- * This command is used to mark customer order (targetAggregateIdentifier) as delivered
+ * A command to mark 'customer order' ([targetAggregateIdentifier]) as delivered
+ *
+ * @property targetAggregateIdentifier target aggregate identifier
+ * @property auditEntry audit entry holds the information of 'who' and 'when' performed the command
  */
 data class MarkCustomerOrderAsDeliveredCommand(@TargetAggregateIdentifier override val targetAggregateIdentifier: CustomerOrderId, override val auditEntry: AuditEntry) : CustomerOrderCommand(targetAggregateIdentifier, auditEntry)

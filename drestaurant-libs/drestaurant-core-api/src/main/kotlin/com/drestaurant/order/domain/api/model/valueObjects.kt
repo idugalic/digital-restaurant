@@ -8,12 +8,19 @@ import java.util.*
 import javax.validation.Valid
 
 /**
- * Order 'details' extends the [OrderInfo] with the total amount
+ * Order 'details' value object, extends the [OrderInfo] with the total amount
+ *
+ * @property orderInfo basic information about the order
+ * @property orderTotal total price amount of the order
  */
 data class OrderDetails(val orderInfo: OrderInfo, val orderTotal: Money) : OrderInfo(orderInfo.consumerId, orderInfo.restaurantId, orderInfo.lineItems)
 
 /**
  * Order 'info' holds the list of [OrderLineItem]s, and reference to customer and restaurant
+ *
+ * @property consumerId identifier of the customer/consumer
+ * @property restaurantId identifier of the restaurant
+ * @property lineItems list of the order line items
  */
 open class OrderInfo(val consumerId: String, val restaurantId: String, @field:Valid val lineItems: List<OrderLineItem>) {
 
@@ -27,6 +34,11 @@ open class OrderInfo(val consumerId: String, val restaurantId: String, @field:Va
 
 /**
  * Order line item is referencing the restaurant menu item that is ordered with specific price and quantity
+ *
+ * @property menuItemId reference to a menu item
+ * @property name name of the order line item
+ * @property price price of the line item
+ * @property quantity quantity of the line item
  */
 data class OrderLineItem(val menuItemId: String, val name: String, @field:Valid val price: Money, val quantity: Int) {
 
@@ -34,7 +46,7 @@ data class OrderLineItem(val menuItemId: String, val name: String, @field:Valid 
 }
 
 /**
- * @author: idugalic
+ * Enum of order states
  */
 enum class OrderState {
     CREATE_PENDING,
@@ -48,6 +60,11 @@ enum class OrderState {
     CANCELLED
 }
 
+/**
+ * Order identifier value object
+ *
+ * @property identifier identifier
+ */
 data class OrderId(val identifier: String) {
     constructor() : this(UUID.randomUUID().toString())
 
