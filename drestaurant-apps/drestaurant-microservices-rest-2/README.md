@@ -194,8 +194,7 @@ $ mvn spring-boot:run
 
 
 ### Infrastructure and Platform (As A Service)
-- [H2 - java SQL databse][h2]
-- [RabbitMQ][rabbitMQ]
+- [AxonServer](https://axoniq.io/product-overview/axon-server)
 
 [mvn]: https://maven.apache.org/
 [kotlin]: https://kotlinlang.org/
