@@ -23,7 +23,19 @@ In general there are two approaches:
 This makes querying of event-sourced aggregates easy.
 
 Aditonally, our event listener is publishing a WebSocket events on every update of a query model. 
-This can be usefull on the front-end to re-fetch the data via HTTP/REST endpoints. 
+This can be usefull on the front-end to re-fetch the data via HTTP/REST endpoints.
+
+#### C4 model
+
+The [C4 model](https://c4model.com/) considers the static structures of a software system in terms of containers (applications, data stores, microservices, etc.), components, and code. It also considers the people who use the software systems that we build.
+
+![Context diagram](monolith-context.png)
+
+![Context diagram](monolith-containers.png)
+
+![Context diagram](monolith-components.png)
+
+This UML diagrams are created by [DocumentationC4Model.kt](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/documentation/DocumentationC4Model.kt)
 
 #### 'Command' HTTP API
 

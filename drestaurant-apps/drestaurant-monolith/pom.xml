@@ -106,5 +106,18 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
         </dependency>
+        <!-- Structurizr - document and visualize your architecture -->
+        <dependency>
+            <groupId>cc.catalysts.structurizr</groupId>
+            <artifactId>structurizr-spring-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.catalysts.structurizr</groupId>
+            <artifactId>structurizr-kotlin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.structurizr</groupId>
+            <artifactId>structurizr-plantuml</artifactId>
+        </dependency>
     </dependencies>
 </project>
