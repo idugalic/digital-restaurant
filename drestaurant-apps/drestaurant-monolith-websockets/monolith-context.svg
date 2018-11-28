@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="304px" preserveAspectRatio="none" style="width:948px;height:304px;" version="1.1" viewBox="0 0 948 304" width="948px" zoomAndPan="magnify"><defs/><g><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacingAndGlyphs" textLength="590" x="182" y="16.708">Digital restaurant system (monolith-websockets) - System Context</text><!--entity 2--><ellipse cx="38.5" cy="55.25" fill="#DDDDDD" rx="8" ry="8" style="stroke: #707070; stroke-width: 2.0;"/><path d="M38.5,63.25 L38.5,90.25 M25.5,71.25 L51.5,71.25 M38.5,90.25 L25.5,105.25 M38.5,90.25 L51.5,105.25 " fill="none" style="stroke: #707070; stroke-width: 2.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="50" x="13.5" y="121.2451">Courier</text><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="65" x="6" y="41.9482">«Person»</text><path d="M106.5,64.4531 L106.5,72.9531 L71.1562,76.9531 L106.5,80.9531 L106.5,89.5859 A0,0 0 0 0 106.5,89.5859 L274.5,89.5859 A0,0 0 0 0 274.5,89.5859 L274.5,74.4531 L264.5,64.4531 L106.5,64.4531 A0,0 0 0 0 106.5,64.4531 " fill="#FFFFFF" style="stroke: #707070; stroke-width: 1.0;"/><path d="M264.5,64.4531 L264.5,74.4531 L274.5,74.4531 L264.5,64.4531 " fill="#FFFFFF" style="stroke: #707070; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="147" x="112.5" y="81.52">hero, who delivers food</text><!--entity 1--><ellipse cx="343.5" cy="55.25" fill="#DDDDDD" rx="8" ry="8" style="stroke: #707070; stroke-width: 2.0;"/><path d="M343.5,63.25 L343.5,90.25 M330.5,71.25 L356.5,71.25 M343.5,90.25 L330.5,105.25 M343.5,90.25 L356.5,105.25 " fill="none" style="stroke: #707070; stroke-width: 2.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="68" x="309.5" y="121.2451">Customer</text><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="65" x="311" y="41.9482">«Person»</text><path d="M412.5,64.4531 L412.5,72.9531 L377.938,76.9531 L412.5,80.9531 L412.5,89.5859 A0,0 0 0 0 412.5,89.5859 L506.5,89.5859 A0,0 0 0 0 506.5,89.5859 L506.5,74.4531 L496.5,64.4531 L412.5,64.4531 A0,0 0 0 0 412.5,64.4531 " fill="#FFFFFF" style="stroke: #707070; stroke-width: 1.0;"/><path d="M496.5,64.4531 L496.5,74.4531 L506.5,74.4531 L496.5,64.4531 " fill="#FFFFFF" style="stroke: #707070; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="73" x="418.5" y="81.52">orders food</text><!--entity 4--><rect fill="#DDDDDD" height="76.8906" style="stroke: #707070; stroke-width: 1.5;" width="354" x="161.5" y="216.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="133" x="272" y="239.9482">«Software System»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="334" x="171.5" y="256.2451">Digital restaurant system (monolith-websockets)</text><line style="stroke: #707070; stroke-width: 1.0;" x1="162.5" x2="514.5" y1="259.5469" y2="259.5469"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="113" x="177.5" y="276.542">software system</text><!--entity 3--><ellipse cx="617.5" cy="55.25" fill="#DDDDDD" rx="8" ry="8" style="stroke: #707070; stroke-width: 2.0;"/><path d="M617.5,63.25 L617.5,90.25 M604.5,71.25 L630.5,71.25 M617.5,90.25 L604.5,105.25 M617.5,90.25 L630.5,105.25 " fill="none" style="stroke: #707070; stroke-width: 2.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="141" x="547" y="121.2451">Restaurant manager</text><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="65" x="585" y="41.9482">«Person»</text><path d="M723,56.9531 L723,72.9531 L688.305,76.9531 L723,80.9531 L723,97.2188 A0,0 0 0 0 723,97.2188 L936,97.2188 A0,0 0 0 0 936,97.2188 L936,66.9531 L926,56.9531 L723,56.9531 A0,0 0 0 0 723,56.9531 " fill="#FFFFFF" style="stroke: #707070; stroke-width: 1.0;"/><path d="M926,56.9531 L926,66.9531 L936,66.9531 L926,56.9531 " fill="#FFFFFF" style="stroke: #707070; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="192" x="729" y="74.02">takes the order and organizes</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="74" x="729" y="89.1528">preparation</text><!--link 2 to 4--><path d="M71.0426,108.5461 C76.8558,114.0101 82.8568,119.6501 88.5,124.9531 C117.829,152.5131 120.25,165.8181 154.5,186.9531 C171.584,197.4955 190.567,206.7639 209.666,214.7854 " fill="none" id="2-4" style="stroke: #707070; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#707070" points="214.523,216.798,207.74,209.6572,209.9039,214.8838,204.6773,217.0477,214.523,216.798" style="stroke: #707070; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="94" x="194" y="168.02">«WebSockets»</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="171" x="155.5" y="183.1528">claim the order and deliver</text><!--link 1 to 4--><path d="M337.818,125.1301 C336.853,134.9701 336.001,145.2891 335.5,154.9531 C334.764,169.1561 335.184,172.7341 335.5,186.9531 C335.677,194.9168 335.971,203.405 336.308,211.5792 " fill="none" id="1-4" style="stroke: #707070; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#707070" points="336.522,216.6207,340.1358,207.4588,336.3094,211.6252,332.143,207.7989,336.522,216.6207" style="stroke: #707070; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="94" x="408" y="168.02">«WebSockets»</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="237" x="336.5" y="183.1528">order food and track the order status</text><!--link 3 to 4--><path d="M610.769,124.9991 C605.401,146.5601 595.768,170.8441 578.5,186.9531 C561.802,202.5304 541.792,214.5541 520.546,223.8271 " fill="none" id="3-4" style="stroke: #707070; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#707070" points="515.705,225.8842,525.5525,226.0454,520.3067,223.9286,522.4235,218.6827,515.705,225.8842" style="stroke: #707070; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="94" x="677.5" y="168.02">«WebSockets»</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="246" x="601.5" y="183.1528">prepare the order and track the status</text><!--
+@startuml
+scale max 2000x2000
+title Digital restaurant system (monolith-websockets) - System Context
+
+skinparam {
+  shadowing false
+  arrowColor #707070
+  actorBorderColor #707070
+  componentBorderColor #707070
+  rectangleBorderColor #707070
+  noteBackgroundColor #ffffff
+  noteBorderColor #707070
+}
+actor "Courier" <<Person>> as 2 #dddddd
+note right of 2
+  hero, who delivers food
+end note
+actor "Customer" <<Person>> as 1 #dddddd
+note right of 1
+  orders food
+end note
+rectangle 4 <<Software System>> #dddddd [
+  Digital restaurant system (monolith-websockets)
+  - -
+  software system
+]
+actor "Restaurant manager" <<Person>> as 3 #dddddd
+note right of 3
+  takes the order and organizes
+  preparation
+end note
+2 .[#707070].> 4 : <<WebSockets>>\nclaim the order and deliver
+1 .[#707070].> 4 : <<WebSockets>>\norder food and track the order status
+3 .[#707070].> 4 : <<WebSockets>>\nprepare the order and track the status
+@enduml
+
+PlantUML version 1.2018.13(Mon Nov 26 17:11:51 UTC 2018)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.7.0_25-b15
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

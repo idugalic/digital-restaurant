@@ -29,7 +29,29 @@ Additionally, it will emit 'any change on Query Model' to Axon subscription quer
 
 Although fully asynchronous designs may be preferable for a number of reasons, it is a common scenario that back-end teams are forced to provide a synchronous REST API on top of asynchronous CQRS+ES back-ends.
 
-#### Restaurant management
+#### Visualize Your Architecture - C4 model
+
+The [C4 software architecture model](https://c4model.com/) is a simple hierarchical way to think about the static structures of a software system in terms of **containers**, **components** and **classes** (or code).
+
+##### System Context Diagram
+
+A System Context diagram can be a useful starting point for diagramming and documenting a software system, allowing you to step back and look at the big picture.
+
+![Context diagram](monolith-context.svg)
+
+##### Container Diagram
+
+Once you understand how your system fits in to the overall IT environment with a System Context diagram, a really useful next step can be to illustrate the high-level technology choices with a Container diagram. A "container" is something like a web server, application server, desktop application, mobile app, database, file system, etc. Essentially, a container is anything that can execute code or host data.
+
+![Context diagram](monolith-containers.svg)
+
+##### Component Diagram
+
+Following on from a Container diagram showing the high-level technology decisions, you can then start to zoom in and decompose each container further. However you decompose your system is up to you, but this is about identifying the major logical structural building blocks and their interactions.
+
+![Context diagram](monolith-components.svg)
+
+#### Restaurant management API
 
 ##### Read all restaurants
 ```
@@ -53,7 +75,7 @@ curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*'
 curl -i -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8080/restaurants/RESTAURANT_ID/orders/RESTAURANT_ORDER_ID/markprepared'
 
 ```
-#### Customer management
+#### Customer management API
 
 ##### Read all customers
 ```
@@ -68,7 +90,7 @@ curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: */*'
 }' 'http://localhost:8080/customers'
 ```
 
-#### Courier management
+#### Courier management API
 
 ##### Read all couriers
 ```
@@ -92,7 +114,7 @@ curl -i -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' 
 curl -i -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' 'http://localhost:8080/couriers/COURIER_ID/orders/COURIER_ORDER_ID/markdelivered'
 ```
 
-#### Order management
+#### Order management API
 
 ##### Read all orders
 ```

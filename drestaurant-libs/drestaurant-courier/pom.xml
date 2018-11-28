@@ -58,14 +58,5 @@
             <artifactId>archunit-junit4</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Structurizr - document and visualize your architecture -->
-        <dependency>
-            <groupId>cc.catalysts.structurizr</groupId>
-            <artifactId>structurizr-spring-boot</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cc.catalysts.structurizr</groupId>
-            <artifactId>structurizr-kotlin</artifactId>
-        </dependency>
     </dependencies>
 </project>

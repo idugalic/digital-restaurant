@@ -25,17 +25,28 @@ This makes querying of event-sourced aggregates easy.
 Aditonally, our event listener is publishing a WebSocket events on every update of a query model. 
 This can be usefull on the front-end to re-fetch the data via HTTP/REST endpoints.
 
-#### C4 model
+#### Visualize Your Architecture - C4 model
 
-The [C4 model](https://c4model.com/) considers the static structures of a software system in terms of containers (applications, data stores, microservices, etc.), components, and code. It also considers the people who use the software systems that we build.
+The [C4 software architecture model](https://c4model.com/) is a simple hierarchical way to think about the static structures of a software system in terms of **containers**, **components** and **classes** (or code).
 
-![Context diagram](monolith-context.png)
+##### System Context Diagram
 
-![Context diagram](monolith-containers.png)
+A System Context diagram can be a useful starting point for diagramming and documenting a software system, allowing you to step back and look at the big picture.
 
-![Context diagram](monolith-components.png)
+![Context diagram](monolith-context.svg)
 
-This UML diagrams are created by [DocumentationC4Model.kt](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/documentation/DocumentationC4Model.kt)
+##### Container Diagram
+
+Once you understand how your system fits in to the overall IT environment with a System Context diagram, a really useful next step can be to illustrate the high-level technology choices with a Container diagram. A "container" is something like a web server, application server, desktop application, mobile app, database, file system, etc. Essentially, a container is anything that can execute code or host data.
+
+![Context diagram](monolith-containers.svg)
+
+##### Component Diagram
+
+Following on from a Container diagram showing the high-level technology decisions, you can then start to zoom in and decompose each container further. However you decompose your system is up to you, but this is about identifying the major logical structural building blocks and their interactions.
+
+![Context diagram](monolith-components.svg)
+
 
 #### 'Command' HTTP API
 

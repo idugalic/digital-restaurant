@@ -22,6 +22,7 @@
         <module>drestaurant-order</module>
         <module>drestaurant-accounting</module>
         <module>drestaurant-core-api</module>
+        <module>drestaurant-documentation</module>
     </modules>
 
 </project>

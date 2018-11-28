@@ -1,3 +1,12 @@
+structurizr:
+  workspace:
+    id: 22222
+    name: DRestaurnat - Monolith - REST
+    description: This is a sample workspace of digital restaurant - monolith -rest
+    key: YOUR_KEY
+    secret: YOUR_SECRET
+  #  Whether to put the workspace to the structurizr server after the model has been fully initialized.
+  performMerge: false
 spring:
   datasource:
     url: jdbc:h2:mem:restaurant

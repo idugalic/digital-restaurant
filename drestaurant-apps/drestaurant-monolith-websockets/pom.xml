@@ -38,6 +38,11 @@
             <artifactId>drestaurant-courier</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.drestaurant</groupId>
+            <artifactId>drestaurant-documentation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- Axon -->
         <dependency>
             <groupId>org.axonframework</groupId>
