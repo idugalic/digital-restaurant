@@ -128,7 +128,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 ---
 @transition[none]
 
-### Domain layer
+### Domain
 
 @ul
 
@@ -142,7 +142,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 @transition[none]
 
 @snap[north-west]
-@color[gray](Domain layer)
+@color[gray](Domain)
 @snapend
 
 #### Subdomains
@@ -159,7 +159,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 @transition[none]
 
 @snap[north-west]
-@color[gray](Domain layer)
+@color[gray](Domain)
 @snapend
 
 #### Subdomains - Analyze
@@ -171,7 +171,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 @transition[none]
 
 @snap[north-west]
-@color[gray](Domain layer)
+@color[gray](Domain)
 @snapend
 
 #### Subdomains - Context
@@ -183,7 +183,7 @@ https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/dres
 @transition[none]
 
 @snap[north-west]
-@color[gray](Domain layer)
+@color[gray](Domain)
 @snapend
 
 #### Core subdomains
@@ -200,7 +200,7 @@ Core subdomains are more important to the business
 @transition[none]
 
 @snap[north-west]
-@color[gray](Domain layer)
+@color[gray](Domain)
 @snapend
 
 #### Generic subdomains
@@ -213,7 +213,7 @@ Generic subdomains facilitate the business, but are not core to the business. In
 @transition[none]
 
 @snap[north-west]
-@color[gray](Domain layer)
+@color[gray](Domain)
 @snapend
 
 #### Eventsourcing
@@ -230,7 +230,7 @@ Generic subdomains facilitate the business, but are not core to the business. In
 @transition[none]
 
 @snap[north-west]
-@color[gray](Domain layer)
+@color[gray](Domain)
 @snapend
 
 #### Eventsourcing benefits
@@ -247,7 +247,7 @@ Generic subdomains facilitate the business, but are not core to the business. In
 @transition[none]
  
 @snap[north-west]
-@color[gray](Domain layer)
+@color[gray](Domain)
 @snapend
  
 #### Eventsourcing drawbacks
@@ -265,7 +265,7 @@ Generic subdomains facilitate the business, but are not core to the business. In
 @transition[none]
 
 @snap[north-west]
-@color[gray](Domain layer)
+@color[gray](Domain)
 @snapend
  
 #### Eventsourcing & snapshotting
@@ -285,7 +285,7 @@ Generic subdomains facilitate the business, but are not core to the business. In
 @transition[none]
 
 @snap[north-west]
-@color[gray](Domain layer)
+@color[gray](Domain)
 @snapend
 
 #### Saga
@@ -304,7 +304,7 @@ Generic subdomains facilitate the business, but are not core to the business. In
 @transition[none]
 
 @snap[north-west]
-@color[gray](Domain layer)
+@color[gray](Domain)
 @snapend
 
 #### Saga example
@@ -335,7 +335,7 @@ class RestaurantOrderSaga {
 @transition[none]
 
 @snap[north-west]
-@color[gray](Domain layer)
+@color[gray](Domain)
 @snapend
 
 #### State machine
@@ -345,7 +345,7 @@ class RestaurantOrderSaga {
 ---
 @transition[none]
 
-### Applications layer
+### Applications
 
 @ul
 
@@ -359,7 +359,7 @@ class RestaurantOrderSaga {
 @transition[none]
 
 @snap[north-west]
-@color[gray](Applications layer)
+@color[gray](Applications)
 @snapend
 
  - Monolith 1 - HTTP and WebSockets API
@@ -373,7 +373,7 @@ class RestaurantOrderSaga {
 @transition[none]
 
 @snap[north-west]
-@color[gray](Applications layer)
+@color[gray](Applications)
 @snapend
 
 #### Monolith 1 (HTTP and WebSockets API)
@@ -392,7 +392,7 @@ class RestaurantOrderSaga {
 @transition[none]
 
 @snap[north-west]
-@color[gray](Applications layer)
+@color[gray](Applications)
 @snapend
 
 #### Monolith 2 (HTTP/REST API)
@@ -410,7 +410,7 @@ class RestaurantOrderSaga {
 @transition[none]
 
 @snap[north-west]
-@color[gray](Applications layer)
+@color[gray](Applications)
 @snapend
 
 #### Monolith 3 (WebSockets API)
@@ -428,7 +428,7 @@ class RestaurantOrderSaga {
 @transition[none]
 
 @snap[north-west]
-@color[gray](Applications layer)
+@color[gray](Applications)
 @snapend
 
 #### Microservices 1 (Monolith 1 decomposed)
@@ -448,7 +448,7 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 @transition[none]
 
 @snap[north-west]
-@color[gray](Applications layer)
+@color[gray](Applications)
 @snapend
 
 #### Microservices 2 (Monolith 2 decomposed)
@@ -468,7 +468,7 @@ Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/d
 @transition[none]
 
 @snap[north-west]
-@color[gray](Applications layer)
+@color[gray](Applications)
 @snapend
 
 #### Microservices 3 (Monolith 3 decomposed)
