@@ -209,7 +209,6 @@ These interfaces (ports) and their implementations are provided by Axon platform
     - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
     - we use H2 SQL database as event store
     - we use H2 SQL database to store materialized views (query side)
-
  - [Microservices 2.1](drestaurant-apps/drestaurant-microservices-rest)
     - **REST API** by not segregating Command and Query
     - [Monolith 2](drestaurant-apps/drestaurant-monolith-rest) as a monolithic version
@@ -218,7 +217,6 @@ These interfaces (ports) and their implementations are provided by Axon platform
     - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
     - we use H2 SQL database as event store
     - we use H2 SQL database to store materialized views (query side)
-    
  - [Microservices 2.2](drestaurant-apps/drestaurant-microservices-rest-2)
      - **REST API** by not segregating Command and Query
      - [Monolith 2](drestaurant-apps/drestaurant-monolith-rest) as a monolithic version
@@ -227,7 +225,6 @@ These interfaces (ports) and their implementations are provided by Axon platform
      - we use [AxonServer](https://axoniq.io/product-overview/axon-server) as event store, and to distribute messages (commands, events and queries)
      - we use H2 SQL database to store materialized views (query side)
      - additionally, we distribute `queries` with AxonServer, so we can extract `query` side in a separate service (ver `Microservices 2.1` does not support this)
-     
  - [Microservices 3](drestaurant-apps/drestaurant-microservices-websockets)
     - Monolith 3 decomposed
     - **WebSockets API**
