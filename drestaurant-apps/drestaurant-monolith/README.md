@@ -1,9 +1,9 @@
 ## Monolith (HTTP and WebSockets API by segregating Command and Query)
-#### :octocat: [digital-restaurant](https://github.com/idugalic/digital-restaurant)/drestaurant-apps/drestaurant-monolith :octocat:
+#### :octocat: /drestaurant-apps/drestaurant-monolith :octocat:
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
-*We are utilizing [components from the domain layer](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs). This layer contains information about the domain. This is the heart of the business software.*
+*We are utilizing [components from the domain layer](../../drestaurant-libs). This layer contains information about the domain. This is the heart of the business software.*
 
 A recurring question with CQRS and EventSourcing is how to put a synchronous HTTP front-end on top of an asynchronous CQRS back-end.
 
@@ -13,13 +13,13 @@ In general there are two approaches:
  - **not segregating Command and Query** - one-to-one relation between a Command Model resource and a Query Model resource
  
  This application is using the first approach ('segregating Command and Query') by exposing capabilities of our 'domain' via the HTTP/REST API components that are responsible for
- - dispatching commands - [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/web/CommandController.kt)
- - querying the 'query model' (materialized views) - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/repository)
+ - dispatching commands - [CommandController](src/main/kotlin/com/drestaurant/web/CommandController.kt)
+ - querying the 'query model' (materialized views) - [Spring REST repositories](src/main/kotlin/com/drestaurant/query/repository)
 
 **There is no one-to-one relation between a Command resource and a Query Model resource. This makes easier to implement multiple representations of the same underlying domain entity as separate resources.**
 
 
-[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates 'query models' (materialized views) of aggregates.
+[Event listener](src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates 'query models' (materialized views) of aggregates.
 This makes querying of event-sourced aggregates easy.
 
 Aditonally, our event listener is publishing a WebSocket events on every update of a query model. 
@@ -135,8 +135,6 @@ WebSocket API (ws://localhost:8080/drestaurant/websocket) topics:
  - /topic/orders.updates (noting that order list has been updated, e.g. new order has been created)
  - /topic/restaurants.updates (noting that restaurant list has been updated, e.g. new restaurant has been created)
 
-
-Frontend part of the solution is available here [http://idugalic.github.io/digital-restaurant-angular](http://idugalic.github.io/digital-restaurant-angular/)
 
 ### Run the application
 

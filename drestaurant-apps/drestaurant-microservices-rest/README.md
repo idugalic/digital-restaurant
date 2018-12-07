@@ -1,12 +1,12 @@
 ## Microservices / REST / RabbitMQ
-#### :octocat: [digital-restaurant](https://github.com/idugalic/digital-restaurant)/drestaurant-apps/drestaurant-monolith-rest :octocat:
+#### :octocat: /drestaurant-apps/drestaurant-monolith-rest :octocat:
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
-We designed and structured our [loosely coupled components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
+We designed and structured our [loosely coupled components](../../drestaurant-libs) in a modular way, 
 and that enable us to choose different deployment strategy and take first step towards Microservices architectural style.
 
-Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest):
+Each microservice:
 
  - has its own bounded context,
  - has its own JPA event(sourcing) store (we are not sharing the JPA Event Store)
@@ -27,7 +27,7 @@ It supports several messaging protocols, directly and through the use of plugins
 
 This messaging pattern supports delivering a message to multiple consumers.
 
-We [configured our (micro)services](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-microservices-rest/drestaurant-microservices-rest-customer/src/main/resources/application.yml) to use publish-subscribe model, by setting unique queue for each (micro)service.
+We [configured our (micro)services](drestaurant-microservices-rest-customer/src/main/resources/application.yml) to use publish-subscribe model, by setting unique queue for each (micro)service.
 This queues are bind to one common exchange (`events.fanout.exchange`).
 
 RabbitMQ allows more sophisticated message routing then Apache Kafka can offer.

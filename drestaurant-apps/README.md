@@ -1,5 +1,5 @@
 ## Applications
-#### :octocat: [digital-restaurant](https://github.com/idugalic/digital-restaurant)/drestaurant-apps :octocat:
+#### :octocat: /drestaurant-apps :octocat:
 
 We have created more 'web' applications (standalone Spring Boot applications) to demonstrate the use of different architectural styles, API designs (adapters) and deployment strategies by utilizing components from the domain layer in different way.
 
@@ -22,43 +22,57 @@ These interfaces (ports) and their implementations are provided by Axon platform
 
 **Monolithic**
 
- - [Monolith 1](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith)
+ - [Monolith 1](drestaurant-monolith) 
     - **HTTP and WebSockets API** by segregating Command and Query
     - we don't synchronize on the backend
     - we provide WebSockets for the frontend to handle async nature of the backend
- - [Monolith 2](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest)
+    - we use H2 SQL database as event store
+    - we use H2 SQL database to store materialized views (query side)
+ - [Monolith 2](drestaurant-monolith-rest)
     - **REST API** by not segregating Command and Query
     - we synchronize on the backend side
- - [Monolith 3](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-websockets)
+    - we use H2 SQL database as event store
+    - we use H2 SQL database to store materialized views (query side)
+ - [Monolith 3](drestaurant-monolith-websockets)
     - **WebSockets API**
     - we are async all the way
+    - we use H2 SQL database as event store
+    - we use H2 SQL database to store materialized views (query side)
 
-**Microservices (decomposed monoliths)**
+**Microservices (`decomposed` monoliths)**
 
- - [Microservices 1](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices)
-    - Monolith 1 decomposed
+ - [Microservices 1](drestaurant-microservices)
     - **HTTP and WebSockets API** by segregating Command and Query
+    - [Monolith 1](drestaurant-monolith) as a monolithic version
     - we don't synchronize on the backend
     - we provide WebSockets for the frontend to handle async nature of the backend
     - we use Apache Kafka to distribute events between services
     - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
- - Microservices 2
+    - we use H2 SQL database as event store
+    - we use H2 SQL database to store materialized views (query side)
 
-    - [Version 1](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest)
-      - Monolith 2 decomposed
-      - **REST API** by not segregating Command and Query
-      - we synchronize on the backend side
-      - we use RabbitMQ to distribute events between services (bounded contexts)
-      - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
-      - **each micorservice has `command` and `query` side components included -> there is NO standalone `query` microservice**
-    - [Version 2](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest-2)
-      - Monolith 2 decomposed
-      - **REST API** by not segregating Command and Query
-      - we synchronize on the backend side
-      - we use [AxonServer](https://axoniq.io/product-overview/axon-server) to route and distribute all type of messages (commands, events and **queries**) between services (bounded contexts)
-      - **each micorservice has `command` side component included only -> there is standalone `query` microservice -> we can scale better**
- - [Microservices 3](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-websockets)
+ - [Microservices 2.1](drestaurant-microservices-rest)
+    - **REST API** by not segregating Command and Query
+    - [Monolith 2](drestaurant-monolith-rest) as a monolithic version
+    - we synchronize on the backend side
+    - we use RabbitMQ to distribute events between services (bounded contexts)
+    - we use Spring Cloud discovery and registry service (Eureka) to distribute commands between services (bounded contexts)
+    - we use H2 SQL database as event store
+    - we use H2 SQL database to store materialized views (query side)
+    
+ - [Microservices 2.2](drestaurant-microservices-rest-2)
+     - **REST API** by not segregating Command and Query
+     - [Monolith 2](drestaurant-monolith-rest) as a monolithic version
+     - we synchronize on the backend side
+     - we are async all the way
+     - we use [AxonServer](https://axoniq.io/product-overview/axon-server) as event store, and to distribute messages (commands, events and queries)
+     - we use H2 SQL database to store materialized views (query side)
+     - additionally, we distribute `queries` with AxonServer, so we can extract `query` side in a separate service (ver `Microservices 2.1` does not support this)
+     
+ - [Microservices 3](drestaurant-microservices-websockets)
     - Monolith 3 decomposed
     - **WebSockets API**
+    - [Monolith 3](drestaurant-monolith-websockets) as a monolithic version
     - we are async all the way
-    - we use [AxonServer](https://axoniq.io/product-overview/axon-server) to route and distribute all type of messages (commands, events, queries) between services (bounded contexts)
+    - we use [AxonServer](https://axoniq.io/product-overview/axon-server) as event store, and to distribute messages (commands, events and queries)
+    - we use H2 SQL database to store materialized views (query side)

@@ -1,10 +1,10 @@
 
 ## Monolith 2 (REST API by not segregating Command and Query)
-#### :octocat: [digital-restaurant](https://github.com/idugalic/digital-restaurant)/drestaurant-apps/drestaurant-monolith-rest :octocat:
+#### :octocat: /drestaurant-apps/drestaurant-monolith-rest :octocat:
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
-*We are utilizing [components from the domain layer](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs). This layer contains information about the domain. This is the heart of the business software.*
+*We are utilizing [components from the domain layer](../../drestaurant-libs). This layer contains information about the domain. This is the heart of the business software.*
 
 Sometimes, you are simply being required to deliver REST API.
 
@@ -17,15 +17,15 @@ In general there are two approaches:
  
 This application is using the second approach ('NOT segregating Command and Query') by exposing capabilities of our 'domain' via the REST API components that are responsible for
  
- - dispatching commands - [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt)
- - querying the 'query model' (materialized views) - [Spring REST repositories](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/repository)
+ - dispatching commands - [CommandController](src/main/kotlin/com/drestaurant/web/CommandController.kt)
+ - querying the 'query model' (materialized views) - [Spring REST repositories](src/main/kotlin/com/drestaurant/query/repository)
 
 
 **We create one-to-one relation between a Command Model resource and a Query Model (materialized view) resource.**
 Note that we are utilizing Spring Rest Data project to implement REST API, and that will position us on the third level of [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html)
 
-[Event listener](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates Query Model / materialized views of aggregates.
-Additionally, it will emit 'any change on Query Model' to Axon subscription queries, and let us subscribe on them within our [CommandController](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-monolith-rest/src/main/kotlin/com/drestaurant/web/CommandController.kt) keeping our architecture clean.
+[Event listener](src/main/kotlin/com/drestaurant/query/handler) is a central component. It consumes events, and creates Query Model / materialized views of aggregates.
+Additionally, it will emit 'any change on Query Model' to Axon subscription queries, and let us subscribe on them within our [CommandController](src/main/kotlin/com/drestaurant/web/CommandController.kt) keeping our architecture clean.
 
 Although fully asynchronous designs may be preferable for a number of reasons, it is a common scenario that back-end teams are forced to provide a synchronous REST API on top of asynchronous CQRS+ES back-ends.
 

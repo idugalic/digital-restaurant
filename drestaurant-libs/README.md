@@ -1,21 +1,21 @@
 ## Domain
-#### :octocat: [digital-restaurant](https://github.com/idugalic/digital-restaurant)/drestaurant-libs :octocat:
+#### :octocat: /drestaurant-libs :octocat:
 
 This layer contains information about the domain. This is the heart of the business software. The state of business objects is held here. Persistence of the business objects and possibly their state is delegated to the infrastructure layer.
 
 Business capabilities of 'Digital Restaurant' include:
-- [Courier component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier) 
+- [Courier component](drestaurant-courier) 
   - Managing courier information
   - A courier view of an order (managing the delivery of orders)
-- [Restaurant component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant)
+- [Restaurant component](drestaurant-restaurant)
   - Managing restaurant menus and other information including location and opening hours
   - A restaurant view of an order  (managing the preparation of orders at a restaurant kitchen)
-- [Customer component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer)
+- [Customer component](drestaurant-customer)
   - Managing information about customers/consumers
   - A customer view of an order (managing the order-customer invariants, e.g order limits)
-- [Order component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order)
+- [Order component](drestaurant-order)
   - Order taking and fulfillment management
-- [Accounting component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-accounting)
+- [Accounting component](drestaurant-accounting)
   - Consumer accounting - managing billing of consumers
   - Restaurant accounting - managing payments to restaurants 
   - Courier accounting - managing payments to couriers
@@ -38,20 +38,20 @@ Each sub-domain model belongs to exactly one bounded context.
 
 Some sub-domains are more important to the business then others. This are the subdomains that you want your most experienced people working on. Those are **core subdomains**:
 
-- [Courier subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier) 
-- [Restaurant subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant)
-- [Customer subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer)
-- [Order subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order)
+- [Courier subdomain](drestaurant-courier) 
+- [Restaurant subdomain](drestaurant-restaurant)
+- [Customer subdomain](drestaurant-customer)
+- [Order subdomain](drestaurant-order)
 
-The [Order](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/Order.kt) ([RestaurantOrder](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant/src/main/kotlin/com/drestaurant/restaurant/domain/RestaurantOrder.kt), [CustomerOrder](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer/src/main/kotlin/com/drestaurant/customer/domain/CustomerOrder.kt), [CourierOrder](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier/src/main/kotlin/com/drestaurant/courier/domain/CourierOrder.kt)) [aggregate](https://docs.axonframework.org/part-ii-domain-logic/command-model#aggregate) class in each subdomain model represent different term of the same 'Order' business concept.
+The [Order](drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/Order.kt) ([RestaurantOrder](drestaurant-restaurant/src/main/kotlin/com/drestaurant/restaurant/domain/RestaurantOrder.kt), [CustomerOrder](drestaurant-customer/src/main/kotlin/com/drestaurant/customer/domain/CustomerOrder.kt), [CourierOrder](drestaurant-courier/src/main/kotlin/com/drestaurant/courier/domain/CourierOrder.kt)) [aggregate](https://docs.axonframework.org/part-ii-domain-logic/command-model#aggregate) class in each subdomain model represent different term of the same 'Order' business concept.
 
- - The Restaurant component has a simpler view of an order aggregate (RestaurantOrder). Its version of an Order simply consist of a status and a list of line item, which tell the restaurant what to prepare. Additionally, we use event-driven mechanism called [sagas](https://docs.axonframework.org/part-ii-domain-logic/sagas) to [manage invariants between Restaurant aggregate and RestaurantOrder aggregate](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-restaurant/src/main/kotlin/com/drestaurant/restaurant/domain/RestaurantOrderSaga.kt) (e.g. Restaurant order should have only menu items that are on the Restaurant menu)
+ - The Restaurant component has a simpler view of an order aggregate (RestaurantOrder). Its version of an Order simply consist of a status and a list of line item, which tell the restaurant what to prepare. Additionally, we use event-driven mechanism called [sagas](https://docs.axonframework.org/part-ii-domain-logic/sagas) to [manage invariants between Restaurant aggregate and RestaurantOrder aggregate](drestaurant-restaurant/src/main/kotlin/com/drestaurant/restaurant/domain/RestaurantOrderSaga.kt) (e.g. Restaurant order should have only menu items that are on the Restaurant menu)
 
- - The Courier component has a different view of an order aggregate (CourierOrder). Its version of an Order simply consist of a status and a address, which tell the courier how and where to deliver the order. Additionally, we use saga to [manage invariants between Courier aggregate and CourierOrder aggregate](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-courier/src/main/kotlin/com/drestaurant/courier/domain/CourierOrderSaga.kt) (e.g. Courier can deliver a limited number of orders)
+ - The Courier component has a different view of an order aggregate (CourierOrder). Its version of an Order simply consist of a status and a address, which tell the courier how and where to deliver the order. Additionally, we use saga to [manage invariants between Courier aggregate and CourierOrder aggregate](drestaurant-courier/src/main/kotlin/com/drestaurant/courier/domain/CourierOrderSaga.kt) (e.g. Courier can deliver a limited number of orders)
 
- - The Customer component has a different view of an order aggregate (CustomerOrder). Its version of an Order simply consist of a status and a address, which tell the courier how and where to deliver the order. Additionally, we use saga to [manage invariants between Customer aggregate and CustomerOrder aggregate](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer/src/main/kotlin/com/drestaurant/customer/domain/CustomerOrderSaga.kt) (e.g. Customer has an order limit)
+ - The Customer component has a different view of an order aggregate (CustomerOrder). Its version of an Order simply consist of a status and a address, which tell the courier how and where to deliver the order. Additionally, we use saga to [manage invariants between Customer aggregate and CustomerOrder aggregate](drestaurant-customer/src/main/kotlin/com/drestaurant/customer/domain/CustomerOrderSaga.kt) (e.g. Customer has an order limit)
 
- - We must maintain consistency between these different 'order' aggregates in different components/domains. For example, once the Order component has initiated order creation it must trigger the creation of RestaurantOrder in the Restaurant component. We will [maintain consistency between components/bounded-context using sagas](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/OrderSaga.kt).
+ - We must maintain consistency between these different 'order' aggregates in different components/domains. For example, once the Order component has initiated order creation it must trigger the creation of RestaurantOrder in the Restaurant component. We will [maintain consistency between components/bounded-context using sagas](drestaurant-order/src/main/kotlin/com/drestaurant/order/domain/OrderSaga.kt).
 
 ![](../digital-restaurant-state-machine.png)
 
@@ -82,14 +82,14 @@ This can be bad for performances if you have a long living aggregate that is rep
  
 Each aggregate defines a snapshot trigger:
  
- - [`@Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")`](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-libs/drestaurant-courier/src/main/kotlin/com/drestaurant/courier/domain/SpringCourierConfiguration.kt)
+ - [`@Aggregate(snapshotTriggerDefinition = "courierSnapshotTriggerDefinition")`](drestaurant-courier/src/main/kotlin/com/drestaurant/courier/domain/SpringCourierConfiguration.kt)
  - Feel free to configure a treshold (number of events) that should trigger the snapshot creation. This treshold is externalized as a property `axon.snapshot.trigger.treshold.courier`
 
 
 ### Generic subdomains
 Other subdomains facilitate the business, but are not core to the business. In general, these types of pieces can be purchased from a vendor or outsourced. Those are **generic subdomains**:
 
-- [Accounting subdomain](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-accounting)
+- [Accounting subdomain](drestaurant-accounting)
 
 Event sourcing is probably not needed within your 'generic subdomain'.
 
@@ -103,13 +103,13 @@ The way Java types are placed into packages (components) can actually make a hug
 Kotlin language doesn't have 'package' modifier as Java has. It has 'internal' modifier which restricts accessiblity of the class to the whole module (compile unit, jar file...) which can hold many packages.
 
 The goal (maybe it is a rule) is to bundle all of the functionality related to a single component into a single Java/Kotlin package, and restrict accessiblity of the classes to `package`, were possible.
-For example, our [Customer component](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-customer) classes are placed in one `com.drestaurant.customer.domain` package, with all classes marked as 'internal'.
-Public classes are placed in `com.drestaurant.customer.domain.api` and they are forming an API for this component. This API consist of [commands and events](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-core-api/src/main/kotlin/com/drestaurant/customer/domain/api).
+For example, our [Customer component](drestaurant-customer) classes are placed in one `com.drestaurant.customer.domain` package, with all classes marked as 'internal'.
+Public classes are placed in `com.drestaurant.customer.domain.api` and they are forming an API for this component. This API consist of [commands and events](drestaurant-core-api/src/main/kotlin/com/drestaurant/customer/domain/api).
 As we have one maven module holding one package/component we are using Kotlin `internal` modifier as an encapsulation mechanism on the package level as well. This rule is handled by the compiler, which is very good, and we can achieve loose coupling and high cohesion effectively.
 
 If you prefer to organize more packages/components into one maven module (maybe use single maven module for all components, and not multi maven module by component as we have now) you should use different encapsulation mechanism because Kotlin is lacking of `package` modifier.
 
-We use an [ArchUnit test](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-libs/drestaurant-customer/src/test/kotlin/com/drestaurant/CustomerModuleTest.kt) to *force* 'package' scope of the Kotlin classes. This rule is handled on the Unit test level, which is not perfect, but still valuable.
+We use an [ArchUnit test](drestaurant-customer/src/test/kotlin/com/drestaurant/CustomerModuleTest.kt) to *force* 'package' scope of the Kotlin classes. This rule is handled on the Unit test level, which is not perfect, but still valuable.
 
 ### Context Mapping
 
@@ -125,9 +125,9 @@ Bounded contexts (and teams that produce them) can be in different relationships
 
 You may be wondering how Domain Events can be consumed by another Bounded Context and not force that consuming Bounded Context into a Conformist relationship. 
 
-Consumers should not use the [event types (e.g., classes)](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-core-api/src/main/kotlin/com/drestaurant) of an event publisher. Rather, they should depend only on the schema of the events, that is, their *Published Language*. This generally means that if the events are published as JSON, or perhaps a more economical object format, the consumer should consume the events by parsing them to obtain their data attributes. This rise complexity (consider [consumer driven contracts](https://www.martinfowler.com/articles/consumerDrivenContracts.html) testing), but enables loose coupling.
+Consumers should not use the [event types (e.g., classes)](drestaurant-core-api/src/main/kotlin/com/drestaurant) of an event publisher. Rather, they should depend only on the schema of the events, that is, their *Published Language*. This generally means that if the events are published as JSON, or perhaps a more economical object format, the consumer should consume the events by parsing them to obtain their data attributes. This rise complexity (consider [consumer driven contracts](https://www.martinfowler.com/articles/consumerDrivenContracts.html) testing), but enables loose coupling.
 
-Our demo application demonstrate `conformist` pattern, as we are using [strongly typed events](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs/drestaurant-core-api/src/main/kotlin/com/drestaurant).
+Our demo application demonstrate `conformist` pattern, as we are using [strongly typed events](drestaurant-core-api/src/main/kotlin/com/drestaurant).
 
 As our application evolve from monolithic to microservices we should consider diverging from `conformist` and converging to `customer-supplier` bounded context relationship depending only on the schema of the events (with consumer driven contracts included).
 

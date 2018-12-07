@@ -25,7 +25,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <axon.version>4.0.1</axon.version>
+        <axon.version>4.0.3</axon.version>
         <axon-extension.version>4.0</axon-extension.version>
         <kotlin.version>1.3.0</kotlin.version>
         <kafka.clients.version>0.11.0.2</kafka.clients.version>
@@ -76,35 +76,16 @@
                 <groupId>org.axonframework.extensions.amqp</groupId>
                 <artifactId>axon-amqp-spring-boot-starter</artifactId>
                 <version>${axon-extension.version}</version>
-                <!-- We choose to use axon-messaging version from the axon-spring-boot-starter -->
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.axonframework</groupId>
-                        <artifactId>axon-messaging</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.axonframework.extensions.kafka</groupId>
                 <artifactId>axon-kafka-spring-boot-starter</artifactId>
                 <version>${axon-extension.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.axonframework</groupId>
-                        <artifactId>axon-messaging</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.axonframework.extensions.springcloud</groupId>
                 <artifactId>axon-springcloud-spring-boot-starter</artifactId>
                 <version>${axon-extension.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.axonframework</groupId>
-                        <artifactId>axon-messaging</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <!-- SQL -->
             <dependency>

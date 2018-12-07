@@ -1,12 +1,12 @@
 ## Microservices / HTTP & Websockets / Apache Kafka
-#### :octocat: [digital-restaurant](https://github.com/idugalic/digital-restaurant)/drestaurant-apps/drestaurant-microservices :octocat:
+#### :octocat: /drestaurant-apps/drestaurant-microservices :octocat:
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
-We designed and structured our [loosely coupled components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
+We designed and structured our [loosely coupled components](../../drestaurant-libs) in a modular way, 
 and that enable us to choose different deployment strategy and take first step towards Microservices architectural style.
 
-Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices):
+Each microservice:
 
  - has its own bounded context,
  - has its own JPA event(sourcing) store (we are not sharing the JPA Event Store)
@@ -24,7 +24,7 @@ For example, we might expect that a customer is created before anything else can
 When using Kafka, you can preserve the order of those events by putting them all in the same Kafka **partition**.
 They must be in the same Kafka **topic** because different topics mean different partitions.
 
-We [configured our Kafka instance](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-microservices/docker-compose.yml) to crate only one topic (**axon-events**) with one partition initially.
+We [configured our Kafka instance](docker-compose.yml) to crate only one topic (**axon-events**) with one partition initially.
  
 ##### Queue vs publish-subscribe (kafka groups)
 
@@ -36,7 +36,7 @@ Each partition is connected to at most one consumer from a group.
 When multiple consumer groups exist, the flow of the data consumption model aligns with the traditional **publish-subscribe** model.
 **The messages are broadcast to all consumer groups.**
 
-We [configured our (micro)services](https://github.com/idugalic/digital-restaurant/blob/master/drestaurant-apps/drestaurant-microservices/drestaurant-microservices-command-customer/src/main/resources/application.yml) to use publish-subscribe model, by setting unique consumer group id for each (micro)service.
+We [configured our (micro)services](drestaurant-microservices-command-customer/src/main/resources/application.yml) to use publish-subscribe model, by setting unique consumer group id for each (micro)service.
 
 #### Spring Cloud connector & command messages
 

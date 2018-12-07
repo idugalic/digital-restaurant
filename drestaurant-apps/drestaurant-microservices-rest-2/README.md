@@ -1,18 +1,18 @@
 ## Microservices / REST / AxonServer
-#### :octocat: [digital-restaurant](https://github.com/idugalic/digital-restaurant)/drestaurant-apps/drestaurant-monolith-rest-2 :octocat:
+#### :octocat: /drestaurant-apps/drestaurant-monolith-rest-2 :octocat:
 
 *This is a thin layer which coordinates the application activity. It does not contain business logic. It does not hold the state of the business objects*
 
-We designed and structured our [loosely coupled components](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-libs) in a modular way, 
+We designed and structured our [loosely coupled components](../../drestaurant-libs) in a modular way, 
 and that enable us to choose different deployment strategy and take first step towards Microservices architectural style.
 
-Each [microservice](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest-2):
+Each microservice:
 
  - has its own bounded context,
  - has shared event(sourcing) storage (AxonServer)
  - and we route and distribute messages (`events`, `commands`, `queries`) between them via [AxonServer](https://axoniq.io/product-overview/axon-server)
 
-This a second version of [REST Microservices application](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest) in which we use AxonServer as an infrastructural component.
+This a second version (2.2) of the `REST Microservices application` in which we use AxonServer as an infrastructural component.
  
 #### AxonServer & event messages & command messages & query messages
 
@@ -52,8 +52,8 @@ In that case you have to choose (and configure, and operate) Spring Cloud to dis
 </dependency>
 ```
 
-We did this already in the [first version](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest) of 'REST Microservices application' as a proof that you can benefit from AxonFramework programming model only (without AxonServer as an infrastructural component).
-[first version](https://github.com/idugalic/digital-restaurant/tree/master/drestaurant-apps/drestaurant-microservices-rest) is using:
+We did this already in the [first version](../drestaurant-microservices-rest) of 'REST Microservices application' as a proof that you can benefit from AxonFramework programming model only (without AxonServer as an infrastructural component).
+[first version](../drestaurant-microservices-rest) is using:
   - RabbitMQ to distribute events between microservices
   - Spring Cloud discovery and registry service (Eureka) to distribute commands between microservices
   - no out of the box option to distribute queries -> each microservice has `command` and `query` side component included -> there is no independent `query` microservice -> you can not scale good
