@@ -43,11 +43,11 @@ data class CreateRestaurantCommand(val name: String, @field:Valid val menu: Rest
  *
  * @property targetAggregateIdentifier target aggregate identifier
  * @property orderDetails order details holds the order line items
- * @property restaurantId identifier of the restaurant to which the order is created
+ * @property restaurantOrderId identifier of the restaurant order
  */
-data class CreateRestaurantOrderCommand(@TargetAggregateIdentifier override val targetAggregateIdentifier: RestaurantOrderId, @field:Valid val orderDetails: RestaurantOrderDetails, val restaurantId: RestaurantId, override val auditEntry: AuditEntry) : RestaurantOrderCommand(targetAggregateIdentifier, auditEntry) {
+data class CreateRestaurantOrderCommand(@TargetAggregateIdentifier override val targetAggregateIdentifier: RestaurantId, @field:Valid val orderDetails: RestaurantOrderDetails, val restaurantOrderId: RestaurantOrderId, override val auditEntry: AuditEntry) : RestaurantCommand(targetAggregateIdentifier, auditEntry) {
 
-    constructor(orderDetails: RestaurantOrderDetails, restaurantId: RestaurantId, auditEntry: AuditEntry) : this(RestaurantOrderId(), orderDetails, restaurantId, auditEntry)
+    constructor(targetAggregateIdentifier: RestaurantId, orderDetails: RestaurantOrderDetails, auditEntry: AuditEntry) : this(targetAggregateIdentifier, orderDetails, RestaurantOrderId(), auditEntry)
 }
 
 /**

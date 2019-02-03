@@ -1,9 +1,7 @@
 package com.drestaurant.restaurant.domain
 
-import org.axonframework.eventhandling.EventBus
 import org.axonframework.eventsourcing.EventCountSnapshotTriggerDefinition
 import org.axonframework.eventsourcing.Snapshotter
-import org.axonframework.spring.config.AxonConfiguration
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,9 +9,6 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 internal class SpringRestaurantConfiguration {
-
-    @Bean
-    fun restaurantCommandHandler(axonConfiguration: AxonConfiguration, eventBus: EventBus) = RestaurantCommandHandler(axonConfiguration.repository(Restaurant::class.java), eventBus)
 
     @Value("\${axon.snapshot.trigger.treshold.restaurant}")
     private val snapshotTriggerTresholdRestaurant: Int = 100

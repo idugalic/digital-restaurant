@@ -63,10 +63,10 @@ internal class OrderSaga {
         val customerOrderId = CustomerOrderId("customerOrder_$orderId")
         associateWith("customerOrderId", customerOrderId.toString())
 
-        commandGateway.send(CreateCustomerOrderCommand(customerOrderId, orderDetails.orderTotal, customerId, event.auditEntry), LoggingCallback.INSTANCE)
+        commandGateway.send(CreateCustomerOrderCommand(customerId, customerOrderId, orderDetails.orderTotal, event.auditEntry), LoggingCallback.INSTANCE)
     }
 
-    @SagaEventHandler(associationProperty = "aggregateIdentifier", keyName = "customerOrderId")
+    @SagaEventHandler(associationProperty = "customerOrderId")
     fun on(event: CustomerOrderCreatedEvent) = commandGateway.send(MarkOrderAsVerifiedByCustomerInternalCommand(orderId, customerId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @SagaEventHandler(associationProperty = "aggregateIdentifier")
@@ -80,10 +80,10 @@ internal class OrderSaga {
             restaurantLineItems.add(roli)
         }
         val restaurantOrderDetails = RestaurantOrderDetails(restaurantLineItems)
-        commandGateway.send(CreateRestaurantOrderCommand(restaurantOrderId, restaurantOrderDetails, restaurantId, event.auditEntry), LoggingCallback.INSTANCE)
+        commandGateway.send(CreateRestaurantOrderCommand(restaurantId, restaurantOrderDetails, restaurantOrderId, event.auditEntry), LoggingCallback.INSTANCE)
     }
 
-    @SagaEventHandler(associationProperty = "aggregateIdentifier", keyName = "restaurantOrderId")
+    @SagaEventHandler(associationProperty = "restaurantOrderId")
     fun on(event: RestaurantOrderCreatedEvent) = commandGateway.send(MarkOrderAsVerifiedByRestaurantInternalCommand(orderId, restaurantId, event.auditEntry), LoggingCallback.INSTANCE)
 
     @SagaEventHandler(associationProperty = "aggregateIdentifier", keyName = "restaurantOrderId")

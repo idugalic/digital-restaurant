@@ -37,11 +37,11 @@ data class RestaurantCreatedEvent(val name: String, val menu: RestaurantMenu, ov
  * An event, noting that restaurant order has been created
  *
  * @property lineItems restaurant order line items
- * @property restaurantId identifier of the restaurant to which order is created
+ * @property restaurantOrderId identifier of the restaurant order
  * @property aggregateIdentifier aggregate identifier
  * @property auditEntry audit entry holds the information of 'who' and 'when' triggered the event
  */
-data class RestaurantOrderCreatedEvent(val lineItems: List<RestaurantOrderLineItem>, val restaurantId: RestaurantId, override val aggregateIdentifier: RestaurantOrderId, override val auditEntry: AuditEntry) : RestaurantOrderEvent(aggregateIdentifier, auditEntry)
+data class RestaurantOrderCreatedEvent(val lineItems: List<RestaurantOrderLineItem>, val restaurantOrderId: RestaurantOrderId, override val aggregateIdentifier: RestaurantId, override val auditEntry: AuditEntry) : RestaurantEvent(aggregateIdentifier, auditEntry)
 
 /**
  * An event, noting that restaurant order has been prepared

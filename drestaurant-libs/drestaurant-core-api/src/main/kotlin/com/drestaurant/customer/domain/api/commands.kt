@@ -42,13 +42,13 @@ data class CreateCustomerCommand(@TargetAggregateIdentifier override val targetA
  * A command to create new 'customer order' for the customer ([customerId])
  *
  * @property targetAggregateIdentifier target aggregate identifier
+ * @property customerOrderId customer order identifier
  * @property orderTotal order total price amount
- * @property customerId identifier of the customer for whom we create the order
  * @property auditEntry audit entry holds the information of 'who' and 'when' performed the command
  */
-data class CreateCustomerOrderCommand(@TargetAggregateIdentifier override val targetAggregateIdentifier: CustomerOrderId, @field:Valid val orderTotal: Money, val customerId: CustomerId, override val auditEntry: AuditEntry) : CustomerOrderCommand(targetAggregateIdentifier, auditEntry) {
+data class CreateCustomerOrderCommand(@TargetAggregateIdentifier override val targetAggregateIdentifier: CustomerId, val customerOrderId: CustomerOrderId, @field:Valid val orderTotal: Money, override val auditEntry: AuditEntry) : CustomerCommand(targetAggregateIdentifier, auditEntry) {
+    constructor(targetAggregateIdentifier: CustomerId, orderTotal: Money, auditEntry: AuditEntry) : this(targetAggregateIdentifier, CustomerOrderId(), orderTotal, auditEntry)
 
-    constructor(orderTotal: Money, customerId: CustomerId, auditEntry: AuditEntry) : this(CustomerOrderId(), orderTotal, customerId, auditEntry)
 }
 
 /**
