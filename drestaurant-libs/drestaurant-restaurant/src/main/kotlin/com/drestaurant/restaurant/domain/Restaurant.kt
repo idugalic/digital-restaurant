@@ -1,9 +1,11 @@
 package com.drestaurant.restaurant.domain
 
-import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.restaurant.domain.api.CreateRestaurantCommand
+import com.drestaurant.restaurant.domain.api.CreateRestaurantOrderCommand
 import com.drestaurant.restaurant.domain.api.RestaurantCreatedEvent
-import com.drestaurant.restaurant.domain.api.model.*
+import com.drestaurant.restaurant.domain.api.model.RestaurantId
+import com.drestaurant.restaurant.domain.api.model.RestaurantMenu
+import com.drestaurant.restaurant.domain.api.model.RestaurantState
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
@@ -11,6 +13,7 @@ import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.modelling.command.AggregateIdentifier
 import org.axonframework.modelling.command.AggregateLifecycle.apply
+import org.axonframework.modelling.command.AggregateLifecycle.createNew
 import org.axonframework.spring.stereotype.Aggregate
 import java.util.stream.Collectors
 
@@ -74,20 +77,16 @@ internal class Restaurant {
         state = RestaurantState.OPEN
     }
 
-    /**
-     * Validate order by restaurant.
-     * Checking if order contain line items that are on the menu only.
-     *
-     * @param orderId
-     * @param lineItems
-     * @param auditEntry
-     */
-    fun validateOrder(orderId: RestaurantOrderId, lineItems: List<RestaurantOrderLineItem>, auditEntry: AuditEntry) {
-        if (menu.menuItems.stream().map { mi -> mi.id }.collect(Collectors.toList()).containsAll(lineItems.stream().map { li -> li.menuItemId }.collect(Collectors.toList()))) {
-            apply(RestaurantValidatedOrderWithSuccessInternalEvent(id, orderId, auditEntry))
 
+    /**
+     * This method creates kitchen order for specific restaurant / Spawns new aggregate
+     */
+    @CommandHandler
+    fun handle(command: CreateRestaurantOrderCommand) {
+        if (menu.menuItems.stream().map { mi -> mi.id }.collect(Collectors.toList()).containsAll(command.orderDetails.lineItems.stream().map { li -> li.menuItemId }.collect(Collectors.toList()))) {
+            createNew(RestaurantOrder::class.java) { RestaurantOrder(command) }
         } else {
-            apply(RestaurantValidatedOrderWithErrorInternalEvent(id, orderId, auditEntry))
+            throw UnsupportedOperationException("Restaurant order invalid - not on the Menu")
         }
     }
 

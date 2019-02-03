@@ -35,11 +35,12 @@ data class CustomerCreatedEvent(val name: PersonName, val orderLimit: Money, ove
 
 /**
  * An event, noting that 'customer order' has been created
- *
+ * @property orderTotal total amount of an order
  * @property aggregateIdentifier aggregate identifier
+ * @property customerOrderId customer order identifier
  * @property auditEntry audit entry holds the information of 'who' and 'when' triggered the event
  */
-data class CustomerOrderCreatedEvent(override val aggregateIdentifier: CustomerOrderId, override val auditEntry: AuditEntry) : CustomerOrderEvent(aggregateIdentifier, auditEntry)
+data class CustomerOrderCreatedEvent(val orderTotal: Money, override val aggregateIdentifier: CustomerId,  val customerOrderId: CustomerOrderId, override val auditEntry: AuditEntry) : CustomerEvent(aggregateIdentifier, auditEntry)
 
 /**
  * An event, noting that 'customer order' has been delivered

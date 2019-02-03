@@ -4,7 +4,10 @@ import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.common.domain.api.model.Money
 import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.customer.domain.api.CreateCustomerCommand
+import com.drestaurant.customer.domain.api.CreateCustomerOrderCommand
 import com.drestaurant.customer.domain.api.CustomerCreatedEvent
+import com.drestaurant.customer.domain.api.CustomerOrderCreatedEvent
+import com.drestaurant.customer.domain.api.model.CustomerId
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor
 import org.axonframework.test.AxonAssertionError
 import org.axonframework.test.aggregate.AggregateTestFixture
@@ -52,6 +55,30 @@ class CustomerAggregateTest {
                 .`when`(createCustomerCommand)
                 .expectException(AxonAssertionError::class.java)
 
+    }
+
+    @Test
+    fun createCustomerOrderTest() {
+        val name = PersonName("Ivan", "Dugalic")
+        val createCustomerOrderCommand = CreateCustomerOrderCommand(CustomerId("customerId"), orderLimit, auditEntry)
+        val customerCreatedEvent = CustomerCreatedEvent(name, orderLimit.add(Money(BigDecimal.ONE)), createCustomerOrderCommand.targetAggregateIdentifier, auditEntry)
+        val customerOrderCreatedEvent = CustomerOrderCreatedEvent(orderLimit, CustomerId("customerId"), createCustomerOrderCommand.customerOrderId, auditEntry)
+        fixture
+                .given(customerCreatedEvent)
+                .`when`(createCustomerOrderCommand)
+                .expectEvents(customerOrderCreatedEvent)
+    }
+
+    @Test
+    fun createCustomerOrderFailOrderLimitTest() {
+        val name = PersonName("Ivan", "Dugalic")
+        val createCustomerOrderCommand = CreateCustomerOrderCommand(CustomerId("customerId"), orderLimit, auditEntry)
+        val customerCreatedEvent = CustomerCreatedEvent(name, orderLimit, createCustomerOrderCommand.targetAggregateIdentifier, auditEntry)
+        val customerOrderCreatedEvent = CustomerOrderCreatedEvent(orderLimit, CustomerId("customerId"), createCustomerOrderCommand.customerOrderId, auditEntry)
+        fixture
+                .given(customerCreatedEvent)
+                .`when`(createCustomerOrderCommand)
+                .expectException(UnsupportedOperationException::class.java)
     }
 
 }

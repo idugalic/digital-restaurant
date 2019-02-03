@@ -1,7 +1,10 @@
 package com.drestaurant.customer.domain
 
 import com.drestaurant.common.domain.api.model.Money
-import com.drestaurant.customer.domain.api.*
+import com.drestaurant.customer.domain.api.CreateCustomerOrderCommand
+import com.drestaurant.customer.domain.api.CustomerOrderCreatedEvent
+import com.drestaurant.customer.domain.api.CustomerOrderDeliveredEvent
+import com.drestaurant.customer.domain.api.MarkCustomerOrderAsDeliveredCommand
 import com.drestaurant.customer.domain.api.model.CustomerId
 import com.drestaurant.customer.domain.api.model.CustomerOrderId
 import com.drestaurant.customer.domain.api.model.CustomerOrderState
@@ -30,50 +33,20 @@ internal class CustomerOrder {
      */
     constructor()
 
-    @CommandHandler
     constructor(command: CreateCustomerOrderCommand) {
-        apply(CustomerOrderCreationInitiatedInternalEvent(command.orderTotal, command.customerId, command.targetAggregateIdentifier, command.auditEntry))
-    }
-
-    @EventSourcingHandler
-    fun on(event: CustomerOrderCreationInitiatedInternalEvent) {
-        this.id = event.aggregateIdentifier
-        this.customerId = event.customerId
-        this.orderTotal = event.orderTotal
-        this.state = CustomerOrderState.CREATE_PENDING
-    }
-
-    @CommandHandler
-    fun markOrderAsCreated(command: MarkCustomerOrderAsCreatedInternalCommand) {
-        if (CustomerOrderState.CREATE_PENDING == state) {
-            apply(CustomerOrderCreatedEvent(command.targetAggregateIdentifier, command.auditEntry))
-        } else {
-            throw UnsupportedOperationException("The current state is not CREATE_PENDING")
-        }
-
+        apply(CustomerOrderCreatedEvent(command.orderTotal, command.targetAggregateIdentifier, command.customerOrderId, command.auditEntry))
     }
 
     @EventSourcingHandler
     fun on(event: CustomerOrderCreatedEvent) {
+        this.id = event.customerOrderId
+        this.customerId = event.aggregateIdentifier
+        this.orderTotal = event.orderTotal
         this.state = CustomerOrderState.CREATED
     }
 
     @CommandHandler
-    fun markOrderAsRejected(command: MarkCustomerOrderAsRejectedInternalCommand) {
-        if (CustomerOrderState.CREATE_PENDING == state) {
-            apply(CustomerOrderRejectedEvent(command.targetAggregateIdentifier, command.auditEntry))
-        } else {
-            throw UnsupportedOperationException("The current state is not CREATE_PENDING")
-        }
-    }
-
-    @EventSourcingHandler
-    fun on(event: CustomerOrderRejectedEvent) {
-        this.state = CustomerOrderState.REJECTED
-    }
-
-    @CommandHandler
-    fun markOrderAsDelivered(command: MarkCustomerOrderAsDeliveredCommand) {
+    fun handle(command: MarkCustomerOrderAsDeliveredCommand) {
         if (CustomerOrderState.CREATED == state) {
             apply(CustomerOrderDeliveredEvent(command.targetAggregateIdentifier, command.auditEntry))
         } else {

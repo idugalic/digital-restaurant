@@ -2,7 +2,9 @@ package com.drestaurant.customer.domain
 
 import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.common.domain.api.model.Money
-import com.drestaurant.customer.domain.api.*
+import com.drestaurant.customer.domain.api.CustomerOrderCreatedEvent
+import com.drestaurant.customer.domain.api.CustomerOrderDeliveredEvent
+import com.drestaurant.customer.domain.api.MarkCustomerOrderAsDeliveredCommand
 import com.drestaurant.customer.domain.api.model.CustomerId
 import com.drestaurant.customer.domain.api.model.CustomerOrderId
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor
@@ -29,52 +31,15 @@ class CustomerOrderAggregateTest {
     }
 
     @Test
-    fun createCustomerOrderTest() {
-        val createCustomerOrderCommand = CreateCustomerOrderCommand(orderId, orderTotal, customerId, auditEntry)
-        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry)
-
-        fixture
-                .given()
-                .`when`(createCustomerOrderCommand)
-                .expectEvents(customerOrderCreationInitiatedEvent)
-    }
-
-    @Test
-    fun markOrderAsCreatedTest() {
-        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry)
-        val markCustomerOrderAsCreatedCommand = MarkCustomerOrderAsCreatedInternalCommand(orderId, auditEntry)
-        val customertOrderCreatedEvent = CustomerOrderCreatedEvent(orderId, auditEntry)
-
-        fixture
-                .given(customerOrderCreationInitiatedEvent)
-                .`when`(markCustomerOrderAsCreatedCommand)
-                .expectEvents(customertOrderCreatedEvent)
-    }
-
-    @Test
-    fun markOrderAsRejectedTest() {
-        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry)
-        val markCustomerOrderAsRejectedCommand = MarkCustomerOrderAsRejectedInternalCommand(orderId, auditEntry)
-        val customerOrderRejectedEvent = CustomerOrderRejectedEvent(orderId, auditEntry)
-
-        fixture
-                .given(customerOrderCreationInitiatedEvent)
-                .`when`(markCustomerOrderAsRejectedCommand)
-                .expectEvents(customerOrderRejectedEvent)
-    }
-
-    @Test
     fun markOrderAsDeliveredTest() {
-        val customerOrderCreationInitiatedEvent = CustomerOrderCreationInitiatedInternalEvent(orderTotal, customerId, orderId, auditEntry)
-        val customertOrderCreatedEvent = CustomerOrderCreatedEvent(orderId, auditEntry)
+        val customerOrderCreatedEvent = CustomerOrderCreatedEvent(orderTotal, customerId, orderId, auditEntry)
 
         val markCustomerOrderAsDeliveredCommand = MarkCustomerOrderAsDeliveredCommand(orderId, auditEntry)
         val customerOrderDeliveredEvent = CustomerOrderDeliveredEvent(orderId, auditEntry)
 
         fixture
-                .given(customerOrderCreationInitiatedEvent, customertOrderCreatedEvent)
+                .given(customerOrderCreatedEvent)
                 .`when`(markCustomerOrderAsDeliveredCommand)
                 .expectEvents(customerOrderDeliveredEvent)
     }
-
 }

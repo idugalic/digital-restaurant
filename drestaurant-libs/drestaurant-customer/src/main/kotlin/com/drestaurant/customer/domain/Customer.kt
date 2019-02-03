@@ -1,12 +1,11 @@
 package com.drestaurant.customer.domain
 
-import com.drestaurant.common.domain.api.model.AuditEntry
 import com.drestaurant.common.domain.api.model.Money
 import com.drestaurant.common.domain.api.model.PersonName
 import com.drestaurant.customer.domain.api.CreateCustomerCommand
+import com.drestaurant.customer.domain.api.CreateCustomerOrderCommand
 import com.drestaurant.customer.domain.api.CustomerCreatedEvent
 import com.drestaurant.customer.domain.api.model.CustomerId
-import com.drestaurant.customer.domain.api.model.CustomerOrderId
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
@@ -14,6 +13,7 @@ import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.modelling.command.AggregateIdentifier
 import org.axonframework.modelling.command.AggregateLifecycle.apply
+import org.axonframework.modelling.command.AggregateLifecycle.createNew
 import org.axonframework.spring.stereotype.Aggregate
 
 /**
@@ -57,21 +57,9 @@ internal class Customer {
         apply(CustomerCreatedEvent(command.name, command.orderLimit, command.targetAggregateIdentifier, command.auditEntry))
     }
 
-    fun validateOrder(orderId: CustomerOrderId, orderTotal: Money, auditEntry: AuditEntry) {
-        if (orderTotal.isGreaterThanOrEqual(orderLimit)) {
-            apply(CustomerValidatedOrderWithErrorInternalEvent(id, orderId, orderTotal, auditEntry))
-
-        } else {
-            apply(CustomerValidatedOrderWithSuccessInternalEvent(id, orderId, orderTotal, auditEntry))
-        }
-    }
-
     /**
      * This method is marked as an EventSourcingHandler and is therefore used by the
-     * Axon framework to handle events of the specified type
-     * [CustomerCreatedEvent]. The [CustomerCreatedEvent] can be raised
-     * either by the constructor during Customer(CustomerCreatedEvent) or by the
-     * eventsourcing repository when 're-loading' the aggregate.
+     * Axon framework to handle events of the specified type [CustomerCreatedEvent].
      *
      * @param event
      */
@@ -80,6 +68,18 @@ internal class Customer {
         id = event.aggregateIdentifier
         name = event.name
         orderLimit = event.orderLimit
+    }
+
+    /**
+     * This method creates order for specific customer / Spawns new aggregate
+     */
+    @CommandHandler
+    fun handle(command: CreateCustomerOrderCommand) {
+        if (!command.orderTotal.isGreaterThanOrEqual(orderLimit)) {
+            createNew(CustomerOrder::class.java) { CustomerOrder(command) }
+        } else {
+            throw UnsupportedOperationException("Customer limit is reached")
+        }
     }
 
     override fun toString(): String = ToStringBuilder.reflectionToString(this)

@@ -1,7 +1,10 @@
 package com.drestaurant.restaurant.domain
 
 import com.drestaurant.common.domain.api.model.AuditEntry
-import com.drestaurant.restaurant.domain.api.*
+import com.drestaurant.restaurant.domain.api.CreateRestaurantOrderCommand
+import com.drestaurant.restaurant.domain.api.MarkRestaurantOrderAsPreparedCommand
+import com.drestaurant.restaurant.domain.api.RestaurantOrderCreatedEvent
+import com.drestaurant.restaurant.domain.api.RestaurantOrderPreparedEvent
 import com.drestaurant.restaurant.domain.api.model.RestaurantId
 import com.drestaurant.restaurant.domain.api.model.RestaurantOrderDetails
 import com.drestaurant.restaurant.domain.api.model.RestaurantOrderId
@@ -20,7 +23,6 @@ class RestaurantOrderAggregateTest {
     private var restuarantId: RestaurantId = RestaurantId("restuarantId")
     private val lineItem: RestaurantOrderLineItem = RestaurantOrderLineItem(1, "menuItemId", "name")
     private var lineItems: MutableList<RestaurantOrderLineItem> = ArrayList()
-    private var orderDetails: RestaurantOrderDetails = RestaurantOrderDetails(lineItems)
     private val who = "johndoe"
     private var auditEntry: AuditEntry = AuditEntry(who, Calendar.getInstance().time)
 
@@ -33,59 +35,13 @@ class RestaurantOrderAggregateTest {
     }
 
     @Test
-    fun createRestaurantOrderTest() {
-        val createRestaurantOrderCommand = CreateRestaurantOrderCommand(orderId, orderDetails, restuarantId, auditEntry)
-        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry)
-
-        fixture.given().`when`(createRestaurantOrderCommand).expectEvents(restaurantOrderCreationInitiatedEvent)
-    }
-
-    @Test
-    fun markOrderAsCreatedTest() {
-        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry)
-        val markRestaurantOrderAsCreatedCommand = MarkRestaurantOrderAsCreatedInternalCommand(orderId, auditEntry)
-        val restaurantOrderCreatedEvent = RestaurantOrderCreatedEvent(lineItems, restuarantId, orderId, auditEntry)
-
-        fixture.given(restaurantOrderCreationInitiatedEvent).`when`(markRestaurantOrderAsCreatedCommand).expectEvents(restaurantOrderCreatedEvent)
-    }
-
-    @Test
-    fun markOrderAsRejectedTest() {
-        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry)
-        val markRestaurantOrderAsRejectedCommand = MarkRestaurantOrderAsRejectedInternalCommand(orderId, auditEntry)
-        val restaurantOrderRejectedEvent = RestaurantOrderRejectedEvent(orderId, auditEntry)
-
-        fixture.given(restaurantOrderCreationInitiatedEvent).`when`(markRestaurantOrderAsRejectedCommand).expectEvents(restaurantOrderRejectedEvent)
-    }
-
-    @Test
-    fun markOrderAsRejectedFaildTest() {
-        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry)
-        val markRestaurantOrderAsRejectedCommand = MarkRestaurantOrderAsRejectedInternalCommand(orderId, auditEntry)
-        val restaurantOrderRejectedEvent = RestaurantOrderRejectedEvent(orderId, auditEntry)
-
-        fixture.given(restaurantOrderCreationInitiatedEvent, restaurantOrderRejectedEvent) //Order already REJECTED
-                .`when`(markRestaurantOrderAsRejectedCommand).expectException(UnsupportedOperationException::class.java)
-    }
-
-    @Test
     fun markOrderAsPreparedTest() {
-        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry)
-        val restaurantOrderCreatedEvent = RestaurantOrderCreatedEvent(lineItems, restuarantId, orderId, auditEntry)
+        val restaurantOrderCreatedEvent = RestaurantOrderCreatedEvent(lineItems, orderId, restuarantId, auditEntry)
 
         val markRestaurantOrderAsPreparedCommand = MarkRestaurantOrderAsPreparedCommand(orderId, auditEntry)
         val restaurantOrderPreparedEvent = RestaurantOrderPreparedEvent(orderId, auditEntry)
 
-        fixture.given(restaurantOrderCreationInitiatedEvent, restaurantOrderCreatedEvent).`when`(markRestaurantOrderAsPreparedCommand)
+        fixture.given(restaurantOrderCreatedEvent).`when`(markRestaurantOrderAsPreparedCommand)
                 .expectEvents(restaurantOrderPreparedEvent)
-    }
-
-    @Test
-    fun markOrderAsPreparedFaildTest() {
-        val restaurantOrderCreationInitiatedEvent = RestaurantOrderCreationInitiatedInternalEvent(orderDetails, restuarantId, orderId, auditEntry)
-        val markRestaurantOrderAsPreparedCommand = MarkRestaurantOrderAsPreparedCommand(orderId, auditEntry)
-
-        fixture.given(restaurantOrderCreationInitiatedEvent) //Creation initialized ,but not yet CREATED
-                .`when`(markRestaurantOrderAsPreparedCommand).expectException(UnsupportedOperationException::class.java)
     }
 }

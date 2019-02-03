@@ -27,8 +27,8 @@ internal class RestaurantOrderHandler(private val repository: RestaurantOrderRep
             val restaurantOrderItem = RestaurantOrderItemEmbedable(item.menuItemId, item.name, item.quantity)
             restaurantOrderItems.add(restaurantOrderItem)
         }
-        val restaurantEntity = restaurantRepository.findById(event.restaurantId.identifier).get()
-        val record = RestaurantOrderEntity(event.aggregateIdentifier.identifier, aggregateVersion, restaurantOrderItems, restaurantEntity, RestaurantOrderState.CREATED)
+        val restaurantEntity = restaurantRepository.findById(event.aggregateIdentifier.identifier).get()
+        val record = RestaurantOrderEntity(event.restaurantOrderId.identifier, aggregateVersion, restaurantOrderItems, restaurantEntity, RestaurantOrderState.CREATED)
         repository.save(record)
         broadcastUpdates()
     }

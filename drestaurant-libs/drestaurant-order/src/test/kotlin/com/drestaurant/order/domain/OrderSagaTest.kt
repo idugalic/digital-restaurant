@@ -74,7 +74,7 @@ class OrderSagaTest {
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
                 )
                 .expectActiveSagas(1)
-                .expectDispatchedCommands(CreateCustomerOrderCommand(CustomerOrderId("customerOrder_$orderId"), orderDetails.orderTotal, customerId, auditEntry))
+                .expectDispatchedCommands(CreateCustomerOrderCommand(customerId, CustomerOrderId("customerOrder_$orderId"), orderDetails.orderTotal, auditEntry))
     }
 
     @Test
@@ -84,7 +84,7 @@ class OrderSagaTest {
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry)
                 )
-                .whenPublishingA(CustomerOrderCreatedEvent(CustomerOrderId("customerOrder_$orderId"), auditEntry))
+                .whenPublishingA(CustomerOrderCreatedEvent(orderDetails.orderTotal, customerId, CustomerOrderId("customerOrder_$orderId"), auditEntry))
                 .expectActiveSagas(1)
                 .expectDispatchedCommands(MarkOrderAsVerifiedByCustomerInternalCommand(orderId, customerId, auditEntry))
     }
@@ -98,7 +98,7 @@ class OrderSagaTest {
                 )
                 .whenPublishingA(OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry))
                 .expectActiveSagas(1)
-                .expectDispatchedCommands(CreateRestaurantOrderCommand(RestaurantOrderId("restaurantOrder_$orderId"), restaurantOrderDetails, restaurantId, auditEntry))
+                .expectDispatchedCommands(CreateRestaurantOrderCommand(restaurantId, restaurantOrderDetails, RestaurantOrderId("restaurantOrder_$orderId"), auditEntry))
     }
 
     @Test
@@ -107,10 +107,10 @@ class OrderSagaTest {
         testFixture.givenAggregate(orderId.toString())
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent(CustomerOrderId("customerOrder_$orderId"), auditEntry),
+                        CreateCustomerOrderCommand(customerId, CustomerOrderId("customerOrder_$orderId"), orderDetails.orderTotal, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry)
                 )
-                .whenPublishingA(RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId, RestaurantOrderId("restaurantOrder_$orderId"), auditEntry))
+                .whenPublishingA(RestaurantOrderCreatedEvent(restaurantLineItems, RestaurantOrderId("restaurantOrder_$orderId"), restaurantId, auditEntry))
                 .expectActiveSagas(1)
                 .expectDispatchedCommands(MarkOrderAsVerifiedByRestaurantInternalCommand(orderId, restaurantId, auditEntry))
     }
@@ -121,9 +121,9 @@ class OrderSagaTest {
         testFixture.givenAggregate(orderId.toString())
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent(CustomerOrderId("customerOrder_$orderId"), auditEntry),
+                        CreateCustomerOrderCommand(customerId, CustomerOrderId("customerOrder_$orderId"), orderDetails.orderTotal, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId, RestaurantOrderId("restaurantOrder_$orderId"), auditEntry)
+                        RestaurantOrderCreatedEvent(restaurantLineItems, RestaurantOrderId("restaurantOrder_$orderId"), restaurantId, auditEntry)
                 )
                 .whenPublishingA(RestaurantOrderPreparedEvent(RestaurantOrderId("restaurantOrder_$orderId"), auditEntry))
                 .expectActiveSagas(1)
@@ -136,9 +136,9 @@ class OrderSagaTest {
         testFixture.givenAggregate(orderId.toString())
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent(CustomerOrderId("customerOrder_$orderId"), auditEntry),
+                        CreateCustomerOrderCommand(customerId, CustomerOrderId("customerOrder_$orderId"), orderDetails.orderTotal, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId, RestaurantOrderId("restaurantOrder_$orderId"), auditEntry),
+                        RestaurantOrderCreatedEvent(restaurantLineItems, RestaurantOrderId("restaurantOrder_$orderId"), restaurantId, auditEntry),
                         RestaurantOrderPreparedEvent(RestaurantOrderId("restaurantOrder_$orderId"), auditEntry)
                 )
                 .whenPublishingA(OrderPreparedEvent(orderId, auditEntry))
@@ -152,9 +152,9 @@ class OrderSagaTest {
         testFixture.givenAggregate(orderId.toString())
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent(CustomerOrderId("customerOrder_$orderId"), auditEntry),
+                        CreateCustomerOrderCommand(customerId, CustomerOrderId("customerOrder_$orderId"), orderDetails.orderTotal, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId, RestaurantOrderId("restaurantOrder_$orderId"), auditEntry),
+                        RestaurantOrderCreatedEvent(restaurantLineItems, RestaurantOrderId("restaurantOrder_$orderId"), restaurantId, auditEntry),
                         RestaurantOrderPreparedEvent(RestaurantOrderId("restaurantOrder_$orderId"), auditEntry),
                         OrderPreparedEvent(orderId, auditEntry)
                 )
@@ -169,9 +169,9 @@ class OrderSagaTest {
         testFixture.givenAggregate(orderId.toString())
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent(CustomerOrderId("customerOrder_$orderId"), auditEntry),
+                        CreateCustomerOrderCommand(customerId, CustomerOrderId("customerOrder_$orderId"), orderDetails.orderTotal, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry),
-                        RestaurantOrderCreatedEvent(restaurantLineItems, restaurantId, RestaurantOrderId("restaurantOrder_$orderId"), auditEntry),
+                        RestaurantOrderCreatedEvent(restaurantLineItems, RestaurantOrderId("restaurantOrder_$orderId"), restaurantId, auditEntry),
                         RestaurantOrderPreparedEvent(RestaurantOrderId("restaurantOrder_$orderId"), auditEntry),
                         OrderPreparedEvent(orderId, auditEntry),
                         CourierOrderCreatedEvent(CourierOrderId("courierOrder_$orderId"), auditEntry)
@@ -199,7 +199,7 @@ class OrderSagaTest {
         testFixture.givenAggregate(orderId.toString())
                 .published(
                         OrderCreationInitiatedEvent(orderDetails, orderId, auditEntry),
-                        CustomerOrderCreatedEvent(CustomerOrderId("customerOrder_$orderId"), auditEntry),
+                        CreateCustomerOrderCommand(customerId, CustomerOrderId("customerOrder_$orderId"), orderDetails.orderTotal, auditEntry),
                         OrderVerifiedByCustomerEvent(orderId, customerId, auditEntry)
                 )
                 .whenPublishingA(RestaurantOrderRejectedEvent(RestaurantOrderId("restaurantOrder_$orderId"), auditEntry))

@@ -4,7 +4,7 @@ import java.io.Serializable
 import java.util.*
 
 enum class CustomerOrderState {
-    CREATE_PENDING, CREATED, REJECTED, DELIVERED, CANCEL_PENDING, CANCELLED
+    CREATED, DELIVERED, CANCELLED
 }
 
 /**

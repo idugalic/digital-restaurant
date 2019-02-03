@@ -331,17 +331,6 @@ class RestaurantOrderSaga {
     internal fun on(event: OrderValidatedWithSuccessByRestaurantInternalEvent) = commandGateway.send(MarkRestaurantOrderAsCreatedInternalCommand(event.orderId, event.auditEntry), LoggingCallback.INSTANCE)
 ```
 
-+++
-@transition[none]
-
-@snap[north-west]
-@color[gray](Domain)
-@snapend
-
-#### State machine
-
-<img src="digital-restaurant-state-machine.png" width="700">
-
 ---
 @transition[none]
 

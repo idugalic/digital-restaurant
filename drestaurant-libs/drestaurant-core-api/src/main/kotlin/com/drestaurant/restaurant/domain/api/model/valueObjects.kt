@@ -42,7 +42,7 @@ data class RestaurantOrderLineItem(val quantity: Int, val menuItemId: String, va
  * Enum of restaurant order states
  */
 enum class RestaurantOrderState {
-    CREATE_PENDING, CREATED, REJECTED, PREPARED, CANCEL_PENDING, CANCELLED
+    CREATED, PREPARED, CANCELLED
 }
 
 /**
