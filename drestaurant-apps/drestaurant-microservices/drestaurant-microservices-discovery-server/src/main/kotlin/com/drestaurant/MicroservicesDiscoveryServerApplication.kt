@@ -6,8 +6,8 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer
 
 @EnableEurekaServer
 @SpringBootApplication
-class DrestaurantDiscoveryServerApplication
+class MicroservicesDiscoveryServerApplication
 
 fun main(args: Array<String>) {
-    runApplication<DrestaurantDiscoveryServerApplication>(*args)
+    runApplication<MicroservicesDiscoveryServerApplication>(*args)
 }

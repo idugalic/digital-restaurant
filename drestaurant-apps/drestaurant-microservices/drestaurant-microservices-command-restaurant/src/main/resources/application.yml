@@ -32,8 +32,3 @@ axon:
     enabled: true
   serializer:
     messages: xstream
-  eventhandling:
-    processors:
-      restaurantordersaga:
-        mode: tracking
-        source: kafkaMessageSource

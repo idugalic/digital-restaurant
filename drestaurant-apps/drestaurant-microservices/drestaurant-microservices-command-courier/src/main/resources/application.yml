@@ -32,10 +32,6 @@ axon:
     enabled: true
   serializer:
     messages: xstream
-  eventhandling:
-    processors:
-      courierordersaga:
-        mode: tracking
-        source: kafkaMessageSource
+
 
 

@@ -5,9 +5,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.runApplication
 
 @SpringBootApplication(exclude = [SecurityAutoConfiguration::class])
-class DrestaurantOrderApplication
+class DrestaurantMonolithWebsocketsApplication
 
 fun main(args: Array<String>) {
-    runApplication<DrestaurantOrderApplication>(*args)
+    runApplication<DrestaurantMonolithWebsocketsApplication>(*args)
 }
-

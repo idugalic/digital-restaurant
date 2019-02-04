@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.runApplication
 
 @SpringBootApplication(exclude = [SecurityAutoConfiguration::class])
-class DrestaurantMonolithApplication
+class MicroservicesRest2CourierApplication
 
 fun main(args: Array<String>) {
-    runApplication<DrestaurantMonolithApplication>(*args)
+    runApplication<MicroservicesRest2CourierApplication>(*args)
 }

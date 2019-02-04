@@ -33,7 +33,7 @@ axon:
     processors:
       courierordersaga:
         mode: subscribing
-        source: amqpMessageSource
+#        source: amqpMessageSource
 
 
 

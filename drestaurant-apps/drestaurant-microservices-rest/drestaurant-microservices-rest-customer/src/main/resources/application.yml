@@ -29,10 +29,6 @@ axon:
     spring-cloud:
       fallback-to-http-get: false
     enabled: true
-  eventhandling:
-    processors:
-      customerordersaga:
-        mode: subscribing
-        source: amqpMessageSource
+
 
 

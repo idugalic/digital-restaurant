@@ -7,8 +7,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient
 
 @EnableDiscoveryClient
 @SpringBootApplication(exclude = [SecurityAutoConfiguration::class])
-class DrestaurantCourierApplication
+class MicroservicesRestRestaurantApplication
 
 fun main(args: Array<String>) {
-    runApplication<DrestaurantCourierApplication>(*args)
+    runApplication<MicroservicesRestRestaurantApplication>(*args)
 }
+
