@@ -20,7 +20,7 @@ internal class RestaurantModuleTest {
      * In Java programming language you should only check the 'modifier'. Kotlin does not have 'package' scope
      */
     @ArchTest
-    val classes_from_customer_domain_package_should_only_be_accessed_within_same_package = ArchRuleDefinition.classes().that().resideInAPackage("com.drestaurant.restaurant.domain").should().onlyBeAccessed().byClassesThat().resideInAPackage("com.drestaurant.restaurant.domain")
+    val classes_from_restaurant_domain_package_should_only_be_accessed_within_same_package = ArchRuleDefinition.classes().that().resideInAPackage("com.drestaurant.restaurant.domain").should().onlyBeAccessed().byClassesThat().resideInAPackage("com.drestaurant.restaurant.domain")
 
     // TODO  It would be nice to check if the all classes in this package ("com.drestaurant.restaurant.domain") are also `INTERNAL` for the module. Not sure how to do this with ArchUnit and Kotlin
 }
