@@ -280,6 +280,4 @@ This setup and project structure is usually addressed as a [monorepo](https://me
 [pivotalCF]: https://run.pivotal.io/
 
 ---
-Created by [Ivan Dugalic][idugalic]
-
-[idugalic]: http://idugalic.pro
+Created with :heart: by [Ivan Dugalic](https://idugalic.github.io/)
