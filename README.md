@@ -1,4 +1,4 @@
-# [projects](http://idugalic.github.io/projects)/digital-restaurant [![Build Status](https://travis-ci.org/idugalic/digital-restaurant.svg?branch=kotlin)](https://travis-ci.org/idugalic/digital-restaurant) [![GitPitch](https://gitpitch.com/assets/badge.svg)](https://gitpitch.com/idugalic/digital-restaurant/master?grs=github&t=white)
+# [projects](http://idugalic.github.io/projects)/digital-restaurant ![Java CI with Maven](https://github.com/idugalic/digital-restaurant/workflows/Java%20CI%20with%20Maven/badge.svg?branch=master) [![GitPitch](https://gitpitch.com/assets/badge.svg)](https://gitpitch.com/idugalic/digital-restaurant/master?grs=github&t=white)
 
 'd-restaurant' is an example of an application that is built using Event Sourcing and CQRS. The application is written in [Kotlin][kotlin], and uses [Spring][spring] Boot.
 It is built using [Axon](https://axoniq.io/product-overview/axon), which is end-to-end development and infrastructure platform for smoothly evolving event-driven microservices focused on [CQRS](https://microservices.io/patterns/data/cqrs.html) and [Event Sourcing](https://microservices.io/patterns/data/event-sourcing.html) patterns.
